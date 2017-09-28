@@ -1,5 +1,6 @@
 import sys
 import os
+from datetime import datetime
 from collections import Iterable
 import odml
 import nixio as nix
@@ -40,6 +41,32 @@ def print_info():
           "{type errors}\t Type Errors were encountered\n".format(**info))
 
 
+def convert_datetime(dt):
+    print(dt)
+    import IPython
+    IPython.embed()
+
+
+def convert_value(v):
+    global info
+    if v.dtype == "binary":
+        info["skipped binary values"] += 1
+        return None
+    if v.data is None:
+        info["skipped none values"] += 1
+        return None
+    try:
+        nixv = nix.Value(v.data)
+    except TypeError as exc:
+        print("Unsuported data type: {}".format(type(v.data)))
+        info["type errors"] += 1
+        return None
+    nixv.unit = v.unit
+    nixv.uncertainty = v.uncertainty
+    nixv.reference = v.reference
+    return nixv
+
+
 def write_recurse(odmlseclist, nixparentsec):
     global info
     for odmlsec in odmlseclist:
@@ -63,49 +90,20 @@ def write_recurse(odmlseclist, nixparentsec):
             propname = odmlprop.name
             definition = odmlprop.definition
             odmlvalue = odmlprop.value
+            nixvalues = []
             if isinstance(odmlvalue, Iterable):
-                nixvalues = []
                 for v in odmlvalue:
-                    if v.dtype == "binary":
-                        info["skipped binary values"] += 1
-                        continue
-                    if v.data is None:
-                        info["skipped none values"] += 1
-                        continue
-                    try:
-                        nixv = nix.Value(v.data)
-                    except TypeError as exc:
-                        print("Unsuported data type: {}".format(type(v.data)))
-                        info["type errors"] += 1
-                        continue
-                    nixv.unit = v.unit
-                    nixv.uncertainty = v.uncertainty
-                    nixv.reference = v.reference
-                    nixvalues.append(nixv)
+                    nixv = convert_value(v)
+                    if nixv:
+                        nixvalues.append(nixv)
             else:
-                if odmlvalue.dtype == "binary":
-                    info["skipped binary values"] += 1
-                    info["skipped empty properties"] += 1
-                    continue
-                if odmlvalue.data is None:
-                    info["skipped none values"] += 1
-                    info["skipped empty properties"] += 1
-                    continue
-                try:
-                    nixv = nix.Value(odmlvalue.data)
-                except TypeError as exc:
-                    print("Unsuported data type: {}".format(
-                        type(odmlvalue.data)
-                    ))
-                    info["type errors"] += 1
-                    continue
-                nixv.unit = odmlvalue.unit
-                nixv.uncertainty = odmlvalue.uncertainty
-                nixv.reference = odmlvalue.reference
-                nixvalues = [nixv]
+                nixv = convert_value(odmlvalue)
+                if nixv:
+                    nixvalues = [convert_value(odmlvalue)]
 
             if not nixvalues:
                 info["skipped empty properties"] += 1
+                continue
             nixprop = nixsec.create_property(propname, nixvalues)
             info["properties written"] += 1
             nixprop.definition = definition
