@@ -5,16 +5,6 @@ import odml
 import nixio as nix
 
 
-# NOTES:
-#   - If a Section has a 'reference' create a property called reference
-#   - If a Property has a 'reference' put the reference in the Property's
-#   values
-#   - Values of type 'URL', 'person', and 'text' are treated as strings
-#   - Values of type 'datetime', 'date', and 'time' are converted to string
-#   representations
-#   - Values of type 'binary' are discarded
-
-
 info = {"sections read": 0,
         "sections written": 0,
         "properties read": 0,
