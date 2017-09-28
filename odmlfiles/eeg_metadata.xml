@@ -1,0 +1,2096 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet  type="text/xsl" href="odmlTerms.xsl"?>
+<?xml-stylesheet  type="text/xsl" href="odml.xsl"?>
+<odML version="1">
+  <date>2017-09-26</date>
+  <section>
+    <definition>Information about the project.</definition>
+    <property>
+      <definition>A descriptive text of the 
+         project topic.</definition>
+      <value><type>text</type></value>
+      <name>Topic</name>
+    </property>
+    <property>
+      <definition>The name or identifier of the grant funding this project.</definition>
+      <value><type>string</type></value>
+      <name>Grant</name>
+    </property>
+    <property>
+      <definition>The person responsible for this project.</definition>
+      <value>Hiro Wagatsuma<type>person</type></value>
+      <name>PrincipleInvestigator</name>
+    </property>
+    <property>
+      <definition>Additional involved person(s).</definition>
+      <value><type>person</type></value>
+      <name>Scientist</name>
+    </property>
+    <property>
+      <definition>The day the project was begun.</definition>
+      <value>2017-03-04<type>date</type></value>
+      <name>Start</name>
+    </property>
+    <property>
+      <definition>The date the project ended.</definition>
+      <value><type>date</type></value>
+      <name>End</name>
+    </property>
+    <name>Project</name>
+    <section>
+      <definition>Specification of an experiment. The Experiment is
+    part of a Project and the recorded data for a specific
+    Experiment are found in Datasets. Possible subsections are, for
+    example, Dataset and Stimulus.</definition>
+      <property>
+        <definition>A description of the
+         experiment.</definition>
+        <value><type>text</type></value>
+        <name>Description</name>
+      </property>
+      <property>
+        <definition>The type of experiment.</definition>
+        <value>electrophysiology<type>string</type></value>
+        <value>behavior<type>string</type></value>
+        <value>simulation<type>string</type></value>
+        <value>imaging<type>string</type></value>
+        <value>psychophysics<type>string</type></value>
+        <name>Type</name>
+      </property>
+      <property>
+        <value><type>string</type></value>
+        <name>Subtype</name>
+      </property>
+      <property>
+        <definition>The name of the project this experiment belongs
+         to.</definition>
+        <value><type>string</type></value>
+        <name>ProjectName</name>
+      </property>
+      <property>
+        <definition>The ID of the project this experiment belongs
+         to.</definition>
+        <value><type>string</type></value>
+        <name>ProjectID</name>
+      </property>
+      <property>
+        <value>2017-04-03<type>date</type></value>
+        <name>Date</name>
+      </property>
+      <name>Experiment</name>
+      <section>
+        <definition>During a recording session in a Setup Datasets are
+    obtained from Cells and/or a Subject by using various stimuli (Stimulus section).</definition>
+        <property>
+          <definition>Comments on the recording session.</definition>
+          <value><type>string</type></value>
+          <name>Comment</name>
+        </property>
+        <property>
+          <definition>The name of the person actually performing the recordings.</definition>
+          <value><type>person</type></value>
+          <name>Experimenter</name>
+        </property>
+        <property>
+          <definition>If registered in a database the primary key of the person that performed the experiments.</definition>
+          <value><type>person</type></value>
+          <name>ExperimenterID</name>
+        </property>
+        <property>
+          <definition>The date and time at which the recording started in  (YYYY-MM-DD hh:mm:ss format).</definition>
+          <value><type>datetime</type></value>
+          <name>Start</name>
+        </property>
+        <property>
+          <definition>The date and time at which the recording ended in  (YYYY-MM-DD hh:mm:ss format).</definition>
+          <value><type>datetime</type></value>
+          <name>End</name>
+        </property>
+        <property>
+          <definition>The date the recording session was conducted (YYYY-MM-DD format).</definition>
+          <value><type>date</type></value>
+          <name>StartDate</name>
+        </property>
+        <property>
+          <definition>The date the recording session ended (YYYY-MM-DD
+         format).</definition>
+          <value><type>date</type></value>
+          <name>EndDate</name>
+        </property>
+        <property>
+          <definition>The time the recordings began (hh:mm:ss format).</definition>
+          <value><type>time</type></value>
+          <name>StartTime</name>
+        </property>
+        <property>
+          <definition>The time the recordings ended (hh:mm:ss format).</definition>
+          <value><type>time</type></value>
+          <name>EndTime</name>
+        </property>
+        <name>Recording</name>
+        <section>
+          <definition>The experimental setup used in the recordings. By
+    using HardwareProperties as a subsection, a very detailed
+    description of the setup can be given.</definition>
+          <property>
+            <definition>The location of the setup (e.g. room).</definition>
+            <value>Wakatsuma Lab<type>string</type></value>
+            <name>Location</name>
+          </property>
+          <property>
+            <definition>The department where the setup is
+         located.</definition>
+            <value>Kyutech<type>string</type></value>
+            <name>Department</name>
+          </property>
+          <property>
+            <definition>A description of the setup.</definition>
+            <value><type>text</type></value>
+            <name>Description</name>
+          </property>
+          <property>
+            <definition>The person who built the setup.</definition>
+            <value><type>string</type></value>
+            <name>Creator</name>
+          </property>
+          <property>
+            <definition>The person who is responsible for the setup
+          maintanance.</definition>
+            <value><type>person</type></value>
+            <name>Maintainer</name>
+          </property>
+          <property>
+            <definition>An identifier of the used setup
+         configuration, e.g. if variations of the same setup are
+         used.</definition>
+            <value><type>string</type></value>
+            <name>Config</name>
+          </property>
+          <property>
+            <definition>The ID of a setup configuration stored e.g. in a database.</definition>
+            <value><type>string</type></value>
+            <name>ConfigID</name>
+          </property>
+          <name>Setup</name>
+          <type>setup</type>
+        </section>
+        <section>
+          <definition>Information about the experimental protocol.</definition>
+          <property>
+            <definition>The protocol name.</definition>
+            <value><type>string</type></value>
+            <name>Name</name>
+          </property>
+          <property>
+            <definition>Description of the experiment</definition>
+            <value><type>string</type></value>
+            <name>Description</name>
+          </property>
+          <property>
+            <definition>The person, who created this protocol.</definition>
+            <value><type>person</type></value>
+            <name>Author</name>
+          </property>
+          <property>
+            <definition>Protocol File</definition>
+            <value>None<type>string</type></value>
+            <name>ProtocolFile</name>
+          </property>
+          <property>
+            <definition>URL for protocol file</definition>
+            <value><type>URL</type></value>
+            <name>ProtocolFileURL</name>
+          </property>
+          <property>
+            <definition>Duration of the protocol.</definition>
+            <value><type>time</type></value>
+            <name>Duration</name>
+          </property>
+          <property>
+            <definition>Version of the protocol</definition>
+            <value><type>string</type></value>
+            <name>Version</name>
+          </property>
+          <name>Protocol</name>
+          <type>protocol</type>
+        </section>
+        <section>
+          <definition>Sections of the Analysis type can be used to describe analyses.</definition>
+          <property>
+            <definition>The name of the person who did the analysis, e.g. 'John Doe' or 'Doe, John'</definition>
+            <value><type>person</type></value>
+            <name>Author</name>
+          </property>
+          <property>
+            <definition>The date of analysis.</definition>
+            <value><type>date</type></value>
+            <name>Date</name>
+          </property>
+          <property>
+            <definition>A general description of the analysis.</definition>
+            <value><type>text</type></value>
+            <name>Description</name>
+          </property>
+          <property>
+            <definition>The name of a method used in this analysis. E.g. "power spectrum".</definition>
+            <value><type>string</type></value>
+            <name>Method</name>
+          </property>
+          <property>
+            <definition>The command used to execute the analysis including the command line parameter.</definition>
+            <value><type>string</type></value>
+            <name>CommandlineCall</name>
+          </property>
+          <property>
+            <definition>Specific comments on this analysis.</definition>
+            <value><type>text</type></value>
+            <name>Comment</name>
+          </property>
+          <property>
+            <definition>The program code to analyse the data can be transferred using this property. 
+         Using it will blow up the the size of the metadatafile and we recommend to rather define the URL of underlying code file.</definition>
+            <value>None<type>string</type></value>
+            <name>CodeFile</name>
+          </property>
+          <property>
+            <definition>The URL of the applied piece of program code to actually do the analysis.</definition>
+            <value><type>URL</type></value>
+            <name>CodeFileURL</name>
+          </property>
+          <property>
+            <definition>If the analysis code is under version control the revision number can be specified using this property.</definition>
+            <value><type>string</type></value>
+            <name>CodeRevision</name>
+          </property>
+          <property>
+            <definition>The configurations used to analyse the data can be transferred using this property. 
+         Using it will blow up the the size of the metadatafile and we recommend to rather define the URL of underlying configuration file.</definition>
+            <value>None<type>string</type></value>
+            <name>ConfigFile</name>
+          </property>
+          <property>
+            <definition>The URL of the used configuration file used to run the analysis.</definition>
+            <value><type>URL</type></value>
+            <name>ConfigFileURL</name>
+          </property>
+          <property>
+            <definition>The data analysed ion the described way can be transferred using this property. 
+         Using it will blow up the the size of the metadatafile and we recommend to rather define the URL of underlying dataset file.</definition>
+            <value>None<type>string</type></value>
+            <name>DatasetFile</name>
+          </property>
+          <property>
+            <definition>The URL of a analysed datasetFile.</definition>
+            <value><type>URL</type></value>
+            <name>DatasetFileURL</name>
+          </property>
+          <property>
+            <definition>The results of this analysis can be transferred using this property. 
+         Using it willblow up the the size of the metadatafile and we recommend to rather define the URL of the results file.</definition>
+            <value>None<type>string</type></value>
+            <name>ResultFile</name>
+          </property>
+          <property>
+            <definition>The URL of a results file.</definition>
+            <value><type>URL</type></value>
+            <name>ResultFileURL</name>
+          </property>
+          <property>
+            <definition>A figure showing the results. This property is meant to strore the real figure content. 
+         This will blow up the the size of the metadatafile and we recommend to rather define the URL of the figure.</definition>
+            <value>None<type>string</type></value>
+            <name>ResultFigure</name>
+          </property>
+          <property>
+            <definition>If the results of this analysis have been published one can store the doi of the paper.</definition>
+            <value><type>text</type></value>
+            <name>PaperDOI</name>
+          </property>
+          <property>
+            <definition>If the results of this analysis have been published the URL of the document can be given here</definition>
+            <value><type>URL</type></value>
+            <name>PaperURL</name>
+          </property>
+          <name>Analysis</name>
+          <type>analysis</type>
+        </section>
+        <section>
+          <definition>Section for grouping short annotations that are taken during
+    an experiment, preparation etc...</definition>
+          <property>
+            <definition>The local datetime entry of the moment the event was
+         taken (YYYY-MM-DD hh:mm:ss format).</definition>
+            <value><type>datetime</type></value>
+            <name>Timestamp</name>
+          </property>
+          <property>
+            <definition>A description of the event.</definition>
+            <value><type>text</type></value>
+            <name>Description</name>
+          </property>
+          <name>EventList</name>
+          <section>
+            <definition>Section for short annotations that are taken during an experiment to describe certain events.</definition>
+            <property>
+              <definition>The local datetime entry of the moment the event was
+         taken (YYYY-MM-DD hh:mm:ss format).</definition>
+              <value><type>datetime</type></value>
+              <name>Timestamp</name>
+            </property>
+            <property>
+              <definition>A description of the event.</definition>
+              <value><type>text</type></value>
+              <name>Description</name>
+            </property>
+            <name>Event1</name>
+            <section>
+              <definition>General description of an applied stimulus. This
+    section is basis of various related sections that specify
+    more specific stimuli.</definition>
+              <property>
+                <definition>A textual description of the stimulus.</definition>
+                <value><type>text</type></value>
+                <name>Description</name>
+              </property>
+              <property>
+                <definition>A comment on this specific stimulus.</definition>
+                <value><type>text</type></value>
+                <name>Comment</name>
+              </property>
+              <property>
+                <definition>Who is the author of this stimulus.</definition>
+                <value><type>person</type></value>
+                <name>Author</name>
+              </property>
+              <property>
+                <definition>The duration of the stimulus.</definition>
+                <value>0.0<unit>s</unit><type>float</type></value>
+                <name>Duration</name>
+              </property>
+              <property>
+                <definition>The time the stimulus started.</definition>
+                <value><type>time</type></value>
+                <name>StartTime</name>
+              </property>
+              <property>
+                <definition>The time the stimulus ended.</definition>
+                <value><type>time</type></value>
+                <name>EndTime</name>
+              </property>
+              <property>
+                <definition>like the current in case of electrical stimulation.</definition>
+                <value><type>string</type></value>
+                <name>Intensity</name>
+              </property>
+              <property>
+                <definition>Describes the site of the stimulus application.</definition>
+                <value><type>string</type></value>
+                <name>Location</name>
+              </property>
+              <property>
+                <definition>Visual, acoustic, haptic, electrical, etc. stimulation.</definition>
+                <value><type>string</type></value>
+                <name>Modality</name>
+              </property>
+              <property>
+                <definition>The number of repetitions of the described stimulation.</definition>
+                <value>0<type>int</type></value>
+                <name>Repetitions</name>
+              </property>
+              <property>
+                <definition>The time between two subsequent stimulations.</definition>
+                <value>0.0<unit>s</unit><type>float</type></value>
+                <name>InterstimulusInterval</name>
+              </property>
+              <property>
+                <definition>The stimulus file used. Using it will blow
+         up the the size of the metadatafile and we recommend to
+         rather define the URL of underlying stimulus
+         file.</definition>
+                <value><checksum>crc32$00000000</checksum><type>binary</type></value>
+                <name>StimulusFile</name>
+              </property>
+              <property>
+                <definition>The URL of a an applied stimulus file. This
+         is the recommended alternative to explicitely including the
+         actual stimulus via StimulusFile.</definition>
+                <value><type>URL</type></value>
+                <name>StimulusFileURL</name>
+              </property>
+              <property>
+                <definition>The position of the stimulus on e.g the screen. Specified as a 2-tuple (x;y). By default this position refers to the top-left corner of the object or its bounding box.</definition>
+                <value><type>2-tuple</type></value>
+                <name>Position</name>
+              </property>
+              <property>
+                <definition>By default stimulus positions are specified by the coordinates of the top-left corner (or of the bounding box). Use this property for other definitions.</definition>
+                <value>top-left<type>string</type></value>
+                <value>center<type>string</type></value>
+                <value>bottom-right<type>string</type></value>
+                <name>PositionReference</name>
+              </property>
+              <property>
+                <definition>The spatial extend of the presented stimulus (width;height) e.g. (1024;768).</definition>
+                <value><type>2-tuple</type></value>
+                <name>SpatialExtent</name>
+              </property>
+              <name>Stimulus</name>
+              <section>
+                <definition>Names (URLs) and times of recorded data files. Datasets are obtained during a Recording
+    and may belong to different Experiments. Related sections that can be used as subsections, parent sections, or siblings are Stimulus, HardwareSettings, and Experiment.</definition>
+                <property>
+                  <definition>The point in time the recording of this dataset was
+      started.</definition>
+                  <value><type>datetime</type></value>
+                  <name>Start</name>
+                </property>
+                <property>
+                  <definition>The point in time the recording of this dataset was
+      ended.</definition>
+                  <value><type>datetime</type></value>
+                  <name>End</name>
+                </property>
+                <property>
+                  <definition>The date recording of this dataset was
+      started.</definition>
+                  <value><type>date</type></value>
+                  <name>StartDate</name>
+                </property>
+                <property>
+                  <definition>The date the recording of this dataset was
+      ended.</definition>
+                  <value><type>date</type></value>
+                  <name>EndDate</name>
+                </property>
+                <property>
+                  <definition>The local time recording was started.</definition>
+                  <value><type>time</type></value>
+                  <name>StartTime</name>
+                </property>
+                <property>
+                  <definition>The local time recording was ended.</definition>
+                  <value><type>time</type></value>
+                  <name>EndTime</name>
+                </property>
+                <property>
+                  <definition>A comment about the dataset (common to all files
+      belonging to this dataset).</definition>
+                  <value><type>text</type></value>
+                  <name>Comment</name>
+                </property>
+                <property>
+                  <definition>Data of this dataset.</definition>
+                  <value><definition>Data of this dataset. Be aware that
+	including the actual content of a data file by this property
+	will blow up the the size of the metadatafile. We rather
+	recommend to simply refer to the URL of a dataset file using
+	the FileURL property.</definition><checksum>crc32$00000000</checksum><type>binary</type></value>
+                  <value><definition>The URL of a data file.</definition><type>URL</type></value>
+                  <name>File</name>
+                </property>
+                <property>
+                  <definition>A rough indication of the overall quality of
+      the dataset. E.g. poor, fair, or good.</definition>
+                  <value><type>string</type></value>
+                  <name>Quality</name>
+                </property>
+                <property>
+                  <definition>A comma separated ascending list of all used
+      values for indicating the overall quality of the
+      dataset. E.g. "poor,fair,good".</definition>
+                  <value><type>string</type></value>
+                  <name>QualityRange</name>
+                </property>
+                <name>Dataset</name>
+                <type>dataset</type>
+              </section>
+              <section>
+                <property>
+                  <value><type>text</type></value>
+                  <name>Description</name>
+                </property>
+                <property>
+                  <value><type>text</type></value>
+                  <name>Comment</name>
+                </property>
+                <property>
+                  <value><type>person</type></value>
+                  <name>Author</name>
+                </property>
+                <property>
+                  <value>0.0<type>float</type></value>
+                  <name>Duration</name>
+                </property>
+                <property>
+                  <value><type>time</type></value>
+                  <name>StartTime</name>
+                </property>
+                <property>
+                  <value><type>time</type></value>
+                  <name>EndTime</name>
+                </property>
+                <property>
+                  <value><type>string</type></value>
+                  <name>Intensity</name>
+                </property>
+                <property>
+                  <value><type>string</type></value>
+                  <name>Location</name>
+                </property>
+                <property>
+                  <value><type>string</type></value>
+                  <name>Modality</name>
+                </property>
+                <property>
+                  <value>0<type>int</type></value>
+                  <name>Repetitions</name>
+                </property>
+                <property>
+                  <value><checksum>crc32$00000000</checksum><type>binary</type></value>
+                  <name>ResponseFile</name>
+                </property>
+                <property>
+                  <value><type>URL</type></value>
+                  <name>ResponseFileURL</name>
+                </property>
+                <property>
+                  <value><type>2-tuple</type></value>
+                  <name>Position</name>
+                </property>
+                <property>
+                  <value><type>string</type></value>
+                  <name>PositionReference</name>
+                </property>
+                <property>
+                  <value><type>2-tuple</type></value>
+                  <name>SpatialExtent</name>
+                </property>
+                <name>Response</name>
+                <type>undefined</type>
+              </section>
+              <type>stimulus</type>
+            </section>
+            <section>
+              <property>
+                <value><type>text</type></value>
+                <name>Description</name>
+              </property>
+              <property>
+                <value><type>text</type></value>
+                <name>Comment</name>
+              </property>
+              <property>
+                <value><type>person</type></value>
+                <name>Author</name>
+              </property>
+              <property>
+                <value>0.0<type>float</type></value>
+                <name>Duration</name>
+              </property>
+              <property>
+                <value><type>time</type></value>
+                <name>StartTime</name>
+              </property>
+              <property>
+                <value><type>time</type></value>
+                <name>EndTime</name>
+              </property>
+              <property>
+                <value><type>string</type></value>
+                <name>Intensity</name>
+              </property>
+              <property>
+                <value><type>string</type></value>
+                <name>Location</name>
+              </property>
+              <property>
+                <value><type>string</type></value>
+                <name>Modality</name>
+              </property>
+              <property>
+                <value>0<type>int</type></value>
+                <name>Repetitions</name>
+              </property>
+              <property>
+                <value><checksum>crc32$00000000</checksum><type>binary</type></value>
+                <name>ResponseFile</name>
+              </property>
+              <property>
+                <value><type>URL</type></value>
+                <name>ResponseFileURL</name>
+              </property>
+              <property>
+                <value><type>2-tuple</type></value>
+                <name>Position</name>
+              </property>
+              <property>
+                <value><type>string</type></value>
+                <name>PositionReference</name>
+              </property>
+              <property>
+                <value><type>2-tuple</type></value>
+                <name>SpatialExtent</name>
+              </property>
+              <name>Response</name>
+              <section>
+                <definition>Names (URLs) and times of recorded data files. Datasets are obtained during a Recording
+    and may belong to different Experiments. Related sections that can be used as subsections, parent sections, or siblings are Stimulus, HardwareSettings, and Experiment.</definition>
+                <property>
+                  <definition>The point in time the recording of this dataset was
+      started.</definition>
+                  <value><type>datetime</type></value>
+                  <name>Start</name>
+                </property>
+                <property>
+                  <definition>The point in time the recording of this dataset was
+      ended.</definition>
+                  <value><type>datetime</type></value>
+                  <name>End</name>
+                </property>
+                <property>
+                  <definition>The date recording of this dataset was
+      started.</definition>
+                  <value><type>date</type></value>
+                  <name>StartDate</name>
+                </property>
+                <property>
+                  <definition>The date the recording of this dataset was
+      ended.</definition>
+                  <value><type>date</type></value>
+                  <name>EndDate</name>
+                </property>
+                <property>
+                  <definition>The local time recording was started.</definition>
+                  <value><type>time</type></value>
+                  <name>StartTime</name>
+                </property>
+                <property>
+                  <definition>The local time recording was ended.</definition>
+                  <value><type>time</type></value>
+                  <name>EndTime</name>
+                </property>
+                <property>
+                  <definition>A comment about the dataset (common to all files
+      belonging to this dataset).</definition>
+                  <value><type>text</type></value>
+                  <name>Comment</name>
+                </property>
+                <property>
+                  <definition>Data of this dataset.</definition>
+                  <value><definition>Data of this dataset. Be aware that
+	including the actual content of a data file by this property
+	will blow up the the size of the metadatafile. We rather
+	recommend to simply refer to the URL of a dataset file using
+	the FileURL property.</definition><checksum>crc32$00000000</checksum><type>binary</type></value>
+                  <value><definition>The URL of a data file.</definition><type>URL</type></value>
+                  <name>File</name>
+                </property>
+                <property>
+                  <definition>A rough indication of the overall quality of
+      the dataset. E.g. poor, fair, or good.</definition>
+                  <value><type>string</type></value>
+                  <name>Quality</name>
+                </property>
+                <property>
+                  <definition>A comma separated ascending list of all used
+      values for indicating the overall quality of the
+      dataset. E.g. "poor,fair,good".</definition>
+                  <value><type>string</type></value>
+                  <name>QualityRange</name>
+                </property>
+                <name>Dataset</name>
+                <type>dataset</type>
+              </section>
+              <type>undefined</type>
+            </section>
+            <type>event</type>
+          </section>
+          <section>
+            <definition>Section for short annotations that are taken during an experiment to describe certain events.</definition>
+            <property>
+              <definition>The local datetime entry of the moment the event was
+         taken (YYYY-MM-DD hh:mm:ss format).</definition>
+              <value><type>datetime</type></value>
+              <name>Timestamp</name>
+            </property>
+            <property>
+              <definition>A description of the event.</definition>
+              <value><type>text</type></value>
+              <name>Description</name>
+            </property>
+            <name>Event2</name>
+            <section>
+              <definition>General description of an applied stimulus. This
+    section is basis of various related sections that specify
+    more specific stimuli.</definition>
+              <property>
+                <definition>A textual description of the stimulus.</definition>
+                <value><type>text</type></value>
+                <name>Description</name>
+              </property>
+              <property>
+                <definition>A comment on this specific stimulus.</definition>
+                <value><type>text</type></value>
+                <name>Comment</name>
+              </property>
+              <property>
+                <definition>Who is the author of this stimulus.</definition>
+                <value><type>person</type></value>
+                <name>Author</name>
+              </property>
+              <property>
+                <definition>The duration of the stimulus.</definition>
+                <value>0.0<unit>s</unit><type>float</type></value>
+                <name>Duration</name>
+              </property>
+              <property>
+                <definition>The time the stimulus started.</definition>
+                <value><type>time</type></value>
+                <name>StartTime</name>
+              </property>
+              <property>
+                <definition>The time the stimulus ended.</definition>
+                <value><type>time</type></value>
+                <name>EndTime</name>
+              </property>
+              <property>
+                <definition>like the current in case of electrical stimulation.</definition>
+                <value><type>string</type></value>
+                <name>Intensity</name>
+              </property>
+              <property>
+                <definition>Describes the site of the stimulus application.</definition>
+                <value><type>string</type></value>
+                <name>Location</name>
+              </property>
+              <property>
+                <definition>Visual, acoustic, haptic, electrical, etc. stimulation.</definition>
+                <value><type>string</type></value>
+                <name>Modality</name>
+              </property>
+              <property>
+                <definition>The number of repetitions of the described stimulation.</definition>
+                <value>0<type>int</type></value>
+                <name>Repetitions</name>
+              </property>
+              <property>
+                <definition>The time between two subsequent stimulations.</definition>
+                <value>0.0<unit>s</unit><type>float</type></value>
+                <name>InterstimulusInterval</name>
+              </property>
+              <property>
+                <definition>The stimulus file used. Using it will blow
+         up the the size of the metadatafile and we recommend to
+         rather define the URL of underlying stimulus
+         file.</definition>
+                <value><checksum>crc32$00000000</checksum><type>binary</type></value>
+                <name>StimulusFile</name>
+              </property>
+              <property>
+                <definition>The URL of a an applied stimulus file. This
+         is the recommended alternative to explicitely including the
+         actual stimulus via StimulusFile.</definition>
+                <value><type>URL</type></value>
+                <name>StimulusFileURL</name>
+              </property>
+              <property>
+                <definition>The position of the stimulus on e.g the screen. Specified as a 2-tuple (x;y). By default this position refers to the top-left corner of the object or its bounding box.</definition>
+                <value><type>2-tuple</type></value>
+                <name>Position</name>
+              </property>
+              <property>
+                <definition>By default stimulus positions are specified by the coordinates of the top-left corner (or of the bounding box). Use this property for other definitions.</definition>
+                <value>top-left<type>string</type></value>
+                <value>center<type>string</type></value>
+                <value>bottom-right<type>string</type></value>
+                <name>PositionReference</name>
+              </property>
+              <property>
+                <definition>The spatial extend of the presented stimulus (width;height) e.g. (1024;768).</definition>
+                <value><type>2-tuple</type></value>
+                <name>SpatialExtent</name>
+              </property>
+              <name>Stimulus</name>
+              <section>
+                <definition>Names (URLs) and times of recorded data files. Datasets are obtained during a Recording
+    and may belong to different Experiments. Related sections that can be used as subsections, parent sections, or siblings are Stimulus, HardwareSettings, and Experiment.</definition>
+                <property>
+                  <definition>The point in time the recording of this dataset was
+      started.</definition>
+                  <value><type>datetime</type></value>
+                  <name>Start</name>
+                </property>
+                <property>
+                  <definition>The point in time the recording of this dataset was
+      ended.</definition>
+                  <value><type>datetime</type></value>
+                  <name>End</name>
+                </property>
+                <property>
+                  <definition>The date recording of this dataset was
+      started.</definition>
+                  <value><type>date</type></value>
+                  <name>StartDate</name>
+                </property>
+                <property>
+                  <definition>The date the recording of this dataset was
+      ended.</definition>
+                  <value><type>date</type></value>
+                  <name>EndDate</name>
+                </property>
+                <property>
+                  <definition>The local time recording was started.</definition>
+                  <value><type>time</type></value>
+                  <name>StartTime</name>
+                </property>
+                <property>
+                  <definition>The local time recording was ended.</definition>
+                  <value><type>time</type></value>
+                  <name>EndTime</name>
+                </property>
+                <property>
+                  <definition>A comment about the dataset (common to all files
+      belonging to this dataset).</definition>
+                  <value><type>text</type></value>
+                  <name>Comment</name>
+                </property>
+                <property>
+                  <definition>Data of this dataset.</definition>
+                  <value><definition>Data of this dataset. Be aware that
+	including the actual content of a data file by this property
+	will blow up the the size of the metadatafile. We rather
+	recommend to simply refer to the URL of a dataset file using
+	the FileURL property.</definition><checksum>crc32$00000000</checksum><type>binary</type></value>
+                  <value><definition>The URL of a data file.</definition><type>URL</type></value>
+                  <name>File</name>
+                </property>
+                <property>
+                  <definition>A rough indication of the overall quality of
+      the dataset. E.g. poor, fair, or good.</definition>
+                  <value><type>string</type></value>
+                  <name>Quality</name>
+                </property>
+                <property>
+                  <definition>A comma separated ascending list of all used
+      values for indicating the overall quality of the
+      dataset. E.g. "poor,fair,good".</definition>
+                  <value><type>string</type></value>
+                  <name>QualityRange</name>
+                </property>
+                <name>Dataset</name>
+                <type>dataset</type>
+              </section>
+              <section>
+                <property>
+                  <value><type>text</type></value>
+                  <name>Description</name>
+                </property>
+                <property>
+                  <value><type>text</type></value>
+                  <name>Comment</name>
+                </property>
+                <property>
+                  <value><type>person</type></value>
+                  <name>Author</name>
+                </property>
+                <property>
+                  <value>0.0<type>float</type></value>
+                  <name>Duration</name>
+                </property>
+                <property>
+                  <value><type>time</type></value>
+                  <name>StartTime</name>
+                </property>
+                <property>
+                  <value><type>time</type></value>
+                  <name>EndTime</name>
+                </property>
+                <property>
+                  <value><type>string</type></value>
+                  <name>Intensity</name>
+                </property>
+                <property>
+                  <value><type>string</type></value>
+                  <name>Location</name>
+                </property>
+                <property>
+                  <value><type>string</type></value>
+                  <name>Modality</name>
+                </property>
+                <property>
+                  <value>0<type>int</type></value>
+                  <name>Repetitions</name>
+                </property>
+                <property>
+                  <value><checksum>crc32$00000000</checksum><type>binary</type></value>
+                  <name>ResponseFile</name>
+                </property>
+                <property>
+                  <value><type>URL</type></value>
+                  <name>ResponseFileURL</name>
+                </property>
+                <property>
+                  <value><type>2-tuple</type></value>
+                  <name>Position</name>
+                </property>
+                <property>
+                  <value><type>string</type></value>
+                  <name>PositionReference</name>
+                </property>
+                <property>
+                  <value><type>2-tuple</type></value>
+                  <name>SpatialExtent</name>
+                </property>
+                <name>Response</name>
+                <type>undefined</type>
+              </section>
+              <type>stimulus</type>
+            </section>
+            <section>
+              <property>
+                <value><type>text</type></value>
+                <name>Description</name>
+              </property>
+              <property>
+                <value><type>text</type></value>
+                <name>Comment</name>
+              </property>
+              <property>
+                <value><type>person</type></value>
+                <name>Author</name>
+              </property>
+              <property>
+                <value>0.0<type>float</type></value>
+                <name>Duration</name>
+              </property>
+              <property>
+                <value><type>time</type></value>
+                <name>StartTime</name>
+              </property>
+              <property>
+                <value><type>time</type></value>
+                <name>EndTime</name>
+              </property>
+              <property>
+                <value><type>string</type></value>
+                <name>Intensity</name>
+              </property>
+              <property>
+                <value><type>string</type></value>
+                <name>Location</name>
+              </property>
+              <property>
+                <value><type>string</type></value>
+                <name>Modality</name>
+              </property>
+              <property>
+                <value>0<type>int</type></value>
+                <name>Repetitions</name>
+              </property>
+              <property>
+                <value><checksum>crc32$00000000</checksum><type>binary</type></value>
+                <name>ResponseFile</name>
+              </property>
+              <property>
+                <value><type>URL</type></value>
+                <name>ResponseFileURL</name>
+              </property>
+              <property>
+                <value><type>2-tuple</type></value>
+                <name>Position</name>
+              </property>
+              <property>
+                <value><type>string</type></value>
+                <name>PositionReference</name>
+              </property>
+              <property>
+                <value><type>2-tuple</type></value>
+                <name>SpatialExtent</name>
+              </property>
+              <name>Response</name>
+              <section>
+                <definition>Names (URLs) and times of recorded data files. Datasets are obtained during a Recording
+    and may belong to different Experiments. Related sections that can be used as subsections, parent sections, or siblings are Stimulus, HardwareSettings, and Experiment.</definition>
+                <property>
+                  <definition>The point in time the recording of this dataset was
+      started.</definition>
+                  <value><type>datetime</type></value>
+                  <name>Start</name>
+                </property>
+                <property>
+                  <definition>The point in time the recording of this dataset was
+      ended.</definition>
+                  <value><type>datetime</type></value>
+                  <name>End</name>
+                </property>
+                <property>
+                  <definition>The date recording of this dataset was
+      started.</definition>
+                  <value><type>date</type></value>
+                  <name>StartDate</name>
+                </property>
+                <property>
+                  <definition>The date the recording of this dataset was
+      ended.</definition>
+                  <value><type>date</type></value>
+                  <name>EndDate</name>
+                </property>
+                <property>
+                  <definition>The local time recording was started.</definition>
+                  <value><type>time</type></value>
+                  <name>StartTime</name>
+                </property>
+                <property>
+                  <definition>The local time recording was ended.</definition>
+                  <value><type>time</type></value>
+                  <name>EndTime</name>
+                </property>
+                <property>
+                  <definition>A comment about the dataset (common to all files
+      belonging to this dataset).</definition>
+                  <value><type>text</type></value>
+                  <name>Comment</name>
+                </property>
+                <property>
+                  <definition>Data of this dataset.</definition>
+                  <value><definition>Data of this dataset. Be aware that
+	including the actual content of a data file by this property
+	will blow up the the size of the metadatafile. We rather
+	recommend to simply refer to the URL of a dataset file using
+	the FileURL property.</definition><checksum>crc32$00000000</checksum><type>binary</type></value>
+                  <value><definition>The URL of a data file.</definition><type>URL</type></value>
+                  <name>File</name>
+                </property>
+                <property>
+                  <definition>A rough indication of the overall quality of
+      the dataset. E.g. poor, fair, or good.</definition>
+                  <value><type>string</type></value>
+                  <name>Quality</name>
+                </property>
+                <property>
+                  <definition>A comma separated ascending list of all used
+      values for indicating the overall quality of the
+      dataset. E.g. "poor,fair,good".</definition>
+                  <value><type>string</type></value>
+                  <name>QualityRange</name>
+                </property>
+                <name>Dataset</name>
+                <type>dataset</type>
+              </section>
+              <type>undefined</type>
+            </section>
+            <type>event</type>
+          </section>
+          <type>event_list</type>
+        </section>
+        <section>
+          <property>
+            <value></value>
+            <name>Weather</name>
+          </property>
+          <property>
+            <value><type>string</type></value>
+            <name>RoomTemperature</name>
+          </property>
+          <property>
+            <value>0.0<type>float</type></value>
+            <name>AirHumidity</name>
+          </property>
+          <property>
+            <value><type>string</type></value>
+            <name>Description</name>
+          </property>
+          <name>Environment</name>
+          <type>undefined</type>
+        </section>
+        <section>
+          <property>
+            <value><type>string</type></value>
+            <name>Name</name>
+          </property>
+          <property>
+            <value><type>string</type></value>
+            <name>Owner</name>
+          </property>
+          <property>
+            <value><type>string</type></value>
+            <name>Developer</name>
+          </property>
+          <property>
+            <value><type>string</type></value>
+            <name>Version</name>
+          </property>
+          <property>
+            <value><type>string</type></value>
+            <name>Licence</name>
+          </property>
+          <property>
+            <value><type>date</type></value>
+            <name>LicenceStart</name>
+          </property>
+          <property>
+            <value><type>date</type></value>
+            <name>LicenceExpiration</name>
+          </property>
+          <property>
+            <value><type>string</type></value>
+            <name>LicenceDuration</name>
+          </property>
+          <property>
+            <value>0<type>int</type></value>
+            <name>LicenceCount</name>
+          </property>
+          <property>
+            <value><type>string</type></value>
+            <name>Distribution</name>
+          </property>
+          <property>
+            <value><type>string</type></value>
+            <name>Description</name>
+          </property>
+          <name>Software</name>
+          <type>undefined</type>
+        </section>
+        <type>recording</type>
+      </section>
+      <section>
+        <definition>Sections of the Analysis type can be used to describe analyses.</definition>
+        <property>
+          <definition>The name of the person who did the analysis, e.g. 'John Doe' or 'Doe, John'</definition>
+          <value><type>person</type></value>
+          <name>Author</name>
+        </property>
+        <property>
+          <definition>The date of analysis.</definition>
+          <value><type>date</type></value>
+          <name>Date</name>
+        </property>
+        <property>
+          <definition>A general description of the analysis.</definition>
+          <value><type>text</type></value>
+          <name>Description</name>
+        </property>
+        <property>
+          <definition>The name of a method used in this analysis. E.g. "power spectrum".</definition>
+          <value><type>string</type></value>
+          <name>Method</name>
+        </property>
+        <property>
+          <definition>The command used to execute the analysis including the command line parameter.</definition>
+          <value><type>string</type></value>
+          <name>CommandlineCall</name>
+        </property>
+        <property>
+          <definition>Specific comments on this analysis.</definition>
+          <value><type>text</type></value>
+          <name>Comment</name>
+        </property>
+        <property>
+          <definition>The program code to analyse the data can be transferred using this property. 
+         Using it will blow up the the size of the metadatafile and we recommend to rather define the URL of underlying code file.</definition>
+          <value>None<type>string</type></value>
+          <name>CodeFile</name>
+        </property>
+        <property>
+          <definition>The URL of the applied piece of program code to actually do the analysis.</definition>
+          <value><type>URL</type></value>
+          <name>CodeFileURL</name>
+        </property>
+        <property>
+          <definition>If the analysis code is under version control the revision number can be specified using this property.</definition>
+          <value><type>string</type></value>
+          <name>CodeRevision</name>
+        </property>
+        <property>
+          <definition>The configurations used to analyse the data can be transferred using this property. 
+         Using it will blow up the the size of the metadatafile and we recommend to rather define the URL of underlying configuration file.</definition>
+          <value>None<type>string</type></value>
+          <name>ConfigFile</name>
+        </property>
+        <property>
+          <definition>The URL of the used configuration file used to run the analysis.</definition>
+          <value><type>URL</type></value>
+          <name>ConfigFileURL</name>
+        </property>
+        <property>
+          <definition>The data analysed ion the described way can be transferred using this property. 
+         Using it will blow up the the size of the metadatafile and we recommend to rather define the URL of underlying dataset file.</definition>
+          <value>None<type>string</type></value>
+          <name>DatasetFile</name>
+        </property>
+        <property>
+          <definition>The URL of a analysed datasetFile.</definition>
+          <value><type>URL</type></value>
+          <name>DatasetFileURL</name>
+        </property>
+        <property>
+          <definition>The results of this analysis can be transferred using this property. 
+         Using it willblow up the the size of the metadatafile and we recommend to rather define the URL of the results file.</definition>
+          <value>None<type>string</type></value>
+          <name>ResultFile</name>
+        </property>
+        <property>
+          <definition>The URL of a results file.</definition>
+          <value><type>URL</type></value>
+          <name>ResultFileURL</name>
+        </property>
+        <property>
+          <definition>A figure showing the results. This property is meant to strore the real figure content. 
+         This will blow up the the size of the metadatafile and we recommend to rather define the URL of the figure.</definition>
+          <value>None<type>string</type></value>
+          <name>ResultFigure</name>
+        </property>
+        <property>
+          <definition>If the results of this analysis have been published one can store the doi of the paper.</definition>
+          <value><type>text</type></value>
+          <name>PaperDOI</name>
+        </property>
+        <property>
+          <definition>If the results of this analysis have been published the URL of the document can be given here</definition>
+          <value><type>URL</type></value>
+          <name>PaperURL</name>
+        </property>
+        <name>Analysis</name>
+        <type>analysis</type>
+      </section>
+      <section>
+        <definition>Properties for describing an electrophysiological experiment.</definition>
+        <property>
+          <definition>EEG recording</definition>
+          <value>EEG<type>string</type></value>
+          <name>Type</name>
+        </property>
+        <property>
+          <definition>Subtype of this electrophysiological experiment.</definition>
+          <value>single electrode recording<type>string</type></value>
+          <value>dual electrode recording<type>string</type></value>
+          <value>multi electrode recording<type>string</type></value>
+          <name>Subtype</name>
+        </property>
+        <name>Electrophysiology</name>
+        <type>experiment/electrophysiology</type>
+      </section>
+      <section>
+        <definition>Section for grouping short annotations that are taken during
+    an experiment, preparation etc...</definition>
+        <property>
+          <definition>The local datetime entry of the moment the event was
+         taken (YYYY-MM-DD hh:mm:ss format).</definition>
+          <value><type>datetime</type></value>
+          <name>Timestamp</name>
+        </property>
+        <property>
+          <definition>A description of the event.</definition>
+          <value><type>text</type></value>
+          <name>Description</name>
+        </property>
+        <name>Events</name>
+        <section>
+          <definition>Section for short annotations that are taken during an experiment to describe certain events.</definition>
+          <property>
+            <value>Bumps<type>string</type></value>
+            <value>Crossroads<type>string</type></value>
+            <name>Type</name>
+          </property>
+          <property>
+            <definition>The local datetime entry of the moment the event was
+         taken (YYYY-MM-DD hh:mm:ss format).</definition>
+            <value><type>datetime</type></value>
+            <name>Timestamp</name>
+          </property>
+          <property>
+            <definition>A description of the event.</definition>
+            <value><type>text</type></value>
+            <name>Description</name>
+          </property>
+          <name>Road</name>
+          <section>
+            <property>
+              <value><type>text</type></value>
+              <name>Description</name>
+            </property>
+            <property>
+              <value><type>text</type></value>
+              <name>Comment</name>
+            </property>
+            <property>
+              <value>0.0<type>float</type></value>
+              <name>Duration</name>
+            </property>
+            <property>
+              <value><type>time</type></value>
+              <name>StartTime</name>
+            </property>
+            <property>
+              <value><type>time</type></value>
+              <name>EndTime</name>
+            </property>
+            <property>
+              <value><type>string</type></value>
+              <name>Intensity</name>
+            </property>
+            <property>
+              <value><type>string</type></value>
+              <name>Modality</name>
+            </property>
+            <property>
+              <value>0<type>int</type></value>
+              <name>Repetitions</name>
+            </property>
+            <name>Response</name>
+            <type>undefined</type>
+          </section>
+          <type>event</type>
+        </section>
+        <section>
+          <definition>Section for short annotations that are taken during an experiment to describe certain events.</definition>
+          <property>
+            <definition>The local datetime entry of the moment the event was
+         taken (YYYY-MM-DD hh:mm:ss format).</definition>
+            <value><type>datetime</type></value>
+            <name>Timestamp</name>
+          </property>
+          <property>
+            <definition>A description of the event.</definition>
+            <value><type>text</type></value>
+            <name>Description</name>
+          </property>
+          <name>Pedestrians</name>
+          <section>
+            <property>
+              <value><type>text</type></value>
+              <name>Description</name>
+            </property>
+            <property>
+              <value><type>text</type></value>
+              <name>Comment</name>
+            </property>
+            <property>
+              <value>0.0<type>float</type></value>
+              <name>Duration</name>
+            </property>
+            <property>
+              <value><type>time</type></value>
+              <name>StartTime</name>
+            </property>
+            <property>
+              <value><type>time</type></value>
+              <name>EndTime</name>
+            </property>
+            <property>
+              <value><type>string</type></value>
+              <name>Intensity</name>
+            </property>
+            <property>
+              <value><type>string</type></value>
+              <name>Modality</name>
+            </property>
+            <property>
+              <value>0<type>int</type></value>
+              <name>Repetitions</name>
+            </property>
+            <name>Response</name>
+            <type>undefined</type>
+          </section>
+          <type>event</type>
+        </section>
+        <section>
+          <definition>Section for short annotations that are taken during an experiment to describe certain events.</definition>
+          <property>
+            <definition>The local datetime entry of the moment the event was
+         taken (YYYY-MM-DD hh:mm:ss format).</definition>
+            <value><type>datetime</type></value>
+            <name>Timestamp</name>
+          </property>
+          <property>
+            <definition>A description of the event.</definition>
+            <value><type>text</type></value>
+            <name>Description</name>
+          </property>
+          <name>OtherCars</name>
+          <section>
+            <property>
+              <value><type>text</type></value>
+              <name>Description</name>
+            </property>
+            <property>
+              <value><type>text</type></value>
+              <name>Comment</name>
+            </property>
+            <property>
+              <value>0.0<type>float</type></value>
+              <name>Duration</name>
+            </property>
+            <property>
+              <value><type>time</type></value>
+              <name>StartTime</name>
+            </property>
+            <property>
+              <value><type>time</type></value>
+              <name>EndTime</name>
+            </property>
+            <property>
+              <value><type>string</type></value>
+              <name>Intensity</name>
+            </property>
+            <property>
+              <value><type>string</type></value>
+              <name>Modality</name>
+            </property>
+            <property>
+              <value>0<type>int</type></value>
+              <name>Repetitions</name>
+            </property>
+            <name>Response</name>
+            <type>undefined</type>
+          </section>
+          <type>event</type>
+        </section>
+        <type>event_list</type>
+      </section>
+      <section>
+        <definition>Fixed properties of hardware components used in the
+    experimental setup. There are two sections for describing
+    hardware components: the "HardwareProperties" and the
+    "HardwareSettings" section. While the HardwareProperties
+    describe the fixed properties of the hardware that can not be
+    changed, the HardwareSettings section describes the actual,
+    adjustable, parameters of the hardware that may change with each
+    recording or dataset. For example, the sample rate of an
+    data-acquisition board or the settings of a filter. In each of
+    these two sections there are subsections for each device that
+    correspond to the class of the device like data-acquisition,
+    amplifier, etc. Some properties are common for any
+    type.</definition>
+        <property>
+          <definition>The device's serial number.</definition>
+          <value><type>string</type></value>
+          <name>SerialNo</name>
+        </property>
+        <property>
+          <definition>The inventory number of the device.</definition>
+          <value><type>string</type></value>
+          <name>InventoryNo</name>
+        </property>
+        <property>
+          <definition>Who's the owner of the device.</definition>
+          <value><type>person</type></value>
+          <name>Owner</name>
+        </property>
+        <property>
+          <definition>The model name of this hardware item.</definition>
+          <value><type>string</type></value>
+          <name>Model</name>
+        </property>
+        <property>
+          <definition>The type of amplifier. E.g. extracellular, intracellular amplifier etc.</definition>
+          <value><type>string</type></value>
+          <name>Type</name>
+        </property>
+        <property>
+          <definition>The Manufacturer of this hardware item.</definition>
+          <value><type>string</type></value>
+          <name>Manufacturer</name>
+        </property>
+        <property>
+          <definition>A description of this hardware item.</definition>
+          <value><type>string</type></value>
+          <name>Description</name>
+        </property>
+        <name>Hardware</name>
+        <section>
+          <definition>Properties to describe an electrode.</definition>
+          <property>
+            <definition>The type of electrode.</definition>
+            <value>EEG<type>string</type></value>
+            <name>Type</name>
+          </property>
+          <property>
+            <definition>The Puller used to make the electrodes.</definition>
+            <dependencyvalue>Glass</dependencyvalue>
+            <value><type>string</type></value>
+            <dependency>Material</dependency>
+            <name>Puller</name>
+          </property>
+          <property>
+            <definition>Usage of electrode.</definition>
+            <value>Ground<type>string</type></value>
+            <value>Reference<type>string</type></value>
+            <value>Channel<type>string</type></value>
+            <name>Usage</name>
+          </property>
+          <property>
+            <definition>The Material the electrodes are made of e.g. glass. tungsten, steel ...</definition>
+            <value><type>string</type></value>
+            <name>Material</name>
+          </property>
+          <property>
+            <definition>The manufacturer of the electrodes if e.g. ordered from a company.</definition>
+            <value><type>string</type></value>
+            <name>Manufacturer</name>
+          </property>
+          <property>
+            <definition>Electrode impedance.</definition>
+            <value>0.0<unit>MΩ</unit><type>float</type></value>
+            <name>Impedance</name>
+          </property>
+          <property>
+            <definition>Number of electrodes in a multi-electrode-array.</definition>
+            <value>0<type>int</type></value>
+            <name>ElectrodeCount</name>
+          </property>
+          <property>
+            <value><type>string</type></value>
+            <name>Description</name>
+          </property>
+          <property>
+            <value><type>string</type></value>
+            <name>ElectrodeLocation</name>
+          </property>
+          <name>Electrodes</name>
+          <type>electrode</type>
+        </section>
+        <section>
+          <definition>Properties of an eyetracker.</definition>
+          <property>
+            <definition>The Manufacturer of this hardware item.</definition>
+            <value>Tobii<type>string</type></value>
+            <name>Manufacturer</name>
+          </property>
+          <property>
+            <definition>The kind of eyetracker.</definition>
+            <value>head mounted<type>string</type></value>
+            <name>Type</name>
+          </property>
+          <property>
+            <definition>The way the head was fixed. Makes no sense if the eytracker is head mounted.</definition>
+            <dependencyvalue>Tabletop</dependencyvalue>
+            <value>None<type>string</type></value>
+            <dependency>Type</dependency>
+            <name>HeadFixation</name>
+          </property>
+          <property>
+            <definition>The device's serial number.</definition>
+            <value><type>string</type></value>
+            <name>SerialNo</name>
+          </property>
+          <property>
+            <definition>The inventory number of the device.</definition>
+            <value><type>string</type></value>
+            <name>InventoryNo</name>
+          </property>
+          <property>
+            <definition>Who's the owner of the device.</definition>
+            <value><type>string</type></value>
+            <name>Owner</name>
+          </property>
+          <property>
+            <definition>The model name of this hardware item.</definition>
+            <value><type>string</type></value>
+            <name>Model</name>
+          </property>
+          <property>
+            <definition>Space for some comments.</definition>
+            <value><type>text</type></value>
+            <name>Comment</name>
+          </property>
+          <property>
+            <definition>The rate with which eye positions are sampled.</definition>
+            <value>0.0<unit>Hz</unit><type>float</type></value>
+            <name>SampleRate</name>
+          </property>
+          <property>
+            <definition>The kind of detektor used in this eyetracker.</definition>
+            <value>Infrared<type>string</type></value>
+            <value>Dual Purkinje<type>string</type></value>
+            <value>Coil<type>string</type></value>
+            <name>DetektorType</name>
+          </property>
+          <property>
+            <definition>The kind of filter applied to the data.</definition>
+            <value><type>string</type></value>
+            <name>Filter</name>
+          </property>
+          <property>
+            <definition>The calibration procedure.</definition>
+            <value><type>string</type></value>
+            <name>Calibration</name>
+          </property>
+          <property>
+            <definition>The way the head was fixed. Makes no sense if the eytracker is head mounted.</definition>
+            <dependencyvalue>Tabletop</dependencyvalue>
+            <value>Bitebar<type>string</type></value>
+            <value>Chinrest<type>string</type></value>
+            <dependency>Type</dependency>
+            <name>Fixation</name>
+          </property>
+          <property>
+            <definition>A description of this hardware item.</definition>
+            <value><type>string</type></value>
+            <name>Description</name>
+          </property>
+          <name>Eyetracker</name>
+          <type>hardware/eyetracker</type>
+        </section>
+        <section>
+          <definition>The amplifier section defines elements that can be used to describe amplifier properties and settings.</definition>
+          <property>
+            <definition>The device's serial number.</definition>
+            <value><type>string</type></value>
+            <name>SerialNo</name>
+          </property>
+          <property>
+            <definition>The inventory number of the device.</definition>
+            <value><type>string</type></value>
+            <name>InventoryNo</name>
+          </property>
+          <property>
+            <definition>Who's the owner of the device.</definition>
+            <value><type>person</type></value>
+            <name>Owner</name>
+          </property>
+          <property>
+            <definition>The model name of this hardware item.</definition>
+            <value><type>string</type></value>
+            <name>Model</name>
+          </property>
+          <property>
+            <definition>The type of amplifier. E.g. extracellular, intracellular amplifier etc.</definition>
+            <value><type>string</type></value>
+            <name>Type</name>
+          </property>
+          <property>
+            <definition>The Manufacturer of this hardware item.</definition>
+            <value><type>string</type></value>
+            <name>Manufacturer</name>
+          </property>
+          <property>
+            <definition>The amplifier mode. Measurement in Voltage clamp controlled current clamp -mode.</definition>
+            <value>Bridge<definition>Passive measurement in Bridge -Mode.</definition><type>string</type></value>
+            <value>CC<definition>Current Clamp measurement.</definition><type>string</type></value>
+            <value>VC<definition>Voltage Clamp measurement.</definition><type>string</type></value>
+            <value>VCcCC<definition>Voltage Clamp controlled Current Clamp measurement.</definition><type>string</type></value>
+            <value>Dynamic Clamp<definition>Dynamic Clamp measurement.</definition><type>string</type></value>
+            <name>MeasurementType</name>
+          </property>
+          <property>
+            <definition>The amplifier mode.</definition>
+            <value>Bridged<definition>Passive measurement in Bridge -Mode.</definition><type>string</type></value>
+            <value>Discontinuous<definition>Measurement in Discontinuous (switched) -Mode.</definition><type>string</type></value>
+            <name>OperationMode</name>
+          </property>
+          <property>
+            <definition>The amplifier switching frequency. This property is only meaningful in Discontinuos operation modes.</definition>
+            <dependencyvalue>Discontiuous</dependencyvalue>
+            <value>0.0<unit>Hz</unit><type>float</type></value>
+            <dependency>OperationMode</dependency>
+            <name>SwitchingFrequency</name>
+          </property>
+          <property>
+            <definition>The amplifier duty cylce if in disconinuous mode (e.g. 0.25, 0.5).</definition>
+            <dependencyvalue>Discontinuous</dependencyvalue>
+            <value>0.0<type>float</type></value>
+            <dependency>OperationMode</dependency>
+            <name>DutyCycle</name>
+          </property>
+          <property>
+            <definition>The amplifier gain.</definition>
+            <value>0.0<type>float</type></value>
+            <name>Gain</name>
+          </property>
+          <property>
+            <definition>The cutoff frequency of the amplifier's highpass filter.</definition>
+            <value>0.0<unit>Hz</unit><type>float</type></value>
+            <name>HighpassCutoff</name>
+          </property>
+          <property>
+            <definition>The cutoff frequency of the amplifier's lowpass filter.</definition>
+            <value>0.0<unit>Hz</unit><type>float</type></value>
+            <name>LowpassCutoff</name>
+          </property>
+          <property>
+            <definition>A description of this hardware item.</definition>
+            <value><type>string</type></value>
+            <name>Description</name>
+          </property>
+          <name>Amplifier</name>
+          <type>hardware/amplifier</type>
+        </section>
+        <section>
+          <definition>The hardware section describes the settings of the used hardware. There should be one hardware section for each hardware item that was used.</definition>
+          <property>
+            <definition>The device's serial number.</definition>
+            <value><type>string</type></value>
+            <name>SerialNo</name>
+          </property>
+          <property>
+            <definition>The inventory number of the device.</definition>
+            <value><type>string</type></value>
+            <name>InventoryNo</name>
+          </property>
+          <property>
+            <definition>The model name of this hardware item.</definition>
+            <value><type>string</type></value>
+            <name>Model</name>
+          </property>
+          <property>
+            <definition>The Manufacturer of this hardware item.</definition>
+            <value><type>string</type></value>
+            <name>Manufacturer</name>
+          </property>
+          <property>
+            <definition>Who's the owner of the device.</definition>
+            <value><type>string</type></value>
+            <name>Owner</name>
+          </property>
+          <property>
+            <definition>The voltage resolution of the analog input (AIN) subsystem given in bit.</definition>
+            <value>0<type>int</type></value>
+            <name>AIResolution</name>
+          </property>
+          <property>
+            <definition>The maximum sampling rate.</definition>
+            <value>0.0<unit>Hz</unit><type>float</type></value>
+            <name>AIMaxSampleRate</name>
+          </property>
+          <property>
+            <definition>The number of input channels of the DAQ-device.</definition>
+            <value>0<type>int</type></value>
+            <name>AIChannelCount</name>
+          </property>
+          <property>
+            <definition>The voltage resolution of a data-acquisition
+             analog output (AO) subsystem given in bit.</definition>
+            <value>0<type>int</type></value>
+            <name>AOResolution</name>
+          </property>
+          <property>
+            <definition>The maximum sampling rate.</definition>
+            <value>0.0<unit>Hz</unit><type>float</type></value>
+            <name>AOMaxSampleRate</name>
+          </property>
+          <property>
+            <definition>The number of output channels of the device.</definition>
+            <value>0<type>int</type></value>
+            <name>AOChannelCount</name>
+          </property>
+          <property>
+            <definition>The number of digital input/output lines (DIO) of the device.</definition>
+            <value>0<type>int</type></value>
+            <name>DIOLineCount</name>
+          </property>
+          <property>
+            <definition>The number of used analog input channels.</definition>
+            <value>0<type>int</type></value>
+            <name>AIUsedChannelCount</name>
+          </property>
+          <property>
+            <definition>The sample rate with which an individual input
+            channel was sampled. Given in Hz.</definition>
+            <value>0<unit>Hz</unit><type>int</type></value>
+            <name>AISampleRate</name>
+          </property>
+          <property>
+            <definition>The gain of an input channel.</definition>
+            <value>0.0<type>float</type></value>
+            <name>AIChannelGain</name>
+          </property>
+          <property>
+            <definition>The reference to which voltages were measured. Usually either "common ground" or "differential".</definition>
+            <value><type>string</type></value>
+            <name>AIReference</name>
+          </property>
+          <property>
+            <definition>The polarity of the measurement "unipolar" or "bipolar".</definition>
+            <value><type>string</type></value>
+            <name>AIPolarity</name>
+          </property>
+          <property>
+            <definition>The number of used analog output channels.</definition>
+            <value>0<type>int</type></value>
+            <name>AOUsedChannelCount</name>
+          </property>
+          <property>
+            <definition>The sample rate with which an individual output
+            channel was sampled. Given in Hz.</definition>
+            <value>0<unit>Hz</unit><type>int</type></value>
+            <name>AOSampleRate</name>
+          </property>
+          <property>
+            <definition>The gain of an output channel.</definition>
+            <value>0.0<type>float</type></value>
+            <name>AOChannelGain</name>
+          </property>
+          <property>
+            <definition>A description of this hardware item.</definition>
+            <value><type>string</type></value>
+            <name>Description</name>
+          </property>
+          <name>DataAcquisition</name>
+          <type>hardware/daq</type>
+        </section>
+        <section>
+          <definition>Fixed properties of hardware components used in the
+    experimental setup. There are two sections for describing
+    hardware components: the "HardwareProperties" and the
+    "HardwareSettings" section. While the HardwareProperties
+    describe the fixed properties of the hardware that can not be
+    changed, the HardwareSettings section describes the actual,
+    adjustable, parameters of the hardware that may change with each
+    recording or dataset. For example, the sample rate of an
+    data-acquisition board or the settings of a filter. In each of
+    these two sections there are subsections for each device that
+    correspond to the class of the device like data-acquisition,
+    amplifier, etc. Some properties are common for any
+    type.</definition>
+          <property>
+            <definition>The device's serial number.</definition>
+            <value><type>string</type></value>
+            <name>SerialNo</name>
+          </property>
+          <property>
+            <definition>The inventory number of the device.</definition>
+            <value><type>string</type></value>
+            <name>InventoryNo</name>
+          </property>
+          <property>
+            <definition>Who's the owner of the device.</definition>
+            <value><type>person</type></value>
+            <name>Owner</name>
+          </property>
+          <property>
+            <definition>The model name of this hardware item.</definition>
+            <value><type>string</type></value>
+            <name>Model</name>
+          </property>
+          <property>
+            <definition>The type of amplifier. E.g. extracellular, intracellular amplifier etc.</definition>
+            <value><type>string</type></value>
+            <name>Type</name>
+          </property>
+          <property>
+            <definition>The Manufacturer of this hardware item.</definition>
+            <value><type>string</type></value>
+            <name>Manufacturer</name>
+          </property>
+          <property>
+            <definition>A description of this hardware item.</definition>
+            <value><type>string</type></value>
+            <name>Description</name>
+          </property>
+          <name>Vehicle</name>
+          <type>hardware</type>
+        </section>
+        <section>
+          <definition>Fixed properties of hardware components used in the
+    experimental setup. There are two sections for describing
+    hardware components: the "HardwareProperties" and the
+    "HardwareSettings" section. While the HardwareProperties
+    describe the fixed properties of the hardware that can not be
+    changed, the HardwareSettings section describes the actual,
+    adjustable, parameters of the hardware that may change with each
+    recording or dataset. For example, the sample rate of an
+    data-acquisition board or the settings of a filter. In each of
+    these two sections there are subsections for each device that
+    correspond to the class of the device like data-acquisition,
+    amplifier, etc. Some properties are common for any
+    type.</definition>
+          <property>
+            <definition>The device's serial number.</definition>
+            <value><type>string</type></value>
+            <name>SerialNo</name>
+          </property>
+          <property>
+            <definition>The inventory number of the device.</definition>
+            <value><type>string</type></value>
+            <name>InventoryNo</name>
+          </property>
+          <property>
+            <definition>Who's the owner of the device.</definition>
+            <value><type>person</type></value>
+            <name>Owner</name>
+          </property>
+          <property>
+            <definition>The model name of this hardware item.</definition>
+            <value><type>string</type></value>
+            <name>Model</name>
+          </property>
+          <property>
+            <definition>The type of amplifier. E.g. extracellular, intracellular amplifier etc.</definition>
+            <value><type>string</type></value>
+            <name>Type</name>
+          </property>
+          <property>
+            <definition>The Manufacturer of this hardware item.</definition>
+            <value><type>string</type></value>
+            <name>Manufacturer</name>
+          </property>
+          <property>
+            <definition>A description of this hardware item.</definition>
+            <value><type>string</type></value>
+            <name>Description</name>
+          </property>
+          <name>MotionTracker</name>
+          <type>hardware</type>
+        </section>
+        <type>hardware</type>
+      </section>
+      <section>
+        <name>Experimenters</name>
+        <section>
+          <definition>Information about a person. E.g. as Experimenter, Author, etc.</definition>
+          <property>
+            <value>0<type>int</type></value>
+            <name>Age</name>
+          </property>
+          <property>
+            <definition>The role of this person e.g. when describing
+         a project (Responsible investigator), or a recording
+         (Experimenter).</definition>
+            <value>Experimenter<type>string</type></value>
+            <name>Role</name>
+          </property>
+          <property>
+            <definition>The  persons first Name (John).</definition>
+            <value><type>string</type></value>
+            <name>FirstName</name>
+          </property>
+          <property>
+            <definition>The persons last name (Doe).</definition>
+            <value><type>string</type></value>
+            <name>LastName</name>
+          </property>
+          <property>
+            <definition>The complete name of this person e.g. John
+         Doe.</definition>
+            <value><type>person</type></value>
+            <name>FullName</name>
+          </property>
+          <property>
+            <definition>Male or female?</definition>
+            <value><type>string</type></value>
+            <name>Affiliation</name>
+          </property>
+          <property>
+            <definition>Person's e-mail.</definition>
+            <value><type>string</type></value>
+            <name>Email</name>
+          </property>
+          <property>
+            <definition>Person's phone number.</definition>
+            <value><type>string</type></value>
+            <name>PhoneNumber</name>
+          </property>
+          <name>Experimenter1</name>
+          <type>person</type>
+        </section>
+        <section>
+          <definition>Information about a person. E.g. as Experimenter, Author, etc.</definition>
+          <property>
+            <value>0<type>int</type></value>
+            <name>Age</name>
+          </property>
+          <property>
+            <definition>The role of this person e.g. when describing
+         a project (Responsible investigator), or a recording
+         (Experimenter).</definition>
+            <value>Experimenter<type>string</type></value>
+            <name>Role</name>
+          </property>
+          <property>
+            <definition>The  persons first Name (John).</definition>
+            <value><type>string</type></value>
+            <name>FirstName</name>
+          </property>
+          <property>
+            <definition>The persons last name (Doe).</definition>
+            <value><type>string</type></value>
+            <name>LastName</name>
+          </property>
+          <property>
+            <definition>The complete name of this person e.g. John
+         Doe.</definition>
+            <value><type>person</type></value>
+            <name>FullName</name>
+          </property>
+          <property>
+            <definition>Male or female?</definition>
+            <value><type>string</type></value>
+            <name>Affiliation</name>
+          </property>
+          <property>
+            <definition>Person's e-mail.</definition>
+            <value><type>string</type></value>
+            <name>Email</name>
+          </property>
+          <property>
+            <definition>Person's phone number.</definition>
+            <value><type>string</type></value>
+            <name>PhoneNumber</name>
+          </property>
+          <name>Experimenter2</name>
+          <type>person</type>
+        </section>
+        <type>undefined</type>
+      </section>
+      <section>
+        <definition>Information about a person. E.g. as Experimenter, Author, etc.</definition>
+        <property>
+          <value>45<type>int</type></value>
+          <name>Age</name>
+        </property>
+        <property>
+          <definition>The  persons first Name (John).</definition>
+          <value><type>string</type></value>
+          <name>FirstName</name>
+        </property>
+        <property>
+          <definition>The persons last name (Doe).</definition>
+          <value><type>string</type></value>
+          <name>LastName</name>
+        </property>
+        <property>
+          <definition>The complete name of this person e.g. John
+         Doe.</definition>
+          <value><type>person</type></value>
+          <name>FullName</name>
+        </property>
+        <property>
+          <definition>Male or female?</definition>
+          <value>male<type>string</type></value>
+          <name>Gender</name>
+        </property>
+        <property>
+          <definition>The birthday. YYYY-MM-dd</definition>
+          <value><type>date</type></value>
+          <name>Birthday</name>
+        </property>
+        <property>
+          <definition>Person's e-mail.</definition>
+          <value><type>string</type></value>
+          <name>Email</name>
+        </property>
+        <property>
+          <definition>Person's phone number.</definition>
+          <value><type>string</type></value>
+          <name>PhoneNumber</name>
+        </property>
+        <property>
+          <definition>Handedness - the dominand hand of the subject</definition>
+          <value><type>string</type></value>
+          <name>Laterality</name>
+        </property>
+        <property>
+          <definition>Highest archived education level of the person.</definition>
+          <value><type>string</type></value>
+          <name>Education level</name>
+        </property>
+        <name>Subject</name>
+        <type>person</type>
+      </section>
+      <type>experiment</type>
+    </section>
+    <type>project</type>
+  </section>
+  <author>Thomas Wachtler,,,</author>
+</odML>
