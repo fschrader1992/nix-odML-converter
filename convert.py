@@ -1,6 +1,5 @@
 import sys
 import os
-from datetime import datetime
 from collections import Iterable
 import odml
 import nixio as nix
