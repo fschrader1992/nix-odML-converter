@@ -42,9 +42,7 @@ def print_info():
 
 
 def convert_datetime(dt):
-    print(dt)
-    import IPython
-    IPython.embed()
+    return dt.isoformat()
 
 
 def convert_value(v):
@@ -52,13 +50,16 @@ def convert_value(v):
     if v.dtype == "binary":
         info["skipped binary values"] += 1
         return None
-    if v.data is None:
+    data = v.data
+    if data is None:
         info["skipped none values"] += 1
         return None
+    if v.dtype in ("date", "time", "datetime"):
+        data = convert_datetime(v.data)
     try:
-        nixv = nix.Value(v.data)
+        nixv = nix.Value(data)
     except TypeError as exc:
-        print("Unsuported data type: {}".format(type(v.data)))
+        print("Unsuported data type: {}".format(type(data)))
         info["type errors"] += 1
         return None
     nixv.unit = v.unit
