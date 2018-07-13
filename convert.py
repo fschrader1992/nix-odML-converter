@@ -43,13 +43,7 @@ def convert_value(v, dtype):
         return None
     if dtype in ("date", "time", "datetime"):
         v = convert_datetime(v)
-    try:
-        nixv = nix.Value(v)
-    except TypeError as exc:
-        print("Unsupported data type: {}".format(type(v)))
-        info["type errors"] += 1
-        return None
-    return nixv
+    return v
 
 
 def odml_to_nix_recurse(odmlseclist, nixparentsec):
@@ -77,7 +71,7 @@ def odml_to_nix_recurse(odmlseclist, nixparentsec):
             nixvalues = []
             for v in odmlvalue:
                 nixv = convert_value(v, odmlprop.dtype)
-                if nixv:
+                if nixv is not None:
                     nixvalues.append(nixv)
 
             if not nixvalues:
@@ -89,7 +83,7 @@ def odml_to_nix_recurse(odmlseclist, nixparentsec):
             nixprop.unit = odmlprop.unit
             nixprop.uncertainty = odmlprop.uncertainty
             nixprop.reference = odmlprop.reference
-            nixprop.dtype = odmlprop.dtype
+            nixprop.odml_type = nix.property.OdmlType[odmlprop.dtype]
             nixprop.value_origin = odmlprop.value_origin
             nixprop.dependency = odmlprop.dependency
             nixprop.dependency_value = odmlprop.dependency_value
@@ -133,6 +127,7 @@ def get_odml_doc(nix_file):
 
     attributes = ['id', 'author', 'version', 'repository', 'date']
     return odml.Document(**{(att, getattr(doc_section, att)) for att in attributes})
+
 
 def nix_to_odml_recurse(nix_section_list, nix_section):
     for nix_sec in nix_section_list:
@@ -189,7 +184,7 @@ def main(filename):
         raise ValueError('Unknown file format {}'.format(file_ext))
 
     # Check output file
-    outfilename = '{}.{}'.format(file_base, output_format)
+    outfilename = file_base + output_format
     if os.path.exists(outfilename):
         yesno = input("File {} already exists. "
                       "Overwrite? ".format(outfilename))
