@@ -1,6 +1,5 @@
 import sys
 import os
-from collections import Iterable
 import odml
 import nixio as nix
 
@@ -34,40 +33,35 @@ def convert_datetime(dt):
     return dt.isoformat()
 
 
-def convert_value(v):
+def convert_value(v, dtype):
     global info
-    if v.dtype == "binary":
+    if dtype == "binary":
         info["skipped binary values"] += 1
         return None
-    data = v.data
-    if data is None:
+    if v is None:
         info["skipped none values"] += 1
         return None
-    if v.dtype in ("date", "time", "datetime"):
-        data = convert_datetime(v.data)
+    if dtype in ("date", "time", "datetime"):
+        v = convert_datetime(v)
     try:
-        nixv = nix.Value(data)
+        nixv = nix.Value(v)
     except TypeError as exc:
-        print("Unsuported data type: {}".format(type(data)))
+        print("Unsupported data type: {}".format(type(v)))
         info["type errors"] += 1
         return None
-    nixv.unit = v.unit
-    nixv.uncertainty = v.uncertainty
-    nixv.reference = v.reference
     return nixv
 
 
-def write_recurse(odmlseclist, nixparentsec):
+def odml_to_nix_recurse(odmlseclist, nixparentsec):
     global info
     for odmlsec in odmlseclist:
         info["sections read"] += 1
         secname = odmlsec.name
-        type_ = odmlsec.type
         definition = odmlsec.definition
         reference = odmlsec.reference
         repository = odmlsec.repository
 
-        nixsec = nixparentsec.create_section(secname, type_)
+        nixsec = nixparentsec.create_section(secname, odmlsec.type, oid=odmlsec.id)
         info["sections written"] += 1
         nixsec.definition = definition
         if reference is not None:
@@ -81,44 +75,139 @@ def write_recurse(odmlseclist, nixparentsec):
             definition = odmlprop.definition
             odmlvalue = odmlprop.value
             nixvalues = []
-            if isinstance(odmlvalue, Iterable):
-                for v in odmlvalue:
-                    nixv = convert_value(v)
-                    if nixv:
-                        nixvalues.append(nixv)
-            else:
-                nixv = convert_value(odmlvalue)
+            for v in odmlvalue:
+                nixv = convert_value(v, odmlprop.dtype)
                 if nixv:
-                    nixvalues = [convert_value(odmlvalue)]
+                    nixvalues.append(nixv)
 
             if not nixvalues:
                 info["skipped empty properties"] += 1
                 continue
-            nixprop = nixsec.create_property(propname, nixvalues)
+            nixprop = nixsec.create_property(propname, nixvalues, oid=odmlprop.id)
             info["properties written"] += 1
             nixprop.definition = definition
+            nixprop.unit = odmlprop.unit
+            nixprop.uncertainty = odmlprop.uncertainty
+            nixprop.reference = odmlprop.reference
+            nixprop.dtype = odmlprop.dtype
+            nixprop.value_origin = odmlprop.value_origin
+            nixprop.dependency = odmlprop.dependency
+            nixprop.dependency_value = odmlprop.dependency_value
 
-        write_recurse(odmlsec.sections, nixsec)
+        odml_to_nix_recurse(odmlsec.sections, nixsec)
+
+def write_odml_doc(odmldoc, nixfile):
+    nixsec = nixfile.create_section('odML document', 'odML document', oid=odmldoc.id)
+    info["sections written"] += 1
+    nixsec.author = odmldoc.author
+    nixsec.date = odmldoc.date
+    nixsec.version = odmldoc.version
+    nixsec.repository = odmldoc.repository
+    return nixsec
 
 
-def nixwrite(metadata, filename):
-    nixfile = nix.File.open(filename, nix.FileMode.Overwrite, backend="h5py")
-    write_recurse(metadata.sections, nixfile)
+def nixwrite(odml_doc, filename):
+    nixfile = nix.File.open(filename, nix.FileMode.Overwrite)
+
+    nix_document_section = write_odml_doc(odml_doc, nixfile)
+    odml_to_nix_recurse(odml_doc.sections, nix_document_section)
+
+
+############### NIX -> ODML #################
+
+def odmlwrite(nix_file, filename):
+
+    odml_doc = get_odml_doc(nix_file)
+    nix_to_odml_recurse(nix)
+
+def get_odml_doc(nix_file):
+
+    # identify odml document section in nix file
+    doc_section = nix_file.find_sections(lambda x: x.name=='odml document', limit=1)
+    if not doc_section:
+        raise ValueError('No odML document section present in nix file.')
+    elif len(doc_section) > 1:
+        raise ValueError('More than one ({}) document section present in nix file.'
+                         ''.format(len(doc_section)))
+    doc_section = doc_section[0]
+
+    attributes = ['id', 'author', 'version', 'repository', 'date']
+    return odml.Document(**{(att, getattr(doc_section, att)) for att in attributes})
+
+def nix_to_odml_recurse(nix_section_list, nix_section):
+    for nix_sec in nix_section_list:
+        # info["sections read"] += 1
+        secname = nix_sec.name
+        definition = nix_sec.definition
+        reference = nix_sec.reference
+        repository = nix_sec.repository
+
+        odml_sec = odml.Section(secname, definition=definition, reference=reference,
+                                oid=nix_sec.id, repository=repository)
+        # info["sections written"] += 1
+        if reference is not None:
+            nixsec["reference"] = reference
+        if repository is not None:
+            nixsec["repository"] = repository
+
+        for odmlprop in odmlsec.properties:
+            info["properties read"] += 1
+            propname = odmlprop.name
+            definition = odmlprop.definition
+            odmlvalue = odmlprop.value
+            nixvalues = []
+            for v in odmlvalue:
+                nixv = convert_value(v, odmlprop.dtype)
+                if nixv:
+                    nixvalues.append(nixv)
+
+            if not nixvalues:
+                info["skipped empty properties"] += 1
+                continue
+            nixprop = nixsec.create_property(propname, nixvalues, oid=odmlprop.id)
+            info["properties written"] += 1
+            nixprop.definition = definition
+            nixprop.unit = odmlprop.unit
+            nixprop.uncertainty = odmlprop.uncertainty
+            nixprop.reference = odmlprop.reference
+            nixprop.dtype = odmlprop.dtype
+            nixprop.value_origin = odmlprop.value_origin
+            nixprop.dependency = odmlprop.dependency
+            nixprop.dependency_value = odmlprop.dependency_value
+
+        odml_to_nix_recurse(odmlsec.sections, nixsec)
 
 
 def main(filename):
-    metadata = odml.load(filename)
-    outfilename = os.path.basename(filename)
-    outfilename = outfilename.replace("xml", "nix").replace("odml", "nix")
+    # Determine input and output format
+    file_base, file_ext = os.path.splitext(filename)
+    if file_ext in ['.xml', '.odml']:
+        output_format = '.nix'
+    elif file_ext in ['.nix']:
+        output_format = '.xml'
+    else:
+        raise ValueError('Unknown file format {}'.format(file_ext))
 
+    # Check output file
+    outfilename = '{}.{}'.format(file_base, output_format)
     if os.path.exists(outfilename):
         yesno = input("File {} already exists. "
                       "Overwrite? ".format(outfilename))
         if yesno.lower() not in ("y", "yes"):
             print("Aborted")
             return
-    print("Saving to NIX file...", end=" ", flush=True)
-    nixwrite(metadata, outfilename)
+
+    # Load, convert and save to new format
+    print("Saving to {} file...".format(output_format), end=" ", flush=True)
+    if output_format in ['.nix']:
+        odml_doc = odml.load(filename)
+        nixwrite(odml_doc, outfilename)
+    elif output_format in ['.xml', '.odml']:
+        nix_file = nix.File.open(filename, nix.FileMode.ReadOnly)
+        odmlwrite(nix_file, outfilename)
+    else:
+        raise ValueError('Unknown file format {}'.format(output_format))
+
     print("Done")
 
 
