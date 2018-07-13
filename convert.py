@@ -2,6 +2,7 @@ import sys
 import os
 import odml
 import nixio as nix
+import odml.fileio
 
 
 info = {"sections read": 0,
@@ -45,6 +46,8 @@ def convert_value(v, dtype):
         v = convert_datetime(v)
     return v
 
+
+########### NIX -> ODML ##############
 
 def odml_to_nix_recurse(odmlseclist, nixparentsec):
     global info
@@ -111,13 +114,14 @@ def nixwrite(odml_doc, filename):
 
 def odmlwrite(nix_file, filename):
 
-    odml_doc = get_odml_doc(nix_file)
-    nix_to_odml_recurse(nix)
+    odml_doc, nix_section = get_odml_doc(nix_file)
+    nix_to_odml_recurse(nix_section.sections, odml_doc)
+    odml.fileio.save(odml_doc, filename)
 
 def get_odml_doc(nix_file):
 
     # identify odml document section in nix file
-    doc_section = nix_file.find_sections(lambda x: x.name=='odml document', limit=1)
+    doc_section = nix_file.find_sections(lambda x: x.name=='odML document', limit=1)
     if not doc_section:
         raise ValueError('No odML document section present in nix file.')
     elif len(doc_section) > 1:
@@ -126,51 +130,41 @@ def get_odml_doc(nix_file):
     doc_section = doc_section[0]
 
     attributes = ['id', 'author', 'version', 'repository', 'date']
-    return odml.Document(**{(att, getattr(doc_section, att)) for att in attributes})
+    doc_attributes = {att: getattr(doc_section, att) for att in attributes
+                      if hasattr(doc_section, att)}
+    if 'id' in doc_attributes:
+        doc_attributes['oid'] = doc_attributes.pop('id')
+
+    return odml.Document(**doc_attributes), doc_section
 
 
-def nix_to_odml_recurse(nix_section_list, nix_section):
+def nix_to_odml_recurse(nix_section_list, odml_section):
     for nix_sec in nix_section_list:
-        # info["sections read"] += 1
-        secname = nix_sec.name
-        definition = nix_sec.definition
-        reference = nix_sec.reference
-        repository = nix_sec.repository
+        info["sections read"] += 1
 
-        odml_sec = odml.Section(secname, definition=definition, reference=reference,
-                                oid=nix_sec.id, repository=repository)
-        # info["sections written"] += 1
-        if reference is not None:
-            nixsec["reference"] = reference
-        if repository is not None:
-            nixsec["repository"] = repository
+        attributes = ['name', 'type', 'definition', 'reference', 'repository', 'link',
+                      'include', 'oid']
+        nix_attributes = {attr: getattr(nix_sec, attr) for attr in attributes
+                          if hasattr(nix_sec, attr)}
+        nix_attributes['parent'] = odml_section
 
-        for odmlprop in odmlsec.properties:
+        odml_sec = odml.Section(**nix_attributes)
+        info["sections written"] += 1
+        for nixprop in nix_sec.props:
             info["properties read"] += 1
-            propname = odmlprop.name
-            definition = odmlprop.definition
-            odmlvalue = odmlprop.value
-            nixvalues = []
-            for v in odmlvalue:
-                nixv = convert_value(v, odmlprop.dtype)
-                if nixv:
-                    nixvalues.append(nixv)
+            prop_attributes = ['name', 'values', 'unit', 'uncertainty', 'reference',
+                               'definition', 'dependency', 'dependency_value', 'odml_type',
+                               'value_origin', 'oid']
+            nix_prop_attributes = {attr: getattr(nixprop, attr) for attr in prop_attributes
+                                   if hasattr(nixprop, attr)}
+            nix_prop_attributes['parent'] = odml_sec
+            nix_prop_attributes['dtype'] = nix_prop_attributes.pop('odml_type')
+            nix_prop_attributes['value'] = list(nix_prop_attributes.pop('values'))
 
-            if not nixvalues:
-                info["skipped empty properties"] += 1
-                continue
-            nixprop = nixsec.create_property(propname, nixvalues, oid=odmlprop.id)
+            odml.Property(**nix_prop_attributes)
             info["properties written"] += 1
-            nixprop.definition = definition
-            nixprop.unit = odmlprop.unit
-            nixprop.uncertainty = odmlprop.uncertainty
-            nixprop.reference = odmlprop.reference
-            nixprop.dtype = odmlprop.dtype
-            nixprop.value_origin = odmlprop.value_origin
-            nixprop.dependency = odmlprop.dependency
-            nixprop.dependency_value = odmlprop.dependency_value
 
-        odml_to_nix_recurse(odmlsec.sections, nixsec)
+        nix_to_odml_recurse(nix_sec.sections, odml_sec)
 
 
 def main(filename):
