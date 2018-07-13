@@ -113,13 +113,11 @@ def nixwrite(odml_doc, filename):
 ############### NIX -> ODML #################
 
 def odmlwrite(nix_file, filename):
-
     odml_doc, nix_section = get_odml_doc(nix_file)
     nix_to_odml_recurse(nix_section.sections, odml_doc)
     odml.fileio.save(odml_doc, filename)
 
 def get_odml_doc(nix_file):
-
     # identify odml document section in nix file
     doc_section = nix_file.find_sections(lambda x: x.name=='odML document', limit=1)
     if not doc_section:
@@ -129,6 +127,7 @@ def get_odml_doc(nix_file):
                          ''.format(len(doc_section)))
     doc_section = doc_section[0]
 
+    # generate odml document
     attributes = ['id', 'author', 'version', 'repository', 'date']
     doc_attributes = {att: getattr(doc_section, att) for att in attributes
                       if hasattr(doc_section, att)}
@@ -142,6 +141,7 @@ def nix_to_odml_recurse(nix_section_list, odml_section):
     for nix_sec in nix_section_list:
         info["sections read"] += 1
 
+        # extract and convert section attributes from nix
         attributes = ['name', 'type', 'definition', 'reference', 'repository', 'link',
                       'include', 'oid']
         nix_attributes = {attr: getattr(nix_sec, attr) for attr in attributes
@@ -152,13 +152,17 @@ def nix_to_odml_recurse(nix_section_list, odml_section):
         info["sections written"] += 1
         for nixprop in nix_sec.props:
             info["properties read"] += 1
+
+            # extract and convert property attributes from nix
             prop_attributes = ['name', 'values', 'unit', 'uncertainty', 'reference',
                                'definition', 'dependency', 'dependency_value', 'odml_type',
                                'value_origin', 'oid']
             nix_prop_attributes = {attr: getattr(nixprop, attr) for attr in prop_attributes
                                    if hasattr(nixprop, attr)}
+
+            if 'odml_type' in nix_prop_attributes:
+                nix_prop_attributes['dtype'] = nix_prop_attributes.pop('odml_type')
             nix_prop_attributes['parent'] = odml_sec
-            nix_prop_attributes['dtype'] = nix_prop_attributes.pop('odml_type')
             nix_prop_attributes['value'] = list(nix_prop_attributes.pop('values'))
 
             odml.Property(**nix_prop_attributes)
