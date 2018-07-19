@@ -10,20 +10,20 @@ document_attributes = ['author', 'version', 'date', 'repository']
 section_attributes = ['name', 'oid', 'definition', 'type', 'reference', 'repository',
                       # 'link', 'include'
                       ]
-property_attributes= ['name', 'oid', 'definition', 'value', 'unit',
-                      'reference', 'dependency', 'dependency_value', 'dtype', 'value_origin',
-                      # the type conversion of the uncertainty is not solved yet.
-                      #'uncertainty',
-                      ]
+property_attributes = ['name', 'oid', 'definition', 'value', 'unit', 'reference', 'dependency',
+                       'dependency_value', 'dtype', 'value_origin',
+                       # the type conversion of the uncertainty is not solved yet.
+                       # 'uncertainty',
+                       ]
 
 
 class TestBlock(unittest.TestCase):
     def setUp(self):
         self.odml_doc = odml.Document(author='me', date=datetime.date.today(), version='0.0.1',
                                       repository='unknown')
-        odml.Section(name='first section', definition='arbitrary definiton',
-                     type='testsection', parent=self.odml_doc, reference='reference 1',
-                     repository='also unknown', link='???', include=False)
+        odml.Section(name='first section', definition='arbitrary definiton', type='testsection',
+                     parent=self.odml_doc, reference='reference 1', repository='also unknown',
+                     link='???', include=False)
 
         odml.Property(name='first property', value=[1, 2, 3], parent=self.odml_doc.sections[0],
                       unit='Volt', uncertainty=3, reference='still unknown',

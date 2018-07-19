@@ -93,6 +93,7 @@ def odml_to_nix_recurse(odmlseclist, nixparentsec):
 
         odml_to_nix_recurse(odmlsec.sections, nixsec)
 
+
 def write_odml_doc(odmldoc, nixfile):
     nixsec = nixfile.create_section('odML document', 'odML document', oid=odmldoc.id)
     info["sections written"] += 1
@@ -121,6 +122,7 @@ def odmlwrite(nix_file, filename):
     nix_to_odml_recurse(nix_section.sections, odml_doc)
     odml.fileio.save(odml_doc, filename)
 
+
 def get_odml_doc(nix_file):
     # identify odml document section in nix file
     try:
@@ -144,8 +146,8 @@ def nix_to_odml_recurse(nix_section_list, odml_section):
         # extract and convert section attributes from nix
         # TODO: add 'include' here as soon as available in nix
         attributes = ['name', 'type', 'definition', 'reference', 'repository', 'link', 'id']
-        nix_attributes = {attr: getattr(nix_sec, attr) for attr in attributes
-                          if hasattr(nix_sec, attr)}
+        nix_attributes = {attr: getattr(nix_sec, attr) for attr in attributes if
+                          hasattr(nix_sec, attr)}
         nix_attributes['parent'] = odml_section
         if 'id' in nix_attributes:
             nix_attributes['oid'] = nix_attributes.pop('id')
@@ -156,11 +158,10 @@ def nix_to_odml_recurse(nix_section_list, odml_section):
             info["properties read"] += 1
 
             # extract and convert property attributes from nix
-            prop_attributes = ['name', 'values', 'unit', 'uncertainty', 'reference',
-                               'definition', 'dependency', 'dependency_value', 'odml_type',
-                               'value_origin', 'id']
-            nix_prop_attributes = {attr: getattr(nixprop, attr) for attr in prop_attributes
-                                   if hasattr(nixprop, attr)}
+            prop_attributes = ['name', 'values', 'unit', 'uncertainty', 'reference', 'definition',
+                               'dependency', 'dependency_value', 'odml_type', 'value_origin', 'id']
+            nix_prop_attributes = {attr: getattr(nixprop, attr) for attr in prop_attributes if
+                                   hasattr(nixprop, attr)}
 
             if 'id' in nix_prop_attributes:
                 nix_prop_attributes['oid'] = nix_prop_attributes.pop('id')
