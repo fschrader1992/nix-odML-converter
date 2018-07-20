@@ -1,4 +1,4 @@
-# odML - NIX metadata conversion tool
+# odML ↔️ NIX metadata conversion tool
 
 This tool reads in odML / NIX files and writes the metadata structure to newly created NIX / odML files.
 When run as a script from the command line, it prints information regarding the number of Sections and Properties that were read, written, or skipped for various reasons.
