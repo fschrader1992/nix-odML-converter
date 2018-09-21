@@ -24,7 +24,7 @@ packages = ['converter']
 with open('README.md') as f:
     description_text = f.read()
 
-# nixio should be also listed here once the no-bindings version is available on pypi
+# nixio requirements should be adjusted as soon as no-bindings-dev is available on pypi
 install_req = ["odML",
 	       "nixio==1.4.dev"] 
 
@@ -44,6 +44,7 @@ setup(
     include_package_data=True,
     long_description=description_text,
     classifiers=CLASSIFIERS,
+    # to be removed as soon as no-bindings-dev is available on pypi
     dependency_links = ['git+https://github.com/G-Node/nixpy.git@no-bindings-dev#egg=nixio-1.4.dev'],
     license="BSD"
 )
