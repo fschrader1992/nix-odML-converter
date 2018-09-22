@@ -24,9 +24,7 @@ packages = ['converter']
 with open('README.md') as f:
     description_text = f.read()
 
-# nixio requirements should be adjusted as soon as no-bindings-dev is available on pypi
-install_req = ["odML",
-	       "nixio==1.4.dev"] 
+install_req = ["odML", "nixio>=1.5.0b1"]
 
 if sys.version_info < (3, 4):
     install_req += ["enum34"]
@@ -39,12 +37,9 @@ setup(
     author_email=CONTACT,
     url=HOMEPAGE,
     packages=packages,
-    test_suite='test',
     install_requires=install_req,
     include_package_data=True,
     long_description=description_text,
     classifiers=CLASSIFIERS,
-    # to be removed as soon as no-bindings-dev is available on pypi
-    dependency_links = ['git+https://github.com/G-Node/nixpy.git@no-bindings-dev#egg=nixio-1.4.dev'],
     license="BSD"
 )
