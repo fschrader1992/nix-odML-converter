@@ -19,7 +19,7 @@ HOMEPAGE = infodict["HOMEPAGE"]
 CLASSIFIERS = infodict["CLASSIFIERS"]
 
 
-packages = ['converter']
+packages = ['nixodmlconverter']
 
 with open('README.md') as f:
     description_text = f.read()
@@ -30,7 +30,7 @@ if sys.version_info < (3, 4):
     install_req += ["enum34"]
 
 setup(
-    name='nix-odML-converter',
+    name='nixodmlconverter',
     version=VERSION,
     description='Converter between NIX and odML format',
     author=AUTHOR,
