@@ -31,7 +31,7 @@ class TestBlock(unittest.TestCase):
                       dependency_value='also unknown', dtype='int', value_origin='ref 2')
 
     def test_double_conversion(self):
-        convert.nixwrite(self.odml_doc, 'tmp.nix')
+        convert.nixwrite(self.odml_doc, 'tmp.nix', 'overwrite')
         nix_file = nix.File('tmp.nix')
         convert.odmlwrite(nix_file, 'tmp.odml')
         odml_doc = odml.fileio.load('tmp.odml')
