@@ -176,7 +176,7 @@ def nix_to_odml_recurse(nix_section_list, odml_section):
         nix_to_odml_recurse(nix_sec.sections, odml_sec)
 
 
-def main(filename):
+def convert(filename):
     # Determine input and output format
     file_base, file_ext = os.path.splitext(filename)
     if file_ext in ['.xml', '.odml']:
@@ -212,6 +212,6 @@ def main(filename):
 if __name__ == "__main__":
     files = sys.argv[1:]
     for f in files:
-        main(f)
+        convert(f)
 
     print_info()
