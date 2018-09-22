@@ -108,8 +108,17 @@ def write_odml_doc(odmldoc, nixfile):
     return nixsec
 
 
-def nixwrite(odml_doc, filename):
-    nixfile = nix.File.open(filename, nix.FileMode.Overwrite)
+def nixwrite(odml_doc, filename, mode='append'):
+    filemode = None
+    if mode == 'append' or mode == 'overwrite metadata':
+        filemode = nix.FileMode.ReadWrite
+    elif mode == 'overwrite':
+        filemode = nix.FileMode.Overwrite
+    nixfile = nix.File.open(filename, filemode)
+
+    if mode == 'overwrite metadata':
+        if 'odML document' in nixfile.sections:
+            del nixfile.sections['odML document']
 
     nix_document_section = write_odml_doc(odml_doc, nixfile)
     odml_to_nix_recurse(odml_doc.sections, nix_document_section)
@@ -176,7 +185,7 @@ def nix_to_odml_recurse(nix_section_list, odml_section):
         nix_to_odml_recurse(nix_sec.sections, odml_sec)
 
 
-def convert(filename):
+def main(filename, mode='append'):
     # Determine input and output format
     file_base, file_ext = os.path.splitext(filename)
     if file_ext in ['.xml', '.odml']:
@@ -186,11 +195,15 @@ def convert(filename):
     else:
         raise ValueError('Unknown file format {}'.format(file_ext))
 
+    # odML files can not be appended but only be overwritten
+    if mode != 'overwrite' and output_format in ['.xml', '.odml']:
+        mode == 'overwrite'
+
     # Check output file
     outfilename = file_base + output_format
     if os.path.exists(outfilename):
         yesno = input("File {} already exists. "
-                      "Overwrite? ".format(outfilename))
+                      "{}? ".format(outfilename, mode.title()))
         if yesno.lower() not in ("y", "yes"):
             print("Aborted")
             return
@@ -199,7 +212,8 @@ def convert(filename):
     print("Saving to {} file...".format(output_format), end=" ", flush=True)
     if output_format in ['.nix']:
         odml_doc = odml.load(filename)
-        nixwrite(odml_doc, outfilename)
+        nixwrite(odml_doc, outfilename, mode=mode)
+
     elif output_format in ['.xml', '.odml']:
         nix_file = nix.File.open(filename, nix.FileMode.ReadOnly)
         odmlwrite(nix_file, outfilename)
@@ -212,6 +226,6 @@ def convert(filename):
 if __name__ == "__main__":
     files = sys.argv[1:]
     for f in files:
-        convert(f)
+        main(f)
 
     print_info()
