@@ -1,10 +1,10 @@
-import os
 import unittest
 import odml
 import odml.fileio
 import datetime
-import convert
 import nixio as nix
+
+from . import convert
 
 document_attributes = ['author', 'version', 'date', 'repository']
 section_attributes = ['name', 'oid', 'definition', 'type', 'reference', 'repository',

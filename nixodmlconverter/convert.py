@@ -47,7 +47,7 @@ def convert_value(v, dtype):
     return v
 
 
-########### NIX -> ODML ##############
+########### ODML -> NIX ##############
 
 def odml_to_nix_recurse(odmlseclist, nixparentsec):
     global info
@@ -197,7 +197,7 @@ def convert(filename, mode='append'):
 
     # odML files can not be appended but only be overwritten
     if mode != 'overwrite' and output_format in ['.xml', '.odml']:
-        mode == 'overwrite'
+        mode = 'overwrite'
 
     # Check output file
     outfilename = file_base + output_format
