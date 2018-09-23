@@ -47,7 +47,7 @@ def convert_value(v, dtype):
     return v
 
 
-########### NIX -> ODML ##############
+########### ODML -> NIX ##############
 
 def odml_to_nix_recurse(odmlseclist, nixparentsec):
     global info
