@@ -103,3 +103,10 @@ ENV/
 # vim swap files
 *.swp
 *.swo
+
+# pycharm
+.DS_Store
+.idea/
+
+# temporary files
+tmp.*
