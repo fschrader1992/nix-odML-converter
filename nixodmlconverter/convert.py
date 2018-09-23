@@ -4,6 +4,8 @@ import odml
 import nixio as nix
 import odml.fileio
 
+from odml.tools.parser_utils import InvalidVersionException
+from odml.tools.format_converter import VersionConverter
 
 info = {"sections read": 0,
         "sections written": 0,
@@ -209,9 +211,22 @@ def convert(filename, mode='append'):
             return
 
     # Load, convert and save to new format
-    print("Saving to {} file...".format(output_format), end=" ", flush=True)
+    print("Saving to {} file...\n".format(output_format), end=" ", flush=True)
     if output_format in ['.nix']:
-        odml_doc = odml.load(filename)
+        try:
+            odml_doc = odml.load(filename)
+        except InvalidVersionException:
+            yesno = input("odML file format version is outdated. Automatically convert "
+                          "{} to the latest version? ".format(outfilename, mode.title()))
+            if yesno.lower() not in ("y", "yes"):
+                print("  Use the odml.tools.VersionConverter to convert "
+                      "to the latest odML file version.")
+                print("  Aborted")
+                return
+
+            vc = VersionConverter(filename)
+            odml_doc = vc.convert()
+
         nixwrite(odml_doc, outfilename, mode=mode)
 
     elif output_format in ['.xml', '.odml']:
