@@ -206,7 +206,7 @@ def convert(filename, mode='append'):
     outfilename = file_base + output_format
     if os.path.exists(outfilename):
         yesno = input("File {} already exists. "
-                      "{}? ".format(outfilename, mode.title()))
+                      "{} (y/n)? ".format(outfilename, mode.title()))
         if yesno.lower() not in ("y", "yes"):
             print("Aborted")
             return
@@ -218,7 +218,8 @@ def convert(filename, mode='append'):
             odml_doc = odml.load(filename)
         except InvalidVersionException:
             yesno = input("odML file format version is outdated. Automatically convert "
-                          "{} to the latest version? ".format(outfilename, mode.title()))
+                          "{} to the latest version (y/n)? ".format(outfilename,
+                                                                   mode.title()))
             if yesno.lower() not in ("y", "yes"):
                 print("  Use the odml.tools.VersionConverter to convert "
                       "to the latest odML file version.")
