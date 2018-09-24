@@ -5,6 +5,7 @@ import nixio as nix
 import odml.fileio
 
 from odml.tools.parser_utils import InvalidVersionException
+from odml.tools.odmlparser import ODMLReader
 from odml.tools.format_converter import VersionConverter
 
 info = {"sections read": 0,
@@ -224,8 +225,8 @@ def convert(filename, mode='append'):
                 print("  Aborted")
                 return
 
-            vc = VersionConverter(filename)
-            odml_doc = vc.convert()
+            xml_string = VersionConverter(filename).convert()
+            odml_doc = ODMLReader().from_string(xml_string)
 
         nixwrite(odml_doc, outfilename, mode=mode)
 
