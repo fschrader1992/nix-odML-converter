@@ -4,6 +4,9 @@ import odml
 import nixio as nix
 import odml.fileio
 
+from odml.tools.parser_utils import InvalidVersionException
+from odml.tools.odmlparser import ODMLReader
+from odml.tools.format_converter import VersionConverter
 
 info = {"sections read": 0,
         "sections written": 0,
@@ -203,15 +206,29 @@ def convert(filename, mode='append'):
     outfilename = file_base + output_format
     if os.path.exists(outfilename):
         yesno = input("File {} already exists. "
-                      "{}? ".format(outfilename, mode.title()))
+                      "{} (y/n)? ".format(outfilename, mode.title()))
         if yesno.lower() not in ("y", "yes"):
             print("Aborted")
             return
 
     # Load, convert and save to new format
-    print("Saving to {} file...".format(output_format), end=" ", flush=True)
+    print("Saving to {} file... ".format(output_format), flush=True)
     if output_format in ['.nix']:
-        odml_doc = odml.load(filename)
+        try:
+            odml_doc = odml.load(filename)
+        except InvalidVersionException:
+            yesno = input("odML file format version is outdated. Automatically convert "
+                          "{} to the latest version (y/n)? ".format(outfilename,
+                                                                   mode.title()))
+            if yesno.lower() not in ("y", "yes"):
+                print("  Use the odml.tools.VersionConverter to convert "
+                      "to the latest odML file version.")
+                print("  Aborted")
+                return
+
+            xml_string = VersionConverter(filename).convert()
+            odml_doc = ODMLReader().from_string(xml_string)
+
         nixwrite(odml_doc, outfilename, mode=mode)
 
     elif output_format in ['.xml', '.odml']:
