@@ -212,7 +212,7 @@ def convert(filename, mode='append'):
             return
 
     # Load, convert and save to new format
-    print("Saving to {} file...\n".format(output_format), end=" ", flush=True)
+    print("Saving to {} file... ".format(output_format), flush=True)
     if output_format in ['.nix']:
         try:
             odml_doc = odml.load(filename)
