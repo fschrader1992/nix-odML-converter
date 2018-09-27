@@ -16,7 +16,7 @@ environment:
 build: false
 
 install:
-  - python -m pip install nixio odml
+  - python -m pip install odml nixio>=1.5.0b1
 
 test_script:
   - python --version
