@@ -1,5 +1,4 @@
 import json
-import os
 import sys
 
 try:
@@ -37,6 +36,7 @@ setup(
     author_email=CONTACT,
     url=HOMEPAGE,
     packages=packages,
+    test_suite='test',
     install_requires=install_req,
     include_package_data=True,
     long_description=description_text,
