@@ -1,8 +1,8 @@
-import unittest
-import odml
-import odml.fileio
 import datetime
+import unittest
+
 import nixio as nix
+import odml
 
 from nixodmlconverter import convert
 
@@ -35,7 +35,7 @@ class TestBlock(unittest.TestCase):
         convert.nixwrite(self.odml_doc, 'tmp.nix', 'overwrite')
         nix_file = nix.File('tmp.nix')
         convert.odmlwrite(nix_file, 'tmp.odml')
-        odml_doc = odml.fileio.load('tmp.odml')
+        odml_doc = odml.load('tmp.odml')
 
         for attr in document_attributes:
             self.assertEqual(getattr(self.odml_doc, attr), getattr(odml_doc, attr))
