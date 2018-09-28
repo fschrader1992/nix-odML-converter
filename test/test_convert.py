@@ -41,10 +41,12 @@ class TestBlock(unittest.TestCase):
         shutil.rmtree(self.test_dir)
 
     def test_double_conversion(self):
-        convert.nixwrite(self.odml_doc, 'tmp.nix', 'overwrite')
-        nix_file = nix.File('tmp.nix')
-        convert.odmlwrite(nix_file, 'tmp.odml')
-        odml_doc = odml.load('tmp.odml')
+        nf = os.path.join(self.test_dir, 'tmp.nix')
+        of = os.path.join(self.test_dir, 'tmp.odml')
+        convert.nixwrite(self.odml_doc, nf, 'overwrite')
+        nix_file = nix.File(nf)
+        convert.odmlwrite(nix_file, of)
+        odml_doc = odml.load(of)
 
         for attr in document_attributes:
             self.assertEqual(getattr(self.odml_doc, attr), getattr(odml_doc, attr))
