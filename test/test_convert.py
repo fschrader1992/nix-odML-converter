@@ -1,4 +1,7 @@
 import datetime
+import os
+import shutil
+import tempfile
 import unittest
 
 import nixio as nix
@@ -19,6 +22,8 @@ property_attributes = ['name', 'oid', 'definition', 'value', 'unit', 'reference'
 
 class TestBlock(unittest.TestCase):
     def setUp(self):
+        self.test_dir = tempfile.mkdtemp("_odmlnix", "test_", tempfile.gettempdir())
+
         self.odml_doc = odml.Document(author='me', date=datetime.date.today(),
                                       version='0.0.1', repository='unknown')
         odml.Section(name='first section', definition='arbitrary definition',
@@ -30,6 +35,10 @@ class TestBlock(unittest.TestCase):
                       unit='Volt', uncertainty=3, reference='still unknown',
                       definition='first property recorded', dependency='unknown',
                       dependency_value='also unknown', dtype='int', value_origin='ref 2')
+
+    def tearDown(self):
+        # cleanup temporary files and folder
+        shutil.rmtree(self.test_dir)
 
     def test_double_conversion(self):
         convert.nixwrite(self.odml_doc, 'tmp.nix', 'overwrite')
