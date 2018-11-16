@@ -1,12 +1,12 @@
-import sys
 import os
-import odml
-import nixio as nix
-import odml.fileio
+import sys
 
-from odml.tools.parser_utils import InvalidVersionException
-from odml.tools.odmlparser import ODMLReader
+import nixio as nix
+import odml
+
 from odml.tools.format_converter import VersionConverter
+from odml.tools.odmlparser import ODMLReader
+from odml.tools.parser_utils import InvalidVersionException
 
 info = {"sections read": 0,
         "sections written": 0,
@@ -132,7 +132,7 @@ def nixwrite(odml_doc, filename, mode='append'):
 def odmlwrite(nix_file, filename):
     odml_doc, nix_section = get_odml_doc(nix_file)
     nix_to_odml_recurse(nix_section.sections, odml_doc)
-    odml.fileio.save(odml_doc, filename)
+    odml.save(odml_doc, filename)
 
 
 def get_odml_doc(nix_file):

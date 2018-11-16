@@ -1,8 +1,11 @@
-import unittest
-import odml
-import odml.fileio
 import datetime
+import os
+import shutil
+import tempfile
+import unittest
+
 import nixio as nix
+import odml
 
 from nixodmlconverter import convert
 
@@ -19,6 +22,8 @@ property_attributes = ['name', 'oid', 'definition', 'value', 'unit', 'reference'
 
 class TestBlock(unittest.TestCase):
     def setUp(self):
+        self.test_dir = tempfile.mkdtemp("_odmlnix", "test_", tempfile.gettempdir())
+
         self.odml_doc = odml.Document(author='me', date=datetime.date.today(),
                                       version='0.0.1', repository='unknown')
         odml.Section(name='first section', definition='arbitrary definition',
@@ -31,11 +36,17 @@ class TestBlock(unittest.TestCase):
                       definition='first property recorded', dependency='unknown',
                       dependency_value='also unknown', dtype='int', value_origin='ref 2')
 
+    def tearDown(self):
+        # cleanup temporary files and folder
+        shutil.rmtree(self.test_dir)
+
     def test_double_conversion(self):
-        convert.nixwrite(self.odml_doc, 'tmp.nix', 'overwrite')
-        nix_file = nix.File('tmp.nix')
-        convert.odmlwrite(nix_file, 'tmp.odml')
-        odml_doc = odml.fileio.load('tmp.odml')
+        nf = os.path.join(self.test_dir, 'tmp.nix')
+        of = os.path.join(self.test_dir, 'tmp.odml')
+        convert.nixwrite(self.odml_doc, nf, 'overwrite')
+        nix_file = nix.File(nf)
+        convert.odmlwrite(nix_file, of)
+        odml_doc = odml.load(of)
 
         for attr in document_attributes:
             self.assertEqual(getattr(self.odml_doc, attr), getattr(odml_doc, attr))
@@ -49,3 +60,5 @@ class TestBlock(unittest.TestCase):
                 prop2 = sec2.properties[prop.name]
                 for attr in property_attributes:
                     self.assertEqual(getattr(prop, attr), getattr(prop2, attr))
+
+        nix_file.close()
