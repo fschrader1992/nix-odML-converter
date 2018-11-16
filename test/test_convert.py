@@ -60,3 +60,5 @@ class TestBlock(unittest.TestCase):
                 prop2 = sec2.properties[prop.name]
                 for attr in property_attributes:
                     self.assertEqual(getattr(prop, attr), getattr(prop2, attr))
+
+        nix_file.close()
