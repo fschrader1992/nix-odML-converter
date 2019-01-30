@@ -3,7 +3,7 @@ import sys
 from io import open
 try:
     from setuptools import setup
-except ImportError as ex:
+except ImportError:
     from distutils.core import setup
 
 with open("info.json") as infofile:
@@ -40,6 +40,7 @@ setup(
     install_requires=install_req,
     include_package_data=True,
     long_description=description_text,
+    long_description_content_type="text/markdown",
     classifiers=CLASSIFIERS,
     license="BSD"
 )
