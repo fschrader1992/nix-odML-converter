@@ -42,5 +42,6 @@ setup(
     long_description=description_text,
     long_description_content_type="text/markdown",
     classifiers=CLASSIFIERS,
-    license="BSD"
+    license="BSD",
+    entry_points={'console_scripts': ['nixodmlconverter=nixodmlconverter.convert:main']}
 )
