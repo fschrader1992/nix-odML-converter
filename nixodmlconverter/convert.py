@@ -248,8 +248,8 @@ def convert(filename, mode='append'):
             odml_doc = odml.load(filename)
         except InvalidVersionException:
             yesno = input("odML file format version is outdated. Automatically convert "
-                          "{} to the latest version (y/n)? ".format(outfilename,
-                                                                    mode.title()))
+                          "{} to the latest version (y/n)? ".format(outfilename))
+
             if yesno.lower() not in ("y", "yes"):
                 print("  Use the odml.tools.VersionConverter to convert "
                       "to the latest odML file version.")
