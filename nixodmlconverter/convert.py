@@ -268,7 +268,7 @@ def convert(filename, mode='append'):
     print("Done")
 
 
-if __name__ == "__main__":
+def main(args=None):
     parser = argparse.ArgumentParser(description='Converts odML to NIX file or extracts odML from NIX file,'
                                                  ' also upgrades odML to newest version.')
     parser.add_argument('files', metavar='FILE', type=str, nargs='+', help='NIX or odML file')
@@ -277,3 +277,7 @@ if __name__ == "__main__":
     for f in args.files:
         convert(f)
     print_info()
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
