@@ -50,7 +50,8 @@ INFO = {"sections read": 0,
         "skipped binary values": 0,
         "skipped none values": 0,
         "type errors": 0,
-        "mod_prop_values": 0}
+        "mod_prop_values": 0,
+        "odml_types_omitted": 0}
 
 
 def print_info():
@@ -67,7 +68,9 @@ def print_info():
           "empty (None)\n"
           "{type errors}\t Type Errors were encountered\n"
           "{mod_prop_values}\t Values were modified due "
-          "to unsupported unicode characters\n".format(**INFO))
+          "to unsupported unicode characters\n"
+          "{odml_types_omitted}\t Unidentified odml value types omitted "
+          "(using string instead)\n".format(**INFO))
 
 
 def user_input(prompt):
@@ -162,6 +165,15 @@ def odml_to_nix_recurse(odmlseclist, nixparentsec):
             nixprop.value_origin = odmlprop.value_origin
             nixprop.dependency = odmlprop.dependency
             nixprop.dependency_value = odmlprop.dependency_value
+
+            # We also need to provide the appropriate odML data type for a potential
+            # later export from NIX to odML.
+            try:
+                nixprop.odml_type = nix.property.OdmlType(odmlprop.dtype)
+            except ValueError:
+                print("[WARNING] Cannot set odml type {}".format(odmlprop.dtype))
+                INFO["odml_types_omitted"] += 1
+
             INFO["properties written"] += 1
 
         odml_to_nix_recurse(odmlsec.sections, nixsec)
