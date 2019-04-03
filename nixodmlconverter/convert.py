@@ -137,7 +137,10 @@ def odml_to_nix_recurse(odmlseclist, nixparentsec):
                 INFO["skipped empty properties"] += 1
                 continue
 
-            nixprop = nixsec.create_property(propname, odmlprop.dtype, oid=odmlprop.id)
+            # We need to get the appropriate NIX DataType for the current odML values.
+            dtype = nix.DataType.get_dtype(nixvalues[0])
+
+            nixprop = nixsec.create_property(propname, dtype, oid=odmlprop.id)
             try:
                 nixprop.values = nixvalues
             except UnicodeError:
