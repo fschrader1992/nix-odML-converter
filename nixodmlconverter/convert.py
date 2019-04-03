@@ -327,7 +327,7 @@ def convert(filename, mode='append'):
 
 
 def main(args=None):
-    parser = docopt(__doc__, argv=args, version="0.0.3")
+    parser = docopt(__doc__, argv=args, version="0.0.4")
 
     files = parser['FILE']
     print(files)
