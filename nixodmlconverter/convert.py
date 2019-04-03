@@ -1,31 +1,26 @@
-"""nixodmlConversion
+"""nixodmlconvert
 
 nixodmlConversion converts odML content between odML and NIX files. The converter
-can a) import content from an existing XML formatted odML file and append it to
-an existing NIX file. The content of an existing odML file is automatically converted
-to the latest odML format before it is imported to the NIX file.
-It further can b) export odML content from a NIX file and save it to an XML formatted
-odML file.
-If no output files are provided, the output files will be created using the filename
-of the input file. If an existing odML output file is provided, this odML file will
-be overwritten.
+a) imports content from an existing XML formatted odML file and appends it to
+a new or existing NIX file. The content of an existing odML file is automatically
+converted to the latest odML format before it is imported to the NIX file.
+Furthermore, the converter b) exports odML content from a NIX file and saves it
+to an XML formatted odML file. If an odML file of the same name exists, the
+file will be overwritten.
 
-Usage: nixodmlConversion [-h] FILE [FILE ...]
+Usage: nixodmlconvert [-h] FILE [FILE ...]
 
 Arguments:
-    FILE            NIX or odML file. If the first provided file is a NIX file,
-                    the odML content of this NIX file will be exported to an odML file.
-                    If the first provided file is an XML formatted odML file, the content
-                    of this odML file will be imported to a NIX file.
+    FILE            NIX or odML file. If the provided file is a NIX file,
+                    the odML content of this NIX file will be exported to an odML file
+                    of the same name. Existing odML output files will be overwritten.
+                    If the provided file is an XML formatted odML file, the content
+                    of this odML file will be imported to a NIX file of the same name.
+                    If a NIX file with the same name exists, the content of the odML
+                    file will be appended, otherwise, a new NIX file will be created.
 
 Options:
-    [FILE ...]      Output file. Depending whether the first provided file is a NIX
-                    or an odML file, any provided output file should be of the opposite
-                    format. If an existing NIX file is provided as output file, the
-                    contents of the provided odML file will be appended to the existing
-                    NIX file.
-                    If an existing odML file is provided as output file, the output file
-                    will be overwritten.
+    [FILE ...]      Additional files for odML import or export.
     -h --help       Show this screen.
 """
 
