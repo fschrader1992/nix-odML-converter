@@ -23,7 +23,7 @@ packages = ['nixodmlconverter']
 with open('README.md', encoding="utf8") as f:
     description_text = f.read()
 
-install_req = ["odML", "nixio>=1.5.0b1"]
+install_req = ["odML", "nixio>=1.5.0b1", "docopt"]
 
 if sys.version_info < (3, 4):
     install_req += ["enum34"]
@@ -43,5 +43,5 @@ setup(
     long_description_content_type="text/markdown",
     classifiers=CLASSIFIERS,
     license="BSD",
-    entry_points={'console_scripts': ['nixodmlconverter=nixodmlconverter.convert:main']}
+    entry_points={"console_scripts": ["nixodmlconverter=nixodmlconverter.convert:main"]}
 )
