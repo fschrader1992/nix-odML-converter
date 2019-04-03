@@ -112,8 +112,10 @@ def odml_to_nix_recurse(odmlseclist, nixparentsec):
         nixsec = nixparentsec.create_section(secname, odmlsec.type, oid=odmlsec.id)
         INFO["sections written"] += 1
         nixsec.definition = definition
+
         if reference is not None:
             nixsec.reference = reference
+
         if repository is not None:
             nixsec.repository = repository
 
@@ -131,16 +133,29 @@ def odml_to_nix_recurse(odmlseclist, nixparentsec):
             if not nixvalues:
                 INFO["skipped empty properties"] += 1
                 continue
-            nixprop = nixsec.create_property(propname, nixvalues, oid=odmlprop.id)
-            INFO["properties written"] += 1
+
+            nixprop = nixsec.create_property(propname, odmlprop.dtype, oid=odmlprop.id)
+            try:
+                nixprop.values = nixvalues
+            except UnicodeError:
+                # Hotfix until nix.Property.values support unicode content
+                enc_vals = []
+                for val in nixvalues:
+                    enc_vals.append(val.encode('utf-8').decode('ascii', 'ignore'))
+
+                print("[WARNING] The Property.values currently do not support unicode. "
+                      "Values will be adjusted: {}/{}".format(nixvalues, enc_vals))
+
+                nixprop.values = enc_vals
+
             nixprop.definition = definition
             nixprop.unit = odmlprop.unit
             nixprop.uncertainty = odmlprop.uncertainty
             nixprop.reference = odmlprop.reference
-            nixprop.odml_type = nix.property.OdmlType(odmlprop.dtype)
             nixprop.value_origin = odmlprop.value_origin
             nixprop.dependency = odmlprop.dependency
             nixprop.dependency_value = odmlprop.dependency_value
+            INFO["properties written"] += 1
 
         odml_to_nix_recurse(odmlsec.sections, nixsec)
 
