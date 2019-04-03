@@ -67,6 +67,20 @@ def print_info():
           "{type errors}\t Type Errors were encountered\n".format(**INFO))
 
 
+def user_input(prompt):
+    """
+    Executes the appropriate user input function dependent on
+    the Python version.
+
+    :param prompt: Information string prompting user input.
+    :return: User input string.
+    """
+    if sys.version_info < (3, 0):
+        return raw_input(prompt)
+
+    return input(prompt)
+
+
 def convert_value(val, dtype):
     global INFO
 
@@ -241,8 +255,8 @@ def convert(filename, mode='append'):
     # Check output file
     outfilename = file_base + output_format
     if os.path.exists(outfilename):
-        yesno = input("File {} already exists. "
-                      "{} (y/n)? ".format(outfilename, mode.title()))
+        yesno = user_input("File {} already exists. "
+                           "{} (y/n)? ".format(outfilename, mode.title()))
         if yesno.lower() not in ("y", "yes"):
             print("Aborted")
             return
@@ -253,8 +267,10 @@ def convert(filename, mode='append'):
         try:
             odml_doc = odml.load(filename)
         except InvalidVersionException:
-            yesno = input("odML file format version is outdated. Automatically convert "
-                          "{} to the latest version (y/n)? ".format(outfilename))
+
+            yesno = user_input("odML file format version is outdated. "
+                               "Automatically convert {} to the latest version "
+                               "(y/n)? ".format(outfilename))
 
             if yesno.lower() not in ("y", "yes"):
                 print("  Use the odml.tools.VersionConverter to convert "
