@@ -49,7 +49,8 @@ INFO = {"sections read": 0,
         "skipped empty properties": 0,
         "skipped binary values": 0,
         "skipped none values": 0,
-        "type errors": 0}
+        "type errors": 0,
+        "mod_prop_values": 0}
 
 
 def print_info():
@@ -64,7 +65,9 @@ def print_info():
           "were of type 'binary'\n"
           "{skipped none values}\t Values were skipped because they were "
           "empty (None)\n"
-          "{type errors}\t Type Errors were encountered\n".format(**INFO))
+          "{type errors}\t Type Errors were encountered\n"
+          "{mod_prop_values}\t Values were modified due "
+          "to unsupported unicode characters\n".format(**INFO))
 
 
 def user_input(prompt):
@@ -144,9 +147,10 @@ def odml_to_nix_recurse(odmlseclist, nixparentsec):
                     enc_vals.append(val.encode('utf-8').decode('ascii', 'ignore'))
 
                 print("[WARNING] The Property.values currently do not support unicode. "
-                      "Values will be adjusted: {}/{}".format(nixvalues, enc_vals))
+                      "Values will be adjusted: \n{}\n{}".format(nixvalues, enc_vals))
 
                 nixprop.values = enc_vals
+                INFO["mod_prop_values"] += 1
 
             nixprop.definition = definition
             nixprop.unit = odmlprop.unit
