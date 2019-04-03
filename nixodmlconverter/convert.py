@@ -67,20 +67,20 @@ def print_info():
           "{type errors}\t Type Errors were encountered\n".format(**INFO))
 
 
-def convert_datetime(dt):
-    return dt.isoformat()
-
-
 def convert_value(val, dtype):
     global INFO
+
     if dtype == "binary":
         INFO["skipped binary values"] += 1
         return None
+
     if val is None:
         INFO["skipped none values"] += 1
         return None
+
     if dtype in ("date", "time", "datetime"):
-        val = convert_datetime(val)
+        val = val.isoformat()
+
     return val
 
 
@@ -137,7 +137,7 @@ def write_odml_doc(odmldoc, nixfile):
     if odmldoc.author:
         nixsec.create_property('odML author', [odmldoc.author])
     if odmldoc.date:
-        nixsec.create_property('odML date', [convert_datetime(odmldoc.date)])
+        nixsec.create_property('odML date', [odmldoc.date.isoformat()])
     if odmldoc.version:
         nixsec.create_property('odML version', [odmldoc.version])
     if odmldoc.repository:
