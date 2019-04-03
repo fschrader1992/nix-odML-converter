@@ -65,3 +65,32 @@ odML format, the following modifications occur when converting from odML to NIX:
 - Values of type `URL`, `person`, and `text` are treated as strings
 - Values of type `datetime`, `date`, and `time` are converted to string representations
 - Values of type `binary` are discarded
+
+
+# NIX (Neuroscience information exchange) format
+
+The NIX data model allows to store fully annotated scientific datasets, i.e. the 
+data together with its metadata within the same container. Our aim is to achieve 
+standardization by providing a common/generic data structure for a multitude of 
+data types.
+
+The source code of the core python library is freely available on 
+[GitHub](https://github.com/G-Node/nixpy) and can be installed via the 
+Python package manager `pip` by typing `pip install nixio`.
+
+More information about the project including related projects as well as tutorials and
+examples can be found at our odML [project page](https://g-node.github.io/nix/).
+
+
+# odML (Open metaData Markup Language) format
+
+The open metadata Markup Language is a file based format (XML, JSON, YAML) for storing
+metadata in an organised human- and machine-readable way. odML is an initiative to define
+and establish an open, flexible, and easy-to-use format to transport metadata.
+
+The source code of the core library is freely available on 
+[GitHub](https://github.com/G-Node/python-odml) and can be installed via the 
+Python package manager `pip` by typing `pip install odml`.
+
+More information about the project including related projects as well as tutorials and
+examples can be found at our odML [project page](https://g-node.github.io/python-odml/).
