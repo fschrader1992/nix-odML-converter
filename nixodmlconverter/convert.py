@@ -1,6 +1,6 @@
-"""nixodmlconvert
+"""nixodmlconverter
 
-nixodmlConversion converts odML content between odML and NIX files. The converter
+nixodmlconverter converts odML content between odML and NIX files. The converter
 a) imports content from an existing XML formatted odML file and appends it to
 a new or existing NIX file. The content of an existing odML file is automatically
 converted to the latest odML format before it is imported to the NIX file.
@@ -8,26 +8,32 @@ Furthermore, the converter b) exports odML content from a NIX file and saves it
 to an XML formatted odML file. If an odML file of the same name exists, the
 file will be overwritten.
 
-Usage: nixodmlconvert [-h] FILE [FILE ...]
+Usage: nixodmlconverter [-h] FILE...
 
 Arguments:
-    FILE            NIX or odML file. If the provided file is a NIX file,
-                    the odML content of this NIX file will be exported to an odML file
-                    of the same name. Existing odML output files will be overwritten.
+    FILE            NIX or odML file.
+
+                    If the provided file is a NIX file, the odML content of this NIX file
+                    will be exported to an odML file of the same name.
+                    Existing odML output files will be overwritten.
+
                     If the provided file is an XML formatted odML file, the content
                     of this odML file will be imported to a NIX file of the same name.
+
                     If a NIX file with the same name exists, the content of the odML
                     file will be appended, otherwise, a new NIX file will be created.
 
+                    Multiple files can be provided.
+
 Options:
-    [FILE ...]      Additional files for odML import or export.
     -h --help       Show this screen.
+    --version       Show version
 """
 
 import os
 import sys
 
-import argparse
+from docopt import docopt
 
 import nixio as nix
 import odml
@@ -271,14 +277,11 @@ def convert(filename, mode='append'):
 
 
 def main(args=None):
-    desc = "Converts an odML to a NIX file or extracts odML from a NIX file, " \
-           "also upgrades odML to the newest version."
-    parser = argparse.ArgumentParser(description=desc)
-    parser.add_argument('files', metavar='FILE', type=str,
-                        nargs='+', help='NIX or odML file')
-    args = parser.parse_args()
-    print(args.files)
-    for curr_file in args.files:
+    parser = docopt(__doc__, argv=args, version="0.0.3")
+
+    files = parser['FILE']
+    print(files)
+    for curr_file in files:
         convert(curr_file)
     print_info()
 
