@@ -1,7 +1,39 @@
+"""nixodmlconverter
+
+nixodmlconverter converts odML content between odML and NIX files. The converter
+a) imports content from an existing XML formatted odML file and appends it to
+a new or existing NIX file. The content of an existing odML file is automatically
+converted to the latest odML format before it is imported to the NIX file.
+Furthermore, the converter b) exports odML content from a NIX file and saves it
+to an XML formatted odML file. If an odML file of the same name exists, the
+file will be overwritten.
+
+Usage: nixodmlconverter [-h] FILE...
+
+Arguments:
+    FILE            NIX or odML file.
+
+                    If the provided file is a NIX file, the odML content of this NIX file
+                    will be exported to an odML file of the same name.
+                    Existing odML output files will be overwritten.
+
+                    If the provided file is an XML formatted odML file, the content
+                    of this odML file will be imported to a NIX file of the same name.
+
+                    If a NIX file with the same name exists, the content of the odML
+                    file will be appended, otherwise, a new NIX file will be created.
+
+                    Multiple files can be provided.
+
+Options:
+    -h --help       Show this screen.
+    --version       Show version
+"""
+
 import os
 import sys
 
-import argparse
+from docopt import docopt
 
 import nixio as nix
 import odml
@@ -10,14 +42,16 @@ from odml.tools.format_converter import VersionConverter
 from odml.tools.odmlparser import ODMLReader
 from odml.tools.parser_utils import InvalidVersionException
 
-info = {"sections read": 0,
+INFO = {"sections read": 0,
         "sections written": 0,
         "properties read": 0,
         "properties written": 0,
         "skipped empty properties": 0,
         "skipped binary values": 0,
         "skipped none values": 0,
-        "type errors": 0}
+        "type errors": 0,
+        "mod_prop_values": 0,
+        "odml_types_omitted": 0}
 
 
 def print_info():
@@ -32,80 +66,126 @@ def print_info():
           "were of type 'binary'\n"
           "{skipped none values}\t Values were skipped because they were "
           "empty (None)\n"
-          "{type errors}\t Type Errors were encountered\n".format(**info))
+          "{type errors}\t Type Errors were encountered\n"
+          "{mod_prop_values}\t Values were modified due "
+          "to unsupported unicode characters\n"
+          "{odml_types_omitted}\t Unidentified odml value types omitted "
+          "(using string instead)\n".format(**INFO))
 
 
-def convert_datetime(dt):
-    return dt.isoformat()
+def user_input(prompt):
+    """
+    Executes the appropriate user input function dependent on
+    the Python version.
+
+    :param prompt: Information string prompting user input.
+    :return: User input string.
+    """
+    if sys.version_info < (3, 0):
+        return raw_input(prompt)
+
+    return input(prompt)
 
 
-def convert_value(v, dtype):
-    global info
+def convert_value(val, dtype):
+    global INFO
+
     if dtype == "binary":
-        info["skipped binary values"] += 1
+        INFO["skipped binary values"] += 1
         return None
-    if v is None:
-        info["skipped none values"] += 1
+
+    if val is None:
+        INFO["skipped none values"] += 1
         return None
+
     if dtype in ("date", "time", "datetime"):
-        v = convert_datetime(v)
-    return v
+        val = val.isoformat()
+
+    return val
 
 
 ########### ODML -> NIX ##############
 
 def odml_to_nix_recurse(odmlseclist, nixparentsec):
-    global info
+    global INFO
     for odmlsec in odmlseclist:
-        info["sections read"] += 1
+        INFO["sections read"] += 1
         secname = odmlsec.name
         definition = odmlsec.definition
         reference = odmlsec.reference
         repository = odmlsec.repository
 
         nixsec = nixparentsec.create_section(secname, odmlsec.type, oid=odmlsec.id)
-        info["sections written"] += 1
+        INFO["sections written"] += 1
         nixsec.definition = definition
+
         if reference is not None:
             nixsec.reference = reference
+
         if repository is not None:
             nixsec.repository = repository
 
         for odmlprop in odmlsec.properties:
-            info["properties read"] += 1
+            INFO["properties read"] += 1
             propname = odmlprop.name
             definition = odmlprop.definition
             odmlvalue = odmlprop.value
             nixvalues = []
-            for v in odmlvalue:
-                nixv = convert_value(v, odmlprop.dtype)
+            for val in odmlvalue:
+                nixv = convert_value(val, odmlprop.dtype)
                 if nixv is not None:
                     nixvalues.append(nixv)
 
             if not nixvalues:
-                info["skipped empty properties"] += 1
+                INFO["skipped empty properties"] += 1
                 continue
-            nixprop = nixsec.create_property(propname, nixvalues, oid=odmlprop.id)
-            info["properties written"] += 1
+
+            # We need to get the appropriate NIX DataType for the current odML values.
+            dtype = nix.DataType.get_dtype(nixvalues[0])
+
+            nixprop = nixsec.create_property(propname, dtype, oid=odmlprop.id)
+            try:
+                nixprop.values = nixvalues
+            except UnicodeError:
+                # Hotfix until nix.Property.values support unicode content
+                enc_vals = []
+                for val in nixvalues:
+                    enc_vals.append(val.encode('utf-8').decode('ascii', 'ignore'))
+
+                print("[WARNING] The Property.values currently do not support unicode. "
+                      "Values will be adjusted: \n{}\n{}".format(nixvalues, enc_vals))
+
+                nixprop.values = enc_vals
+                INFO["mod_prop_values"] += 1
+
             nixprop.definition = definition
             nixprop.unit = odmlprop.unit
             nixprop.uncertainty = odmlprop.uncertainty
             nixprop.reference = odmlprop.reference
-            nixprop.odml_type = nix.property.OdmlType(odmlprop.dtype)
             nixprop.value_origin = odmlprop.value_origin
             nixprop.dependency = odmlprop.dependency
             nixprop.dependency_value = odmlprop.dependency_value
+
+            # We also need to provide the appropriate odML data type for a potential
+            # later export from NIX to odML.
+            try:
+                nixprop.odml_type = nix.property.OdmlType(odmlprop.dtype)
+            except ValueError:
+                print("[WARNING] Cannot set odml type {}".format(odmlprop.dtype))
+                INFO["odml_types_omitted"] += 1
+
+            INFO["properties written"] += 1
 
         odml_to_nix_recurse(odmlsec.sections, nixsec)
 
 
 def write_odml_doc(odmldoc, nixfile):
     nixsec = nixfile.create_section('odML document', 'odML document', oid=odmldoc.id)
-    info["sections written"] += 1
+    INFO["sections written"] += 1
     if odmldoc.author:
         nixsec.create_property('odML author', [odmldoc.author])
     if odmldoc.date:
-        nixsec.create_property('odML date', [convert_datetime(odmldoc.date)])
+        nixsec.create_property('odML date', [odmldoc.date.isoformat()])
     if odmldoc.version:
         nixsec.create_property('odML version', [odmldoc.version])
     if odmldoc.repository:
@@ -146,8 +226,9 @@ def get_odml_doc(nix_file):
 
     # generate odml document
     attributes = ['author', 'version', 'repository', 'date']
-    doc_attributes = {attr: doc_section.props['odML {}'.format(attr)].values[0] for attr in
-                      attributes if 'odML {}'.format(attr) in doc_section.props}
+    doc_attributes = {attr: doc_section.props['odML {}'.format(attr)].values[0]
+                      for attr in attributes
+                      if 'odML {}'.format(attr) in doc_section.props}
     doc_attributes['oid'] = doc_section.id
 
     return odml.Document(**doc_attributes), doc_section
@@ -155,11 +236,11 @@ def get_odml_doc(nix_file):
 
 def nix_to_odml_recurse(nix_section_list, odml_section):
     for nix_sec in nix_section_list:
-        info["sections read"] += 1
+        INFO["sections read"] += 1
 
         # extract and convert section attributes from nix
-        # TODO: add 'include' here as soon as available in nix
-        attributes = ['name', 'type', 'definition', 'reference', 'repository', 'link', 'id']
+        attributes = ['name', 'type', 'definition', 'reference',
+                      'repository', 'link', 'id']
         nix_attributes = {attr: getattr(nix_sec, attr) for attr in attributes if
                           hasattr(nix_sec, attr)}
         nix_attributes['parent'] = odml_section
@@ -167,15 +248,16 @@ def nix_to_odml_recurse(nix_section_list, odml_section):
             nix_attributes['oid'] = nix_attributes.pop('id')
 
         odml_sec = odml.Section(**nix_attributes)
-        info["sections written"] += 1
+        INFO["sections written"] += 1
         for nixprop in nix_sec.props:
-            info["properties read"] += 1
+            INFO["properties read"] += 1
 
             # extract and convert property attributes from nix
-            prop_attributes = ['name', 'values', 'unit', 'uncertainty', 'reference', 'definition',
-                               'dependency', 'dependency_value', 'odml_type', 'value_origin', 'id']
-            nix_prop_attributes = {attr: getattr(nixprop, attr) for attr in prop_attributes if
-                                   hasattr(nixprop, attr)}
+            prop_attributes = ['name', 'values', 'unit', 'uncertainty', 'reference',
+                               'definition', 'dependency', 'dependency_value',
+                               'odml_type', 'value_origin', 'id']
+            nix_prop_attributes = {attr: getattr(nixprop, attr)
+                                   for attr in prop_attributes if hasattr(nixprop, attr)}
 
             if 'id' in nix_prop_attributes:
                 nix_prop_attributes['oid'] = nix_prop_attributes.pop('id')
@@ -185,7 +267,7 @@ def nix_to_odml_recurse(nix_section_list, odml_section):
             nix_prop_attributes['value'] = list(nix_prop_attributes.pop('values'))
 
             odml.Property(**nix_prop_attributes)
-            info["properties written"] += 1
+            INFO["properties written"] += 1
 
         nix_to_odml_recurse(nix_sec.sections, odml_sec)
 
@@ -207,8 +289,8 @@ def convert(filename, mode='append'):
     # Check output file
     outfilename = file_base + output_format
     if os.path.exists(outfilename):
-        yesno = input("File {} already exists. "
-                      "{} (y/n)? ".format(outfilename, mode.title()))
+        yesno = user_input("File {} already exists. "
+                           "{} (y/n)? ".format(outfilename, mode.title()))
         if yesno.lower() not in ("y", "yes"):
             print("Aborted")
             return
@@ -219,9 +301,11 @@ def convert(filename, mode='append'):
         try:
             odml_doc = odml.load(filename)
         except InvalidVersionException:
-            yesno = input("odML file format version is outdated. Automatically convert "
-                          "{} to the latest version (y/n)? ".format(outfilename,
-                                                                   mode.title()))
+
+            yesno = user_input("odML file format version is outdated. "
+                               "Automatically convert {} to the latest version "
+                               "(y/n)? ".format(outfilename))
+
             if yesno.lower() not in ("y", "yes"):
                 print("  Use the odml.tools.VersionConverter to convert "
                       "to the latest odML file version.")
@@ -242,12 +326,15 @@ def convert(filename, mode='append'):
     print("Done")
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Converts odML to NIX file or extracts odML from NIX file,'
-                                                 ' also upgrades odML to newest version.')
-    parser.add_argument('files', metavar='FILE', type=str, nargs='+', help='NIX or odML file')
-    args = parser.parse_args()
-    print(args.files)
-    for f in args.files:
-        convert(f)
+def main(args=None):
+    parser = docopt(__doc__, argv=args, version="0.0.4")
+
+    files = parser['FILE']
+    print(files)
+    for curr_file in files:
+        convert(curr_file)
     print_info()
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

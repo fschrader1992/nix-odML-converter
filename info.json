@@ -1,5 +1,5 @@
 {
-  "VERSION": "0.0.2",
+  "VERSION": "0.0.4",
   "FORMAT_VERSION": "1.1",
   "AUTHOR": "Achilleas Koutsou, Julia Sprenger",
   "COPYRIGHT": "(c) 2018, German Neuroinformatics Node",
@@ -9,7 +9,7 @@
     "Programming Language :: Python :: 2",
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: BSD License",
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Topic :: Scientific/Engineering",
     "Intended Audience :: Science/Research"
   ]
