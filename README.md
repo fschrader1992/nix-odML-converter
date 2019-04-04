@@ -13,28 +13,11 @@ or skipped for various reasons.
 
 For more information on the odML and NIX data formats, please check the sections below.
 
+## Installation
 
-## Dependencies
+You can easily install the converter via the Python package manager `pip`.
 
-* Python 2.7 or 3.5+
-* Python packages:
-    * odml
-    * nixio (>=1.5.0b1)
-
-These dependency packages can be manually installed via the python package manager `pip`:
-
-`pip install odml nixio==1.5.0b3` 
-
-or by manually installing the nix-odML-converter from the repository root:
-
-`python setup.py install`
-
-
-## Building from source
-
-    git clone https://github.com/G-Node/nix-odML-converter.git
-    cd nix-odML-converter
-    python setup.py install
+    pip install nixodmlconverter
 
 ## Usage
 
@@ -70,6 +53,31 @@ odML format, the following modifications occur when converting from odML to NIX:
 - Values of type `URL`, `person`, and `text` are treated as strings
 - Values of type `datetime`, `date`, and `time` are converted to string representations
 - Values of type `binary` are discarded
+
+
+## Building from source
+
+You can also install the package by cloning the github repository and
+installing from source.
+
+    git clone https://github.com/G-Node/nix-odML-converter.git
+    cd nix-odML-converter
+    python setup.py install
+
+## Dependencies
+
+* Python 2.7 or 3.5+
+* Python packages:
+    * odml
+    * nixio (>=1.5.0b1)
+
+These dependency packages can be manually installed via the python package manager `pip`:
+
+`pip install odml nixio==1.5.0b3` 
+
+or by manually installing the nix-odML-converter from the repository root:
+
+`python setup.py install`
 
 
 # NIX (Neuroscience information exchange) format
