@@ -56,7 +56,7 @@ INFO = {"sections read": 0,
 
 
 def print_info():
-    print("Conversion info")
+    print("\nConversion info")
     print("{sections read}\t Sections were read\n"
           "{sections written}\t Sections were written\n"
           "{properties read}\t Properties were read\n"
@@ -86,6 +86,18 @@ def user_input(prompt):
         return raw_input(prompt)
 
     return input(prompt)
+
+#def print_same_line(msg):
+#    """
+#    Print a message to the same line on the command line and
+#    use the appropriate function depending on the Python version.
+#
+#    :param msg: Text to be displayed on the command line
+#    """
+#    if sys.version_info < (3, 0):
+#        print("{}\r".format(msg)),
+#    else:
+#        print(msg, end="\r")
 
 
 def convert_value(val, dtype):
@@ -140,8 +152,8 @@ def odml_to_nix_property(odmlprop, nixsec):
         for val in nixvalues:
             enc_vals.append(val.encode('utf-8').decode('ascii', 'ignore'))
 
-        print("[WARNING] The Property.values currently do not support unicode. "
-              "Values will be adjusted: \n{}\n{}".format(nixvalues, enc_vals))
+        print("\n[WARNING] The Property.values currently do not support unicode. "
+              "Values will be adjusted: \n{}\n{}\n".format(nixvalues, enc_vals))
 
         nixprop.values = enc_vals
         INFO["mod_prop_values"] += 1
@@ -152,8 +164,8 @@ def odml_to_nix_property(odmlprop, nixsec):
         nixprop.unit = odmlprop.unit
     except UnicodeDecodeError:
         if u"Ω" in odmlprop.unit:
-            print("[WARNING] Property.unit currently does not support the omega "
-                  "unicode character. It will be replaced by 'Ohm'.")
+            print("\n[WARNING] Property.unit currently does not support the omega "
+                  "unicode character. It will be replaced by 'Ohm'.\n")
             nixprop.unit = odmlprop.unit.replace(u"Ω", "Ohm").encode('ascii')
 
     nixprop.definition = odmlprop.definition
@@ -168,7 +180,7 @@ def odml_to_nix_property(odmlprop, nixsec):
     try:
         nixprop.odml_type = nix.property.OdmlType(odmlprop.dtype)
     except ValueError:
-        print("[WARNING] Cannot set odml type {}".format(odmlprop.dtype))
+        print("\n[WARNING] Cannot set odml type {}\n".format(odmlprop.dtype))
         INFO["odml_types_omitted"] += 1
 
     INFO["properties written"] += 1
@@ -194,6 +206,9 @@ def odml_to_nix_recurse(odmlseclist, nixparentsec):
 
         for odmlprop in odmlsec.properties:
             odml_to_nix_property(odmlprop, nixsec)
+            msg = ("\rProcessed Sections: {}; processed Properties: {}".format(
+                INFO['sections read'], INFO['properties read']))
+            sys.stdout.write(msg)
 
         odml_to_nix_recurse(odmlsec.sections, nixsec)
 
@@ -372,7 +387,7 @@ def convert(filename, mode='append'):
     else:
         raise ValueError('Unknown file format {}'.format(output_format))
 
-    print("Done")
+    print("\nDone")
 
 
 def main(args=None):
