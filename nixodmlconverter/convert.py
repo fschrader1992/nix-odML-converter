@@ -234,26 +234,41 @@ def nixwrite(odml_doc, filename, mode='append'):
 ############### NIX -> ODML #################
 
 def odmlwrite(nix_file, filename):
-    odml_doc, nix_section = get_odml_doc(nix_file)
-    nix_to_odml_recurse(nix_section.sections, odml_doc)
+    odml_doc, nix_sections = get_odml_doc(nix_file)
+    nix_to_odml_recurse(nix_sections, odml_doc)
     odml.save(odml_doc, filename)
 
 
 def get_odml_doc(nix_file):
-    # identify odml document section in nix file
-    try:
+    """
+    Extracts sections from a provided nix.File and returns sections and
+    a new odml.Document.
+    If the metadata root of the nix.File contains a specific section with the
+    name 'odML document' only the subsections of this section will be returned.
+    Otherwise all sections of the metadata root will be returned.
+
+    :param nix_file: a nix.File
+
+    :return: tuple containing an odml.Document and a list of nix.Sections
+    """
+    if nix_file.find_sections(filtr=lambda x: "odML document" in x.name):
         doc_section = nix_file.sections['odML document']
-    except ValueError:
-        raise ValueError('No odML document section present in nix file.')
+        # generate odml document
+        attributes = ['author', 'version', 'repository', 'date']
+        doc_attributes = {attr: doc_section.props['odML {}'.format(attr)].values[0]
+                          for attr in attributes
+                          if 'odML {}'.format(attr) in doc_section.props}
+        doc_attributes['oid'] = doc_section.id
 
-    # generate odml document
-    attributes = ['author', 'version', 'repository', 'date']
-    doc_attributes = {attr: doc_section.props['odML {}'.format(attr)].values[0]
-                      for attr in attributes
-                      if 'odML {}'.format(attr) in doc_section.props}
-    doc_attributes['oid'] = doc_section.id
+        doc = odml.Document(**doc_attributes)
 
-    return odml.Document(**doc_attributes), doc_section
+    elif nix_file.sections:
+        doc = odml.Document()
+        doc_section = nix_file
+    else:
+        raise ValueError('No exportable sections present in nix file.')
+
+    return doc, doc_section.sections
 
 
 def nix_to_odml_property(nixprop, odml_sec):
