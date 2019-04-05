@@ -89,8 +89,6 @@ def user_input(prompt):
 
 
 def convert_value(val, dtype):
-    global INFO
-
     if dtype == "binary":
         INFO["skipped binary values"] += 1
         return None
@@ -177,7 +175,6 @@ def odml_to_nix_property(odmlprop, nixsec):
 
 
 def odml_to_nix_recurse(odmlseclist, nixparentsec):
-    global INFO
     for odmlsec in odmlseclist:
         INFO["sections read"] += 1
         secname = odmlsec.name
