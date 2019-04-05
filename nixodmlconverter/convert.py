@@ -120,7 +120,7 @@ def odml_to_nix_property(odmlprop, nixsec):
     """
     INFO["properties read"] += 1
     nixvalues = []
-    for val in odmlprop.value:
+    for val in odmlprop.values:
         nixv = convert_value(val, odmlprop.dtype)
         if nixv is not None:
             nixvalues.append(nixv)
