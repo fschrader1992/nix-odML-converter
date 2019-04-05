@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """nixodmlconverter
 
 nixodmlconverter converts odML content between odML and NIX files. The converter
@@ -140,14 +141,15 @@ def odml_to_nix_recurse(odmlseclist, nixparentsec):
                 INFO["skipped empty properties"] += 1
                 continue
 
-            # We need to get the appropriate NIX DataType for the current odML values.
+            # We need to get the appropriate NIX DataType for the current odML values
             dtype = nix.DataType.get_dtype(nixvalues[0])
 
             nixprop = nixsec.create_property(propname, dtype, oid=odmlprop.id)
+
+            # Hotfix until nix.Property.values support unicode content
             try:
                 nixprop.values = nixvalues
             except UnicodeError:
-                # Hotfix until nix.Property.values support unicode content
                 enc_vals = []
                 for val in nixvalues:
                     enc_vals.append(val.encode('utf-8').decode('ascii', 'ignore'))
@@ -158,8 +160,17 @@ def odml_to_nix_recurse(odmlseclist, nixparentsec):
                 nixprop.values = enc_vals
                 INFO["mod_prop_values"] += 1
 
+            # Python2 hotfix, since the omega character is not sanitized
+            # in nixpy Property.unit
+            try:
+                nixprop.unit = odmlprop.unit
+            except UnicodeDecodeError:
+                if u"Ω" in odmlprop.unit:
+                    print("[WARNING] Property.unit currently does not support the omega "
+                          "unicode character. It will be replaced by 'Ohm'.")
+                    nixprop.unit = odmlprop.unit.replace(u"Ω", "Ohm").encode('ascii')
+
             nixprop.definition = definition
-            nixprop.unit = odmlprop.unit
             nixprop.uncertainty = odmlprop.uncertainty
             nixprop.reference = odmlprop.reference
             nixprop.value_origin = odmlprop.value_origin
