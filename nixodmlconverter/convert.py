@@ -256,6 +256,38 @@ def get_odml_doc(nix_file):
     return odml.Document(**doc_attributes), doc_section
 
 
+def nix_to_odml_property(nixprop, odml_sec):
+    """
+    Creates a new Property for a provided odml Section
+    and populates all attributes with the corresponding
+    values from a provided nix Property.
+
+    :param nixprop: nix.Property
+    :param odml_sec: odml.Section
+    """
+    INFO["properties read"] += 1
+
+    # extract and convert property attributes from nix
+    prop_attributes = ['name', 'values', 'unit', 'uncertainty', 'reference',
+                       'definition', 'dependency', 'dependency_value',
+                       'odml_type', 'value_origin', 'id']
+
+    nix_prop_attributes = {attr: getattr(nixprop, attr)
+                           for attr in prop_attributes if hasattr(nixprop, attr)}
+
+    if 'id' in nix_prop_attributes:
+        nix_prop_attributes['oid'] = nix_prop_attributes.pop('id')
+
+    if 'odml_type' in nix_prop_attributes:
+        nix_prop_attributes['dtype'] = nix_prop_attributes.pop('odml_type').value
+
+    nix_prop_attributes['parent'] = odml_sec
+    nix_prop_attributes['value'] = list(nix_prop_attributes.pop('values'))
+
+    odml.Property(**nix_prop_attributes)
+    INFO["properties written"] += 1
+
+
 def nix_to_odml_recurse(nix_section_list, odml_section):
     for nix_sec in nix_section_list:
         INFO["sections read"] += 1
@@ -272,24 +304,7 @@ def nix_to_odml_recurse(nix_section_list, odml_section):
         odml_sec = odml.Section(**nix_attributes)
         INFO["sections written"] += 1
         for nixprop in nix_sec.props:
-            INFO["properties read"] += 1
-
-            # extract and convert property attributes from nix
-            prop_attributes = ['name', 'values', 'unit', 'uncertainty', 'reference',
-                               'definition', 'dependency', 'dependency_value',
-                               'odml_type', 'value_origin', 'id']
-            nix_prop_attributes = {attr: getattr(nixprop, attr)
-                                   for attr in prop_attributes if hasattr(nixprop, attr)}
-
-            if 'id' in nix_prop_attributes:
-                nix_prop_attributes['oid'] = nix_prop_attributes.pop('id')
-            if 'odml_type' in nix_prop_attributes:
-                nix_prop_attributes['dtype'] = nix_prop_attributes.pop('odml_type').value
-            nix_prop_attributes['parent'] = odml_sec
-            nix_prop_attributes['value'] = list(nix_prop_attributes.pop('values'))
-
-            odml.Property(**nix_prop_attributes)
-            INFO["properties written"] += 1
+            nix_to_odml_property(nixprop, odml_sec)
 
         nix_to_odml_recurse(nix_sec.sections, odml_sec)
 
