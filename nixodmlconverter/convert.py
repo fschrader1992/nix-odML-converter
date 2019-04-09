@@ -42,6 +42,8 @@ import odml
 from odml.tools.format_converter import VersionConverter
 from odml.tools.odmlparser import ODMLReader
 from odml.tools.parser_utils import InvalidVersionException
+from nixodmlconverter.info import VERSION
+
 
 INFO = {"sections read": 0,
         "sections written": 0,
@@ -391,7 +393,7 @@ def convert(filename, mode='append'):
 
 
 def main(args=None):
-    parser = docopt(__doc__, argv=args, version="0.0.4")
+    parser = docopt(__doc__, argv=args, version=VERSION)
 
     files = parser['FILE']
     print(files)

@@ -1,16 +1,17 @@
 import json
+import os
 import sys
+
 from io import open
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
 
-with open("info.json") as infofile:
+with open(os.path.join("nixodmlconverter", "info.json")) as infofile:
     infodict = json.load(infofile)
 
 VERSION = infodict["VERSION"]
-FORMAT_VERSION = infodict["FORMAT_VERSION"]
 AUTHOR = infodict["AUTHOR"]
 COPYRIGHT = infodict["COPYRIGHT"]
 CONTACT = infodict["CONTACT"]
