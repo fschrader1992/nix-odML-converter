@@ -12,7 +12,6 @@ with open(os.path.join("nixodmlconverter", "info.json")) as infofile:
     infodict = json.load(infofile)
 
 VERSION = infodict["VERSION"]
-FORMAT_VERSION = infodict["FORMAT_VERSION"]
 AUTHOR = infodict["AUTHOR"]
 COPYRIGHT = infodict["COPYRIGHT"]
 CONTACT = infodict["CONTACT"]
