@@ -235,14 +235,15 @@ def nixwrite(odml_doc, filename, mode='append'):
         filemode = nix.FileMode.ReadWrite
     elif mode == 'overwrite':
         filemode = nix.FileMode.Overwrite
-    nixfile = nix.File.open(filename, filemode)
 
-    if mode == 'overwrite metadata':
-        if 'odML document' in nixfile.sections:
-            del nixfile.sections['odML document']
+    with nix.File.open(filename, filemode) as nixfile:
+        if mode == 'overwrite metadata':
+            if 'odML document' in nixfile.sections:
+                del nixfile.sections['odML document']
 
-    nix_document_section = write_odml_doc(odml_doc, nixfile)
-    odml_to_nix_recurse(odml_doc.sections, nix_document_section)
+        nix_document_section = write_odml_doc(odml_doc, nixfile)
+        odml_to_nix_recurse(odml_doc.sections, nix_document_section)
+
 
 
 ############### NIX -> ODML #################
@@ -384,8 +385,8 @@ def convert(filename, mode='append'):
         nixwrite(odml_doc, outfilename, mode=mode)
 
     elif output_format in ['.xml', '.odml']:
-        nix_file = nix.File.open(filename, nix.FileMode.ReadOnly)
-        odmlwrite(nix_file, outfilename)
+        with nix.File.open(filename, nix.FileMode.ReadOnly) as nix_file:
+            odmlwrite(nix_file, outfilename)
     else:
         raise ValueError('Unknown file format {}'.format(output_format))
 

@@ -13,7 +13,7 @@ document_attributes = ['author', 'version', 'date', 'repository']
 section_attributes = ['name', 'oid', 'definition', 'type', 'reference', 'repository',
                       # 'link', 'include'
                       ]
-property_attributes = ['name', 'oid', 'definition', 'value', 'unit', 'reference',
+property_attributes = ['name', 'oid', 'definition', 'values', 'unit', 'reference',
                        'dependency', 'dependency_value', 'dtype', 'value_origin',
                        # the type conversion of the uncertainty is not solved yet.
                        # 'uncertainty',
