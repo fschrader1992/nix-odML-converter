@@ -1,15 +1,15 @@
 {
-  "VERSION": "0.0.6",
+  "VERSION": "0.0.7",
   "AUTHOR": "Achilleas Koutsou, Julia Sprenger, Michael Sonntag",
-  "COPYRIGHT": "(c) 2018, German Neuroinformatics Node",
+  "COPYRIGHT": "(c) 2020, German Neuroinformatics Node",
   "CONTACT": "dev@g-node.org",
   "HOMEPAGE": "https://github.com/G-Node/nix-odml-converter",
   "CLASSIFIERS": [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 2.7",
-    "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
     "Topic :: Scientific/Engineering",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: BSD License"
