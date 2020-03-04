@@ -66,18 +66,20 @@ installing from source.
 
 ## Dependencies
 
-* Python 2.7 or 3.5+
+* Python 3.6+
 * Python packages:
-    * odml
-    * nixio (>=1.5.0b1)
+    * odml (>=1.4.5)
+    * nixio (>=1.5.0b3)
 
 These dependency packages can be manually installed via the python package manager `pip`:
 
-`pip install odml nixio==1.5.0b3` 
+`pip install "odml>=1.4.5" "nixio>=1.5.0b3"` 
 
 or by manually installing the nix-odML-converter from the repository root:
 
 `python setup.py install`
+
+Python 2 has reached end of life. We will not keep any future versions of nixodmlconverter Python 2 compatible and also recommend using a Python version >= 3.6.
 
 
 # NIX (Neuroscience information exchange) format
