@@ -24,7 +24,9 @@ packages = ['nixodmlconverter']
 with open('README.md', encoding="utf8") as f:
     description_text = f.read()
 
-install_req = ["odml>=1.4.5", "nixio>=1.5.0b1", "docopt"]
+# Older Python installations might come with a "six" version<1.12.0
+# for which nixio will fail.
+install_req = ["odml>=1.4.5", "nixio>=1.5.0b1", "docopt", "six>=1.12.0"]
 
 if sys.version_info < (3, 4):
     install_req += ["enum34"]
