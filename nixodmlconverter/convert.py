@@ -39,8 +39,8 @@ from docopt import docopt
 import nixio as nix
 import odml
 
-from odml.tools.format_converter import VersionConverter
-from odml.tools.odmlparser import ODMLReader
+from odml.tools.converters import VersionConverter
+from odml.tools import ODMLReader
 from odml.tools.parser_utils import InvalidVersionException
 from nixodmlconverter.info import VERSION
 

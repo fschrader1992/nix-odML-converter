@@ -1,4 +1,4 @@
-![Travis build](https://travis-ci.org/G-Node/nix-odML-converter.svg?branch=master)
+[![Travis build](https://travis-ci.org/G-Node/nix-odML-converter.svg?branch=master)](https://travis-ci.org/G-Node/nix-odML-converter/)
 [![Build status](https://ci.appveyor.com/api/projects/status/fc30meltvawsbpgt?svg=true)](https://ci.appveyor.com/project/G-Node/nix-odml-converter)
 [![PyPI version](https://img.shields.io/pypi/v/nixodmlconverter.svg)](https://pypi.org/project/nixodmlconverter/)
 
@@ -66,18 +66,20 @@ installing from source.
 
 ## Dependencies
 
-* Python 2.7 or 3.5+
+* Python 3.6+
 * Python packages:
-    * odml
-    * nixio (>=1.5.0b1)
+    * odml (>=1.4.5)
+    * nixio (>=1.5.0b3)
 
 These dependency packages can be manually installed via the python package manager `pip`:
 
-`pip install odml nixio==1.5.0b3` 
+`pip install "odml>=1.4.5" "nixio>=1.5.0b3"` 
 
 or by manually installing the nix-odML-converter from the repository root:
 
 `python setup.py install`
+
+Python 2 has reached end of life. Future versions of nixodmlconverter will no longer support Python 2.  We further recommend using a Python version >= 3.6.
 
 
 # NIX (Neuroscience information exchange) format
