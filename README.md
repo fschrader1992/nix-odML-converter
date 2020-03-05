@@ -79,7 +79,7 @@ or by manually installing the nix-odML-converter from the repository root:
 
 `python setup.py install`
 
-Python 2 has reached end of life. We will not keep any future versions of nixodmlconverter Python 2 compatible and also recommend using a Python version >= 3.6.
+Python 2 has reached end of life. Future versions of nixodmlconverter will no longer support Python 2.  We further recommend using a Python version >= 3.6.
 
 
 # NIX (Neuroscience information exchange) format
