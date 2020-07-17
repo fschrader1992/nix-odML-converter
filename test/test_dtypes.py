@@ -443,3 +443,33 @@ class TestDtypes(unittest.TestCase):
         # in the odML core lib reading the file including a line break.
         # self.assertEqual(len(vals), 3)
         # self.assertEqual(vals, ['a\nb', 'c d', 'e\nix_path'])
+
+    def test_nix_to_odml_tuple(self):
+        nix_path = os.path.join(self.test_dir, 'tmp.nix')
+        nix_file = nix.File.open(nix_path, nix.FileMode.Overwrite)
+        odml_path = os.path.join(self.test_dir, 'tmp.xml')
+
+        sec = nix_file.create_section(name="section")
+        prop = sec.create_property(name="2-tuple property", values_or_dtype=np.str_)
+        prop.values = ["(1; 2)", "(3; 4)"]
+
+        convert.odmlwrite(nix_file, odml_path)
+        odml_doc = odml.load(odml_path)
+
+        odml_prop = odml_doc.sections[0].props[0]
+        vals = odml_prop.values
+        self.assertEqual(getattr(odml_prop, "dtype"), "2-tuple")
+        self.assertEqual(len(vals), 2)
+        self.assertEqual(vals, [["1", "2"], ["3", "4"]])
+
+        prop2 = sec.create_property(name="3-tuple property", values_or_dtype=np.str_)
+        prop2.values = ["(1; 2; 3)", "(4; 5; 6)"]
+
+        convert.odmlwrite(nix_file, odml_path)
+        odml_doc = odml.load(odml_path)
+
+        odml_prop_2 = odml_doc.sections[0].props[1]
+        vals = odml_prop_2.values
+        self.assertEqual(getattr(odml_prop_2, "dtype"), "3-tuple")
+        self.assertEqual(len(vals), 2)
+        self.assertEqual(vals, [["1", "2", "3"], ["4", "5", "6"]])
