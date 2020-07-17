@@ -165,6 +165,9 @@ def convert_value(val, dtype):
     if dtype in ("date", "time", "datetime"):
         val = val.isoformat()
 
+    if dtype.endswith("-tuple"):
+        val = "(" + "; ".join(val) + ")"
+
     return val
 
 
