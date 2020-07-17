@@ -362,6 +362,12 @@ def nix_to_odml_property(nixprop, odml_sec):
 
     if 'id' in nix_prop_attributes:
         nix_prop_attributes['oid'] = nix_prop_attributes.pop('id')
+    non_byte_vals = []
+    for val in list(nix_prop_attributes.pop('values')):
+        if isinstance(val, bytes):
+            non_byte_vals += [str(val, "utf-8")]
+        else:
+            non_byte_vals += [val]
 
     odml_type = None
     if 'odml_type' in nix_prop_attributes:
@@ -369,10 +375,10 @@ def nix_to_odml_property(nixprop, odml_sec):
     if odml_type and odml_type.value:
         nix_prop_attributes['dtype'] = odml_type.value
     else:
-        nix_prop_attributes['dtype'] = infer_dtype(nix_prop_attributes['values'])
+        nix_prop_attributes['dtype'] = infer_dtype(non_byte_vals)
 
     nix_prop_attributes['parent'] = odml_sec
-    nix_prop_attributes['values'] = list(nix_prop_attributes.pop('values'))
+    nix_prop_attributes['values'] = non_byte_vals
 
     odml.Property(**nix_prop_attributes)
     INFO["properties written"] += 1
