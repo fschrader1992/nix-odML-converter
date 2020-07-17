@@ -36,6 +36,8 @@ import sys
 
 from docopt import docopt
 
+import re
+
 import nixio as nix
 import odml
 
@@ -88,6 +90,56 @@ def user_input(prompt):
         return raw_input(prompt)
 
     return input(prompt)
+
+
+def infer_dtype(values):
+    """
+    PROTOTYPE
+
+    Tests whether values with dtype "string" are maybe of different dtype.
+
+    :param prop: property the validation is applied on.
+    """
+
+    dtype_checks = {
+        'int': r'^(-+)?\d+$',
+        'date': r'^\d{2,4}-\d{1,2}-\d{1,2}$',
+        'datetime': r'^\d{2,4}-\d{1,2}-\d{1,2} \d{2}:\d{2}(:\d{2})?$',
+        'time': r'^\d{2}:\d{2}(:\d{2})?$',
+        'float': r'^(-+)?\d+\.\d+$',
+        'tuple': r'^\((.*?)\)',
+        'boolean': r'^TRUE|FALSE|True|False|true|false|t|f+$',
+        'text': r'[\r\n]'}
+
+    val_dtypes = []
+
+    for val in values:
+        val = str(val)
+        # Do not continue if a value is None
+        if val is None:
+            return
+
+        curr_dtype = "string"
+
+        for check_dtype in dtype_checks.items():
+            if bool(re.compile(check_dtype[1]).match(val.strip())):
+                if check_dtype[0] == "tuple" and val.count(';') > 0:
+                    curr_dtype = str(val.count(';') + 1) + "-" + check_dtype[0]
+                else:
+                    curr_dtype = check_dtype[0]
+                break
+            if check_dtype[0] == "text" and len(re.findall(check_dtype[1], val.strip())) > 0:
+                curr_dtype = check_dtype[0]
+                break
+
+        val_dtypes += [curr_dtype]
+
+    if len(set(val_dtypes)) == 1:
+        return val_dtypes[0]
+    elif "text" in set(val_dtypes):
+        return "text"
+
+    return "string"
 
 #def print_same_line(msg):
 #    """
