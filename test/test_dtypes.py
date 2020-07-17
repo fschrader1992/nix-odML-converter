@@ -131,6 +131,33 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, ("a\nb", "c", "d\ne"))
 
+    def test_odml_to_nix_tuple(self):
+        nix_path = os.path.join(self.test_dir, 'tmp.nix')
+        odml.Property(name='2-tuple property', values=["(1; 2)", "(3; 4)"],
+                      parent=self.odml_doc.sections[0], dtype='2-tuple')
+        convert.nixwrite(self.odml_doc, nix_path, 'overwrite')
+        nix_file = nix.File.open(nix_path)
+        nix_prop = nix_file.sections[0].sections[0].props[0]
+        vals = nix_prop.values
+        #assert None, such that backconversion works correctly
+        self.assertEqual(getattr(nix_prop, "odml_type"), None)
+        self.assertEqual(getattr(nix_prop, "data_type"), np.str_)
+        self.assertEqual(len(vals), 2)
+        self.assertEqual(vals, ("(1; 2)", "(3; 4)"))
+        nix_file.close()
+
+        odml.Property(name='3-tuple property', values=["(1; 2; 3)", "(4; 5; 6)"],
+                      parent=self.odml_doc.sections[0], dtype='3-tuple')
+        convert.nixwrite(self.odml_doc, nix_path, 'overwrite')
+        nix_file = nix.File.open(nix_path)
+        nix_prop_2 = nix_file.sections[0].sections[0].props[1]
+        vals_2 = nix_prop_2.values
+        #assert None, such that backconversion works correctly
+        self.assertEqual(getattr(nix_prop_2, "odml_type"), None)
+        self.assertEqual(getattr(nix_prop_2, "data_type"), np.str_)
+        self.assertEqual(len(vals_2), 2)
+        self.assertEqual(vals_2, ("(1; 2; 3)", "(4; 5; 6)"))
+
     def test_nix_to_odml_string(self):
         nix_path = os.path.join(self.test_dir, 'tmp.nix')
         nix_file = nix.File.open(nix_path, nix.FileMode.Overwrite)
