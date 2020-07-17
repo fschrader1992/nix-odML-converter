@@ -304,7 +304,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(vals, [True, False, True])
 
         prop2 = sec.create_property(name="string boolean property", values_or_dtype=np.str_)
-        prop2.values = ["True", "False", "TRUE", "FALSE", "t", "f"]
+        prop2.values = ["True", "False", "TRUE", "FALSE"]
 
         convert.odmlwrite(nix_file, odml_path)
         odml_doc = odml.load(odml_path)
@@ -312,8 +312,8 @@ class TestDtypes(unittest.TestCase):
         odml_prop_2 = odml_doc.sections[0].props[1]
         vals = odml_prop_2.values
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.boolean)
-        self.assertEqual(len(vals), 6)
-        self.assertEqual(vals, [True, False, True, False, True, False])
+        self.assertEqual(len(vals), 4)
+        self.assertEqual(vals, [True, False, True, False])
 
         prop3 = sec.create_property(name="boolean property 3", values_or_dtype=np.bool_)
         prop3.values = [False, True, False]
