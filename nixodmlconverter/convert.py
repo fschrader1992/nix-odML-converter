@@ -33,10 +33,9 @@ Options:
 
 import os
 import sys
+import re
 
 from docopt import docopt
-
-import re
 
 import nixio as nix
 import odml
