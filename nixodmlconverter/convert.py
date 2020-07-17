@@ -369,7 +369,7 @@ def nix_to_odml_property(nixprop, odml_sec):
         nix_prop_attributes['dtype'] = infer_dtype(nix_prop_attributes['values'])
 
     nix_prop_attributes['parent'] = odml_sec
-    nix_prop_attributes['value'] = list(nix_prop_attributes.pop('values'))
+    nix_prop_attributes['values'] = list(nix_prop_attributes.pop('values'))
 
     odml.Property(**nix_prop_attributes)
     INFO["properties written"] += 1
