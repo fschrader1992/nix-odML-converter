@@ -360,8 +360,13 @@ def nix_to_odml_property(nixprop, odml_sec):
     if 'id' in nix_prop_attributes:
         nix_prop_attributes['oid'] = nix_prop_attributes.pop('id')
 
+    odml_type = None
     if 'odml_type' in nix_prop_attributes:
-        nix_prop_attributes['dtype'] = nix_prop_attributes.pop('odml_type').value
+        odml_type = nix_prop_attributes.pop('odml_type')
+    if odml_type and odml_type.value:
+        nix_prop_attributes['dtype'] = odml_type.value
+    else:
+        nix_prop_attributes['dtype'] = infer_dtype(nix_prop_attributes['values'])
 
     nix_prop_attributes['parent'] = odml_sec
     nix_prop_attributes['value'] = list(nix_prop_attributes.pop('values'))
