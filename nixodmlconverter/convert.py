@@ -42,7 +42,7 @@ import odml
 from odml.tools.converters import VersionConverter
 from odml.tools import ODMLReader
 from odml.tools.parser_utils import InvalidVersionException
-from nixodmlconverter.info import VERSION
+from .info import VERSION
 
 
 INFO = {"sections read": 0,
