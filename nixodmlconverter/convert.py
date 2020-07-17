@@ -357,31 +357,34 @@ def nix_to_odml_property(nixprop, odml_sec):
                        'definition', 'dependency', 'dependency_value',
                        'odml_type', 'value_origin', 'id']
 
-    nix_prop_attributes = {attr: getattr(nixprop, attr)
-                           for attr in prop_attributes if hasattr(nixprop, attr)}
+    try:
+        nix_prop_attributes = {attr: getattr(nixprop, attr)
+                               for attr in prop_attributes if hasattr(nixprop, attr)}
 
-    if 'id' in nix_prop_attributes:
-        nix_prop_attributes['oid'] = nix_prop_attributes.pop('id')
-    non_byte_vals = []
-    for val in list(nix_prop_attributes.pop('values')):
-        if isinstance(val, bytes):
-            non_byte_vals += [str(val, "utf-8")]
+        if 'id' in nix_prop_attributes:
+            nix_prop_attributes['oid'] = nix_prop_attributes.pop('id')
+        non_byte_vals = []
+        for val in list(nix_prop_attributes.pop('values')):
+            if isinstance(val, bytes):
+                non_byte_vals += [str(val, "utf-8")]
+            else:
+                non_byte_vals += [val]
+
+        odml_type = None
+        if 'odml_type' in nix_prop_attributes:
+            odml_type = nix_prop_attributes.pop('odml_type')
+        if odml_type and odml_type.value:
+            nix_prop_attributes['dtype'] = odml_type.value
         else:
-            non_byte_vals += [val]
+            nix_prop_attributes['dtype'] = infer_dtype(non_byte_vals)
 
-    odml_type = None
-    if 'odml_type' in nix_prop_attributes:
-        odml_type = nix_prop_attributes.pop('odml_type')
-    if odml_type and odml_type.value:
-        nix_prop_attributes['dtype'] = odml_type.value
-    else:
-        nix_prop_attributes['dtype'] = infer_dtype(non_byte_vals)
+        nix_prop_attributes['parent'] = odml_sec
+        nix_prop_attributes['values'] = non_byte_vals
 
-    nix_prop_attributes['parent'] = odml_sec
-    nix_prop_attributes['values'] = non_byte_vals
-
-    odml.Property(**nix_prop_attributes)
-    INFO["properties written"] += 1
+        odml.Property(**nix_prop_attributes)
+        INFO["properties written"] += 1
+    except Exception as e:
+        print("Could not convert property", nixprop, ":", e)
 
 
 def nix_to_odml_recurse(nix_section_list, odml_section):
