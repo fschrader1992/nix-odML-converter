@@ -107,7 +107,7 @@ def infer_dtype(values):
         'time': r'^\d{2}:\d{2}(:\d{2})?$',
         'float': r'^(-+)?\d+\.\d+$',
         'tuple': r'^\((.*?)\)',
-        'boolean': r'^TRUE|FALSE|True|False|true|false|t|f+$',
+        'boolean': r'^TRUE|FALSE|True|False|true|false$',
         'text': r'[\r\n]'}
 
     val_dtypes = []
