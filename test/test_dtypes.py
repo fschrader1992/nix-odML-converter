@@ -186,6 +186,9 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop, "dtype"), odml.DType.string)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, ['a', 'b', 'c'])
+        
+        nix_file.close()
+        nix_file = nix.File.open(nix_path, nix.FileMode.Overwrite)
 
         prop2 = sec.create_property(name="string property 2", values_or_dtype=np.str_)
         prop2.values = ['d', 'e', 'f']
@@ -219,6 +222,9 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [1, 2, 3])
 
+        nix_file.close()
+        nix_file = nix.File.open(nix_path, nix.FileMode.Overwrite)
+
         prop2 = sec.create_property(name="string int property", values_or_dtype=np.str_)
         prop2.values = ["4", "5", "6"]
 
@@ -230,6 +236,9 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.int)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [4, 5, 6])
+
+        nix_file.close()
+        nix_file = nix.File.open(nix_path, nix.FileMode.Overwrite)
 
         prop3 = sec.create_property(name="int property 3", values_or_dtype=np.int_)
         prop3.values = [7, 8, 9]
@@ -262,6 +271,9 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop, "dtype"), odml.DType.float)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [1.1, 2.2, 3.3])
+
+        nix_file.close()
+        nix_file = nix.File.open(nix_path, nix.FileMode.Overwrite)
 
         prop2 = sec.create_property(name="string float property", values_or_dtype=np.str_)
         prop2.values = ["4.4", "5.5", "6.6"]
@@ -345,6 +357,9 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [True, False, True])
 
+        nix_file.close()
+        nix_file = nix.File.open(nix_path, nix.FileMode.Overwrite)
+
         prop2 = sec.create_property(name="string boolean property", values_or_dtype=np.str_)
         prop2.values = ["True", "False", "TRUE", "FALSE"]
 
@@ -356,6 +371,9 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.boolean)
         self.assertEqual(len(vals), 4)
         self.assertEqual(vals, [True, False, True, False])
+
+        nix_file.close()
+        nix_file = nix.File.open(nix_path, nix.FileMode.Overwrite)
 
         prop3 = sec.create_property(name="boolean property 3", values_or_dtype=np.bool_)
         prop3.values = [False, True, False]
@@ -389,6 +407,9 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(len(vals), 2)
         self.assertEqual(vals, [datetime.date(2011, 11, 1), datetime.date(2011, 12, 2)])
 
+        nix_file.close()
+        nix_file = nix.File.open(nix_path, nix.FileMode.Overwrite)
+
         prop2 = sec.create_property(name="date property 2", values_or_dtype=np.str_)
         prop2.values = ['2011-11-03', '2011-12-04']
         setattr(prop2, "odml_type", nix.OdmlType("date"))
@@ -420,6 +441,9 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop, "dtype"), odml.DType.time)
         self.assertEqual(len(vals), 2)
         self.assertEqual(vals, [datetime.time(11, 11, 11), datetime.time(2, 2, 2)])
+
+        nix_file.close()
+        nix_file = nix.File.open(nix_path, nix.FileMode.Overwrite)
 
         prop2 = sec.create_property(name="time property 2", values_or_dtype=np.str_)
         prop2.values = ['12:12:12', '03:03:03']
@@ -453,6 +477,9 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(len(vals), 2)
         self.assertEqual(vals, [datetime.datetime(2011, 11, 1, 11, 11, 11),
                                 datetime.datetime(2012, 12, 2, 2, 2, 2)])
+
+        nix_file.close()
+        nix_file = nix.File.open(nix_path, nix.FileMode.Overwrite)
 
         prop2 = sec.create_property(name="datetime property 2", values_or_dtype=np.str_)
         prop2.values = ['2012-12-02 12:12:12', '2013-01-01 01:01:01']
@@ -507,6 +534,9 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop, "dtype"), "2-tuple")
         self.assertEqual(len(vals), 2)
         self.assertEqual(vals, [["1", "2"], ["3", "4"]])
+
+        nix_file.close()
+        nix_file = nix.File.open(nix_path, nix.FileMode.Overwrite)
 
         prop2 = sec.create_property(name="3-tuple property", values_or_dtype=np.str_)
         prop2.values = ["(1; 2; 3)", "(4; 5; 6)"]
