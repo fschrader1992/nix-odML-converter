@@ -483,7 +483,6 @@ class TestDtypes(unittest.TestCase):
 
         odml_prop = odml_doc.sections[0].props[0]
         vals = odml_prop.values
-        odml_doc.sections[0].pprint()
         self.assertEqual(getattr(odml_prop, "dtype"), odml.DType.text)
         # this does currently not work as there seems to be a problem
         # in the odML core lib reading the file including a line break.
