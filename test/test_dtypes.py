@@ -156,11 +156,13 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(vals, ("(1; 2)", "(3; 4)"))
         nix_file.close()
 
+        file_name_2 = 'tmp' + str(uuid.uuid4())
+        nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
         odml.Property(name='3-tuple property', values=["(1; 2; 3)", "(4; 5; 6)"],
                       parent=self.odml_doc.sections[0], dtype='3-tuple')
-        convert.nixwrite(self.odml_doc, nix_path, 'overwrite')
-        nix_file = nix.File.open(nix_path)
-        nix_prop_2 = nix_file.sections[0].sections[0].props[1]
+        convert.nixwrite(self.odml_doc, nix_path_2, 'overwrite')
+        nix_file_2 = nix.File.open(nix_path_2)
+        nix_prop_2 = nix_file_2.sections[0].sections[0].props[1]
         vals_2 = nix_prop_2.values
         #assert None, such that backconversion works correctly
         self.assertEqual(getattr(nix_prop_2, "odml_type"), None)
@@ -187,14 +189,21 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, ['a', 'b', 'c'])
 
-        prop2 = sec.create_property(name="string property 2", values_or_dtype=np.str_)
+        file_name_2 = 'tmp' + str(uuid.uuid4())
+        nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
+        nix_file_2 = nix.File.open(nix_path_2, nix.FileMode.Overwrite)
+        odml_path_2 = os.path.join(self.test_dir, file_name_2 + '.xml')
+
+        sec_2 = nix_file_2.create_section(name="section")
+
+        prop2 = sec_2.create_property(name="string property 2", values_or_dtype=np.str_)
         prop2.values = ['d', 'e', 'f']
         setattr(prop2, "odml_type", nix.OdmlType("string"))
 
-        convert.odmlwrite(nix_file, odml_path)
-        odml_doc = odml.load(odml_path)
+        convert.odmlwrite(nix_file_2, odml_path_2)
+        odml_doc_2 = odml.load(odml_path_2)
 
-        odml_prop_2 = odml_doc.sections[0].props[1]
+        odml_prop_2 = odml_doc_2.sections[0].props[0]
         vals = odml_prop_2.values
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.string)
         self.assertEqual(len(vals), 3)
@@ -218,27 +227,41 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop, "dtype"), odml.DType.int)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [1, 2, 3])
+        
+        file_name_2 = 'tmp' + str(uuid.uuid4())
+        nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
+        nix_file_2 = nix.File.open(nix_path_2, nix.FileMode.Overwrite)
+        odml_path_2 = os.path.join(self.test_dir, file_name_2 + '.xml')
 
-        prop2 = sec.create_property(name="string int property", values_or_dtype=np.str_)
+        sec_2 = nix_file_2.create_section(name="section")
+
+        prop2 = sec_2.create_property(name="string int property", values_or_dtype=np.str_)
         prop2.values = ["4", "5", "6"]
 
-        convert.odmlwrite(nix_file, odml_path)
-        odml_doc = odml.load(odml_path)
+        convert.odmlwrite(nix_file_2, odml_path_2)
+        odml_doc_2 = odml.load(odml_path_2)
 
-        odml_prop_2 = odml_doc.sections[0].props[1]
+        odml_prop_2 = odml_doc_2.sections[0].props[0]
         vals = odml_prop_2.values
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.int)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [4, 5, 6])
 
-        prop3 = sec.create_property(name="int property 3", values_or_dtype=np.int_)
+        file_name_3 = 'tmp' + str(uuid.uuid4())
+        nix_path_3 = os.path.join(self.test_dir, file_name_3 + '.nix')
+        nix_file_3 = nix.File.open(nix_path_3, nix.FileMode.Overwrite)
+        odml_path_3 = os.path.join(self.test_dir, file_name_3 + '.xml')
+
+        sec_3 = nix_file_3.create_section(name="section")
+
+        prop3 = sec_3.create_property(name="int property 3", values_or_dtype=np.int_)
         prop3.values = [7, 8, 9]
         setattr(prop3, "odml_type", nix.OdmlType("int"))
 
-        convert.odmlwrite(nix_file, odml_path)
-        odml_doc = odml.load(odml_path)
+        convert.odmlwrite(nix_file_3, odml_path_3)
+        odml_doc_3 = odml.load(odml_path_3)
 
-        odml_prop_3 = odml_doc.sections[0].props[2]
+        odml_prop_3 = odml_doc_3.sections[0].props[0]
         vals = odml_prop_3.values
         self.assertEqual(getattr(odml_prop_3, "dtype"), odml.DType.int)
         self.assertEqual(len(vals), 3)
@@ -263,13 +286,20 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [1.1, 2.2, 3.3])
 
-        prop2 = sec.create_property(name="string float property", values_or_dtype=np.str_)
+        file_name_2 = 'tmp' + str(uuid.uuid4())
+        nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
+        nix_file_2 = nix.File.open(nix_path_2, nix.FileMode.Overwrite)
+        odml_path_2 = os.path.join(self.test_dir, file_name_2 + '.xml')
+
+        sec_2 = nix_file_2.create_section(name="section")
+
+        prop2 = sec_2.create_property(name="string float property", values_or_dtype=np.str_)
         prop2.values = ["4.4", "5.5", "6.6"]
 
-        convert.odmlwrite(nix_file, odml_path)
-        odml_doc = odml.load(odml_path)
+        convert.odmlwrite(nix_file_2, odml_path_2)
+        odml_doc_2 = odml.load(odml_path_2)
 
-        odml_prop_2 = odml_doc.sections[0].props[1]
+        odml_prop_2 = odml_doc_2.sections[0].props[0]
         vals = odml_prop_2.values
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.float)
         self.assertEqual(len(vals), 3)
@@ -277,16 +307,23 @@ class TestDtypes(unittest.TestCase):
 
         '''
         # there seems to be a problem with float64 conversion in the nixpy lib
-        prop3 = sec.create_property(name="float property 3", values_or_dtype=np.float_)
+        file_name_2 = 'tmp' + str(uuid.uuid4())
+        nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
+        nix_file_2 = nix.File.open(nix_path_2, nix.FileMode.Overwrite)
+        odml_path_2 = os.path.join(self.test_dir, file_name_2 + '.xml')
+
+        sec_2 = nix_file_2.create_section(name="section")
+
+        prop2 = sec_2.create_property(name="string float property", values_or_dtype=np.float_)
         prop3.values = [7.7, 8.8, 9.9]
         setattr(prop3, "odml_type", nix.OdmlType("float"))
 
-        convert.odmlwrite(nix_file, odml_path)
-        odml_doc = odml.load(odml_path)
+        convert.odmlwrite(nix_file_2, odml_path_2)
+        odml_doc_2 = odml.load(odml_path_2)
 
-        odml_prop_3 = odml_doc.sections[0].props[2]
-        vals = odml_prop_3.values
-        self.assertEqual(getattr(odml_prop_3, "dtype"), odml.DType.float)
+        odml_prop_2 = odml_doc_2.sections[0].props[0]
+        vals = odml_prop_2.values
+        self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.float)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [7.7, 8.8, 9.9])
         '''
@@ -345,26 +382,40 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [True, False, True])
 
-        prop2 = sec.create_property(name="string boolean property", values_or_dtype=np.str_)
+        file_name_2 = 'tmp' + str(uuid.uuid4())
+        nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
+        nix_file_2 = nix.File.open(nix_path_2, nix.FileMode.Overwrite)
+        odml_path_2 = os.path.join(self.test_dir, file_name_2 + '.xml')
+
+        sec_2 = nix_file_2.create_section(name="section")
+
+        prop2 = sec_2.create_property(name="string boolean property", values_or_dtype=np.str_)
         prop2.values = ["True", "False", "TRUE", "FALSE"]
 
-        convert.odmlwrite(nix_file, odml_path)
-        odml_doc = odml.load(odml_path)
+        convert.odmlwrite(nix_file_2, odml_path_2)
+        odml_doc_2 = odml.load(odml_path_2)
 
-        odml_prop_2 = odml_doc.sections[0].props[1]
+        odml_prop_2 = odml_doc_2.sections[0].props[0]
         vals = odml_prop_2.values
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.boolean)
         self.assertEqual(len(vals), 4)
         self.assertEqual(vals, [True, False, True, False])
 
-        prop3 = sec.create_property(name="boolean property 3", values_or_dtype=np.bool_)
+        file_name_3 = 'tmp' + str(uuid.uuid4())
+        nix_path_3 = os.path.join(self.test_dir, file_name_3 + '.nix')
+        nix_file_3 = nix.File.open(nix_path_3, nix.FileMode.Overwrite)
+        odml_path_3 = os.path.join(self.test_dir, file_name_3 + '.xml')
+
+        sec_3 = nix_file_3.create_section(name="section")
+
+        prop3 = sec_3.create_property(name="boolean property 3", values_or_dtype=np.bool_)
         prop3.values = [False, True, False]
         setattr(prop3, "odml_type", nix.OdmlType("boolean"))
 
-        convert.odmlwrite(nix_file, odml_path)
-        odml_doc = odml.load(odml_path)
+        convert.odmlwrite(nix_file_3, odml_path_3)
+        odml_doc_3 = odml.load(odml_path_3)
 
-        odml_prop_3 = odml_doc.sections[0].props[2]
+        odml_prop_3 = odml_doc_3.sections[0].props[0]
         vals = odml_prop_3.values
         self.assertEqual(getattr(odml_prop_3, "dtype"), odml.DType.boolean)
         self.assertEqual(len(vals), 3)
@@ -389,14 +440,21 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(len(vals), 2)
         self.assertEqual(vals, [datetime.date(2011, 11, 1), datetime.date(2011, 12, 2)])
 
-        prop2 = sec.create_property(name="date property 2", values_or_dtype=np.str_)
+        file_name_2 = 'tmp' + str(uuid.uuid4())
+        nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
+        nix_file_2 = nix.File.open(nix_path_2, nix.FileMode.Overwrite)
+        odml_path_2 = os.path.join(self.test_dir, file_name_2 + '.xml')
+
+        sec_2 = nix_file_2.create_section(name="section")
+
+        prop2 = sec_2.create_property(name="date property 2", values_or_dtype=np.str_)
         prop2.values = ['2011-11-03', '2011-12-04']
         setattr(prop2, "odml_type", nix.OdmlType("date"))
 
-        convert.odmlwrite(nix_file, odml_path)
-        odml_doc = odml.load(odml_path)
+        convert.odmlwrite(nix_file_2, odml_path_2)
+        odml_doc_2 = odml.load(odml_path_2)
 
-        odml_prop_2 = odml_doc.sections[0].props[1]
+        odml_prop_2 = odml_doc_2.sections[0].props[0]
         vals = odml_prop_2.values
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.date)
         self.assertEqual(len(vals), 2)
@@ -421,14 +479,21 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(len(vals), 2)
         self.assertEqual(vals, [datetime.time(11, 11, 11), datetime.time(2, 2, 2)])
 
-        prop2 = sec.create_property(name="time property 2", values_or_dtype=np.str_)
+        file_name_2 = 'tmp' + str(uuid.uuid4())
+        nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
+        nix_file_2 = nix.File.open(nix_path_2, nix.FileMode.Overwrite)
+        odml_path_2 = os.path.join(self.test_dir, file_name_2 + '.xml')
+
+        sec_2 = nix_file_2.create_section(name="section")
+
+        prop2 = sec_2.create_property(name="time property 2", values_or_dtype=np.str_)
         prop2.values = ['12:12:12', '03:03:03']
         setattr(prop2, "odml_type", nix.OdmlType("time"))
 
-        convert.odmlwrite(nix_file, odml_path)
-        odml_doc = odml.load(odml_path)
+        convert.odmlwrite(nix_file_2, odml_path_2)
+        odml_doc_2 = odml.load(odml_path_2)
 
-        odml_prop_2 = odml_doc.sections[0].props[1]
+        odml_prop_2 = odml_doc_2.sections[0].props[0]
         vals = odml_prop_2.values
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.time)
         self.assertEqual(len(vals), 2)
@@ -454,14 +519,21 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(vals, [datetime.datetime(2011, 11, 1, 11, 11, 11),
                                 datetime.datetime(2012, 12, 2, 2, 2, 2)])
 
-        prop2 = sec.create_property(name="datetime property 2", values_or_dtype=np.str_)
+        file_name_2 = 'tmp' + str(uuid.uuid4())
+        nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
+        nix_file_2 = nix.File.open(nix_path_2, nix.FileMode.Overwrite)
+        odml_path_2 = os.path.join(self.test_dir, file_name_2 + '.xml')
+
+        sec_2 = nix_file_2.create_section(name="section")
+
+        prop2 = sec_2.create_property(name="datetime property 2", values_or_dtype=np.str_)
         prop2.values = ['2012-12-02 12:12:12', '2013-01-01 01:01:01']
         setattr(prop2, "odml_type", nix.OdmlType("datetime"))
 
-        convert.odmlwrite(nix_file, odml_path)
-        odml_doc = odml.load(odml_path)
+        convert.odmlwrite(nix_file_2, odml_path_2)
+        odml_doc_2 = odml.load(odml_path_2)
 
-        odml_prop_2 = odml_doc.sections[0].props[1]
+        odml_prop_2 = odml_doc_2.sections[0].props[0]
         vals = odml_prop_2.values
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.datetime)
         self.assertEqual(len(vals), 2)
@@ -508,13 +580,20 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(len(vals), 2)
         self.assertEqual(vals, [["1", "2"], ["3", "4"]])
 
-        prop2 = sec.create_property(name="3-tuple property", values_or_dtype=np.str_)
+        file_name_2 = 'tmp' + str(uuid.uuid4())
+        nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
+        nix_file_2 = nix.File.open(nix_path_2, nix.FileMode.Overwrite)
+        odml_path_2 = os.path.join(self.test_dir, file_name_2 + '.xml')
+
+        sec_2 = nix_file_2.create_section(name="section")
+
+        prop2 = sec_2.create_property(name="3-tuple property", values_or_dtype=np.str_)
         prop2.values = ["(1; 2; 3)", "(4; 5; 6)"]
 
-        convert.odmlwrite(nix_file, odml_path)
-        odml_doc = odml.load(odml_path)
+        convert.odmlwrite(nix_file_2, odml_path_2)
+        odml_doc_2 = odml.load(odml_path_2)
 
-        odml_prop_2 = odml_doc.sections[0].props[1]
+        odml_prop_2 = odml_doc_2.sections[0].props[0]
         vals = odml_prop_2.values
         self.assertEqual(getattr(odml_prop_2, "dtype"), "3-tuple")
         self.assertEqual(len(vals), 2)
