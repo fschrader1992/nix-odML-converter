@@ -267,7 +267,7 @@ class TestDtypes(unittest.TestCase):
 
         sec_3 = nix_file_3.create_section(name="section")
 
-        prop_3 = sec_3.create_property(name="int property 3", values_or_dtype=np.int_)
+        prop_3 = sec_3.create_property(name="int property 3", values_or_dtype=np.int64)
         prop_3.values = [7, 8, 9]
         setattr(prop_3, "odml_type", nix.OdmlType("int"))
 
