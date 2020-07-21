@@ -100,6 +100,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(nix_prop, "data_type"), np.str_)
         self.assertEqual(len(vals), 2)
         self.assertEqual(vals, ('2011-12-01', '2011-12-02'))
+        nix_file.close()
 
     def test_odml_to_nix_time(self):
         file_name = 'tmp' + str(uuid.uuid4())
