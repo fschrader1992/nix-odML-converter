@@ -141,6 +141,12 @@ def infer_dtype(values):
 
     return "string"
 
+def non_binary_value(val):
+    if isinstance(val, bytes):
+        return str(val, "utf-8")
+    else:
+        return val
+
 #def print_same_line(msg):
 #    """
 #    Print a message to the same line on the command line and
@@ -362,19 +368,16 @@ def nix_to_odml_property(nixprop, odml_sec):
                                for attr in prop_attributes if hasattr(nixprop, attr)}
 
         if 'id' in nix_prop_attributes:
-            nix_prop_attributes['oid'] = nix_prop_attributes.pop('id')
+            nix_prop_attributes['oid'] = non_binary_value(nix_prop_attributes.pop('id'))
         non_byte_vals = []
         for val in list(nix_prop_attributes.pop('values')):
-            if isinstance(val, bytes):
-                non_byte_vals += [str(val, "utf-8")]
-            else:
-                non_byte_vals += [val]
+            non_byte_vals += [non_binary_value(val)]
 
         odml_type = None
         if 'odml_type' in nix_prop_attributes:
-            odml_type = nix_prop_attributes.pop('odml_type')
+            odml_type = non_binary_value(nix_prop_attributes.pop('odml_type'))
         if odml_type and odml_type.value:
-            nix_prop_attributes['dtype'] = odml_type.value
+            nix_prop_attributes['dtype'] = non_binary_value(odml_type.value)
         else:
             nix_prop_attributes['dtype'] = infer_dtype(non_byte_vals)
 
