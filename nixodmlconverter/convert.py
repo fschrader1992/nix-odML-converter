@@ -381,6 +381,7 @@ def nix_to_odml_property(nixprop, odml_sec):
         else:
             nix_prop_attributes['dtype'] = infer_dtype(non_byte_vals)
 
+        nix_prop_attributes['reference'] = non_binary_value(nix_prop_attributes.pop('reference'))
         nix_prop_attributes['parent'] = odml_sec
         nix_prop_attributes['values'] = non_byte_vals
 
