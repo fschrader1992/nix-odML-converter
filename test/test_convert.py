@@ -62,3 +62,8 @@ class TestBlock(unittest.TestCase):
                     self.assertEqual(getattr(prop, attr), getattr(prop2, attr))
 
         nix_file.close()
+
+    def test_example_nix_file(self):
+        nf = '../odmlfiles/test.nix'
+        nix_file = nix.File.open(nf, "r")
+        convert.odmlwrite(nix_file, '../odmlfiles/test.xml')
