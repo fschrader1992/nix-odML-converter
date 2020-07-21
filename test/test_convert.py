@@ -68,3 +68,4 @@ class TestBlock(unittest.TestCase):
                                  '../odmlfiles/test')
         nix_file = nix.File.open(file_path + '.nix', "r")
         convert.odmlwrite(nix_file, file_path + '.xml')
+        nix_file.close()
