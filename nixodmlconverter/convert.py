@@ -163,9 +163,6 @@ def convert_value(val, dtype):
         INFO["skipped none values"] += 1
         return None
 
-    if dtype == "int":
-        val = np.int32(val)
-
     if dtype in ("date", "time", "datetime"):
         val = val.isoformat()
 

@@ -49,7 +49,7 @@ class TestDtypes(unittest.TestCase):
         nix_prop = nix_file.sections[0].sections[0].props[0]
         vals = nix_prop.values
         self.assertEqual(getattr(nix_prop, "odml_type"), nix.OdmlType("int"))
-        self.assertEqual(getattr(nix_prop, "data_type"), np.int_)
+        self.assertEqual(getattr(nix_prop, "data_type"), np.int64)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, (1, 2, 3))
         nix_file.close()
@@ -227,7 +227,7 @@ class TestDtypes(unittest.TestCase):
         odml_path_1 = os.path.join(self.test_dir, file_name_1 + '.xml')
 
         sec_1 = nix_file_1.create_section(name="section")
-        prop_1 = sec_1.create_property(name="int property", values_or_dtype=np.int_)
+        prop_1 = sec_1.create_property(name="int property", values_or_dtype=np.int64)
         prop_1.values = [1, 2, 3]
 
         convert.odmlwrite(nix_file_1, odml_path_1)
