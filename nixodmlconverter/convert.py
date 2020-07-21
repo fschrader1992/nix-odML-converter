@@ -37,6 +37,7 @@ import re
 
 from docopt import docopt
 
+import numpy as np
 import nixio as nix
 import odml
 
@@ -161,6 +162,9 @@ def convert_value(val, dtype):
     if val is None:
         INFO["skipped none values"] += 1
         return None
+
+    if dtype == "int":
+        val = np.int32(val)
 
     if dtype in ("date", "time", "datetime"):
         val = val.isoformat()
