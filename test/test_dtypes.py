@@ -37,6 +37,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(nix_prop, "data_type"), np.str_)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, ("a", "b", "c"))
+        nix_file.close()
 
     def test_odml_to_nix_int(self):
         file_name = 'tmp' + str(uuid.uuid4())
@@ -51,6 +52,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(nix_prop, "data_type"), np.int_)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, (1, 2, 3))
+        nix_file.close()
 
     '''
     # there seems to be a problem with float64 conversion in the nixpy lib
@@ -67,6 +69,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(nix_prop, "data_type"), np.float_)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, (1.1, 2.2, 3.2))
+        nix_file.close()
     '''
 
     def test_odml_to_nix_boolean(self):
@@ -82,6 +85,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(nix_prop, "data_type"), np.bool_)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, (True, False, 1))
+        nix_file.close()
 
     def test_odml_to_nix_date(self):
         file_name = 'tmp' + str(uuid.uuid4())
@@ -110,6 +114,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(nix_prop, "data_type"), np.str_)
         self.assertEqual(len(vals), 2)
         self.assertEqual(vals, ('11:11:11', '02:02:02'))
+        nix_file.close()
 
     def test_odml_to_nix_datetime(self):
         file_name = 'tmp' + str(uuid.uuid4())
@@ -125,6 +130,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(nix_prop, "data_type"), np.str_)
         self.assertEqual(len(vals), 2)
         self.assertEqual(vals, ('2011-12-01T01:01:01', '2011-12-02T02:02:02'))
+        nix_file.close()
 
     def test_odml_to_nix_text(self):
         file_name = 'tmp' + str(uuid.uuid4())
@@ -139,6 +145,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(nix_prop, "data_type"), np.str_)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, ("a\nb", "c", "d\ne"))
+        nix_file.close()
 
     def test_odml_to_nix_tuple(self):
         file_name_1 = 'tmp' + str(uuid.uuid4())
@@ -169,6 +176,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(nix_prop_2, "data_type"), np.str_)
         self.assertEqual(len(vals_2), 2)
         self.assertEqual(vals_2, ("(1; 2; 3)", "(4; 5; 6)"))
+        nix_file_2.close()
 
     def test_nix_to_odml_string(self):
         file_name_1 = 'tmp' + str(uuid.uuid4())
@@ -188,6 +196,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_1, "dtype"), odml.DType.string)
         self.assertEqual(len(vals_1), 3)
         self.assertEqual(vals_1, ['a', 'b', 'c'])
+        nix_file_1.close()
 
         file_name_2 = 'tmp' + str(uuid.uuid4())
         nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
@@ -208,6 +217,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.string)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, ["d", "e", "f"])
+        nix_file_2.close()
 
     def test_nix_to_odml_int(self):
         file_name_1 = 'tmp' + str(uuid.uuid4())
@@ -227,6 +237,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_1, "dtype"), odml.DType.int)
         self.assertEqual(len(vals_1), 3)
         self.assertEqual(vals_1, [1, 2, 3])
+        nix_file_1.close()
         
         file_name_2 = 'tmp' + str(uuid.uuid4())
         nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
@@ -246,6 +257,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.int)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [4, 5, 6])
+        nix_file_2.close()
 
         file_name_3 = 'tmp' + str(uuid.uuid4())
         nix_path_3 = os.path.join(self.test_dir, file_name_3 + '.nix')
@@ -266,6 +278,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_3, "dtype"), odml.DType.int)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [7, 8, 9])
+        nix_file_3.close()
 
     def test_nix_to_odml_float(self):
         file_name_1 = 'tmp' + str(uuid.uuid4())
@@ -285,6 +298,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_1, "dtype"), odml.DType.float)
         self.assertEqual(len(vals_1), 3)
         self.assertEqual(vals_1, [1.1, 2.2, 3.3])
+        nix_file_1.close()
 
         file_name_2 = 'tmp' + str(uuid.uuid4())
         nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
@@ -304,6 +318,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.float)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [4.4, 5.5, 6.6])
+        nix_file_2.close()
 
         '''
         # there seems to be a problem with float64 conversion in the nixpy lib
@@ -326,6 +341,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.float)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [7.7, 8.8, 9.9])
+        nix_file_3.close()
         '''
 
     def test_nix_to_odml_double(self):
@@ -346,6 +362,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_1, "dtype"), odml.DType.float)
         self.assertEqual(len(vals_1), 3)
         self.assertEqual(vals_1, [1.1, 2.2, 3.3])
+        nix_file_1.close()
         
         '''
         # there seems to be a problem with float64 conversion in the nixpy lib
@@ -361,6 +378,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.float)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [4.4, 5.5, 6.6])
+        nix_file_2.close()
         '''
 
     def test_nix_to_odml_boolean(self):
@@ -381,6 +399,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_1, "dtype"), odml.DType.boolean)
         self.assertEqual(len(vals_1), 3)
         self.assertEqual(vals_1, [True, False, True])
+        nix_file_1.close()
 
         file_name_2 = 'tmp' + str(uuid.uuid4())
         nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
@@ -400,6 +419,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.boolean)
         self.assertEqual(len(vals), 4)
         self.assertEqual(vals, [True, False, True, False])
+        nix_file_2.close()
 
         file_name_3 = 'tmp' + str(uuid.uuid4())
         nix_path_3 = os.path.join(self.test_dir, file_name_3 + '.nix')
@@ -420,6 +440,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_3, "dtype"), odml.DType.boolean)
         self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [False, True, False])
+        nix_file_3.close()
 
     def test_nix_to_odml_date(self):
         file_name_1 = 'tmp' + str(uuid.uuid4())
@@ -439,6 +460,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_1, "dtype"), odml.DType.date)
         self.assertEqual(len(vals_1), 2)
         self.assertEqual(vals_1, [datetime.date(2011, 11, 1), datetime.date(2011, 12, 2)])
+        nix_file_1.close()
 
         file_name_2 = 'tmp' + str(uuid.uuid4())
         nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
@@ -459,6 +481,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.date)
         self.assertEqual(len(vals), 2)
         self.assertEqual(vals, [datetime.date(2011, 11, 3), datetime.date(2011, 12, 4)])
+        nix_file_2.close()
 
     def test_nix_to_odml_time(self):
         file_name_1 = 'tmp' + str(uuid.uuid4())
@@ -478,6 +501,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_1, "dtype"), odml.DType.time)
         self.assertEqual(len(vals_1), 2)
         self.assertEqual(vals_1, [datetime.time(11, 11, 11), datetime.time(2, 2, 2)])
+        nix_file_1.close()
 
         file_name_2 = 'tmp' + str(uuid.uuid4())
         nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
@@ -498,6 +522,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.time)
         self.assertEqual(len(vals), 2)
         self.assertEqual(vals, [datetime.time(12, 12, 12), datetime.time(3, 3, 3)])
+        nix_file_2.close()
 
     def test_nix_to_odml_datetime(self):
         file_name_1 = 'tmp' + str(uuid.uuid4())
@@ -518,6 +543,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(len(vals_1), 2)
         self.assertEqual(vals_1, [datetime.datetime(2011, 11, 1, 11, 11, 11),
                                 datetime.datetime(2012, 12, 2, 2, 2, 2)])
+        nix_file_1.close()
 
         file_name_2 = 'tmp' + str(uuid.uuid4())
         nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
@@ -539,6 +565,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(len(vals), 2)
         self.assertEqual(vals, [datetime.datetime(2012, 12, 2, 12, 12, 12),
                                 datetime.datetime(2013, 1, 1, 1, 1, 1)])
+        nix_file_2.close()
 
     def test_nix_to_odml_text(self):
         file_name_1 = 'tmp' + str(uuid.uuid4())
@@ -560,6 +587,7 @@ class TestDtypes(unittest.TestCase):
         # in the odML core lib reading the file including a line break.
         # self.assertEqual(len(vals), 3)
         # self.assertEqual(vals, ['a\nb', 'c d', 'e\nix_path'])
+        nix_file_1.close()
 
     def test_nix_to_odml_tuple(self):
         file_name_1 = 'tmp' + str(uuid.uuid4())
@@ -579,6 +607,7 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_1, "dtype"), "2-tuple")
         self.assertEqual(len(vals_1), 2)
         self.assertEqual(vals_1, [["1", "2"], ["3", "4"]])
+        nix_file_1.close()
 
         file_name_2 = 'tmp' + str(uuid.uuid4())
         nix_path_2 = os.path.join(self.test_dir, file_name_2 + '.nix')
@@ -598,3 +627,4 @@ class TestDtypes(unittest.TestCase):
         self.assertEqual(getattr(odml_prop_2, "dtype"), "3-tuple")
         self.assertEqual(len(vals), 2)
         self.assertEqual(vals, [["1", "2", "3"], ["4", "5", "6"]])
+        nix_file_2.close()
