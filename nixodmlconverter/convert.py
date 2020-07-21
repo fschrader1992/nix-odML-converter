@@ -387,8 +387,8 @@ def nix_to_odml_property(nixprop, odml_sec):
 
         odml.Property(**nix_prop_attributes)
         INFO["properties written"] += 1
-    except Exception as e:
-        print("Could not convert property", nixprop, ":", e)
+    except TypeError as t_e:
+        print("Could not convert property " + str(nixprop) + ":" + str(t_e))
 
 
 def nix_to_odml_recurse(nix_section_list, odml_section):
