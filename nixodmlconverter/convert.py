@@ -197,12 +197,15 @@ def odml_to_nix_property(odmlprop, nixsec):
         if nixv is not None:
             nixvalues.append(nixv)
 
-    if not nixvalues:
-        INFO["skipped empty properties"] += 1
-        return
+    #if not nixvalues:
+    #    INFO["skipped empty properties"] += 1
+    #    return
 
     # We need to get the appropriate NIX DataType for the current odML values
-    dtype = nix.DataType.get_dtype(nixvalues[0])
+    if nixvalues:
+        dtype = nix.DataType.get_dtype(nixvalues[0])
+    else:
+        dtype = nix.DataType.get_dtype("")
 
     nixprop = nixsec.create_property(odmlprop.name, dtype, oid=odmlprop.id)
 
