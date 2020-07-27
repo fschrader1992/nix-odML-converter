@@ -30,7 +30,7 @@ class TestBlock(unittest.TestCase):
                      type='testsection', parent=self.odml_doc, reference='reference 1',
                      repository='also unknown', link='???', include=False)
 
-        odml.Property(name='first property', value=[1, 2, 3],
+        odml.Property(name='first property', values=[1, 2, 3],
                       parent=self.odml_doc.sections[0],
                       unit='Volt', uncertainty=3, reference='still unknown',
                       definition='first property recorded', dependency='unknown',
