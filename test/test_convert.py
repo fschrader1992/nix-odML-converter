@@ -66,6 +66,6 @@ class TestBlock(unittest.TestCase):
     def test_example_nix_file(self):
         file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 
                                  '../odmlfiles/test')
-        nix_file = nix.File.open(file_path + '.nix', "r")
+        nix_file = nix.File.open(file_path + '.nix', nix.FileMode.ReadOnly)
         convert.odmlwrite(nix_file, file_path + '.xml')
         nix_file.close()
