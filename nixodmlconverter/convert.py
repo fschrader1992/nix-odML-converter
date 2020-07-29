@@ -140,6 +140,7 @@ def infer_dtype(values):
 
     return "string"
 
+
 def non_binary_value(val):
     if isinstance(val, bytes):
         return str(val, "utf-8")
