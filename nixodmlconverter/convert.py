@@ -224,15 +224,7 @@ def odml_to_nix_property(odmlprop, nixsec):
         nixprop.values = enc_vals
         INFO["mod_prop_values"] += 1
 
-    # Python2 hotfix, since the omega character is not sanitized
-    # in nixpy Property.unit
-    try:
-        nixprop.unit = odmlprop.unit
-    except UnicodeDecodeError:
-        if u"Ω" in odmlprop.unit:
-            print("\n[WARNING] Property.unit currently does not support the omega "
-                  "unicode character. It will be replaced by 'Ohm'.\n")
-            nixprop.unit = odmlprop.unit.replace(u"Ω", "Ohm").encode('ascii')
+    nixprop.unit = odmlprop.unit
 
     nixprop.definition = odmlprop.definition
     nixprop.uncertainty = odmlprop.uncertainty
