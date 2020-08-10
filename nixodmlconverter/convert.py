@@ -146,7 +146,7 @@ def non_binary_value(val):
         return str(val, "utf-8")
     return val
 
-#def print_same_line(msg):
+# def print_same_line(msg):
 #    """
 #    Print a message to the same line on the command line and
 #    use the appropriate function depending on the Python version.
@@ -197,7 +197,7 @@ def odml_to_nix_property(odmlprop, nixsec):
         if nixv is not None:
             nixvalues.append(nixv)
 
-    #if not nixvalues:
+    # if not nixvalues:
     #    INFO["skipped empty properties"] += 1
     #    return
 
@@ -298,7 +298,6 @@ def nixwrite(odml_doc, filename, mode='append'):
 
         nix_document_section = write_odml_doc(odml_doc, nixfile)
         odml_to_nix_recurse(odml_doc.sections, nix_document_section)
-
 
 
 ############### NIX -> ODML #################
