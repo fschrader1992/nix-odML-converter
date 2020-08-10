@@ -135,7 +135,7 @@ def infer_dtype(values):
 
     if len(set(val_dtypes)) == 1:
         return val_dtypes[0]
-    elif "text" in set(val_dtypes):
+    if "text" in set(val_dtypes):
         return "text"
 
     return "string"
@@ -144,8 +144,7 @@ def infer_dtype(values):
 def non_binary_value(val):
     if isinstance(val, bytes):
         return str(val, "utf-8")
-    else:
-        return val
+    return val
 
 #def print_same_line(msg):
 #    """
