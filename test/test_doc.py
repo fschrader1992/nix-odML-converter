@@ -14,9 +14,6 @@ class TestBlock(unittest.TestCase):
     def setUp(self):
         self.test_dir = tempfile.mkdtemp("_odmlnix", "test_", tempfile.gettempdir())
 
-        self.odml_doc = odml.Document(author='me', date=datetime.date.today(),
-                                      version='0.0.1', repository='unknown')
-
     def tearDown(self):
         # cleanup temporary files and folder
         shutil.rmtree(self.test_dir)
