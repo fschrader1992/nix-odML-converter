@@ -97,7 +97,7 @@ def infer_dtype(values):
 
     Tests whether values with dtype "string" are maybe of different dtype.
 
-    :param prop: property the validation is applied on.
+    :param values: values, for which the dtype should be found
     """
 
     dtype_checks = {
