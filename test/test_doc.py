@@ -63,8 +63,6 @@ class TestBlock(unittest.TestCase):
                                       version=None, repository=None)
 
         convert.nixwrite(orig_odml_doc, nix_path, 'overwrite')
-        nix_file_r = nix.File.open(nix_path)
-        nix_file_r.close()
 
         nix_file_r = nix.File.open(nix_path, nix.FileMode.ReadOnly)
         convert.odmlwrite(nix_file_r, odml_path)
@@ -74,6 +72,8 @@ class TestBlock(unittest.TestCase):
         self.assertEqual(getattr(odml_doc, "author"), None)
         self.assertEqual(getattr(odml_doc, "version"), None)
         self.assertEqual(getattr(odml_doc, "repository"), None)
+
+        nix_file_r.close()
 
     def test_nix_to_odml_empty(self):
         file_name = 'tmp'
@@ -83,8 +83,6 @@ class TestBlock(unittest.TestCase):
         orig_odml_doc = odml.Document()
 
         convert.nixwrite(orig_odml_doc, nix_path, 'overwrite')
-        nix_file_r = nix.File.open(nix_path)
-        nix_file_r.close()
 
         nix_file_r = nix.File.open(nix_path, nix.FileMode.ReadOnly)
         convert.odmlwrite(nix_file_r, odml_path)
@@ -94,3 +92,5 @@ class TestBlock(unittest.TestCase):
         self.assertEqual(getattr(odml_doc, "author"), None)
         self.assertEqual(getattr(odml_doc, "version"), None)
         self.assertEqual(getattr(odml_doc, "repository"), None)
+
+        nix_file_r.close()
