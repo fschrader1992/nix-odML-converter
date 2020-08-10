@@ -93,9 +93,7 @@ def user_input(prompt):
 
 def infer_dtype(values):
     """
-    PROTOTYPE
-
-    Tests whether values with dtype "string" are maybe of different dtype.
+    Tests, whether values with dtype "string" are maybe of different dtype.
 
     :param values: values, for which the dtype should be found
     """
@@ -196,10 +194,6 @@ def odml_to_nix_property(odmlprop, nixsec):
         nixv = convert_value(val, odmlprop.dtype)
         if nixv is not None:
             nixvalues.append(nixv)
-
-    # if not nixvalues:
-    #    INFO["skipped empty properties"] += 1
-    #    return
 
     # We need to get the appropriate NIX DataType for the current odML values
     if nixvalues:
