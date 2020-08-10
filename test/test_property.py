@@ -29,7 +29,7 @@ class TestBlock(unittest.TestCase):
 
         odml.Property(name=None, oid=None, definition=None,
                       parent=self.odml_doc.sections[0],
-                      values=[], dtype=None,
+                      values=None, dtype=None,
                       unit=None, uncertainty=None,
                       reference=None, dependency=None,
                       dependency_value=None, value_origin=None)
@@ -92,7 +92,7 @@ class TestBlock(unittest.TestCase):
 
         odml.Property(name=None, oid=None, definition=None,
                       parent=self.odml_doc.sections[0],
-                      values=[], dtype=None,
+                      values=None, dtype=None,
                       unit=None, uncertainty=None,
                       reference=None, dependency=None,
                       dependency_value=None, value_origin=None)
