@@ -374,7 +374,10 @@ def nix_to_odml_property(nixprop, odml_sec):
     if odml_type and odml_type.value:
         nix_prop_attributes['dtype'] = non_binary_value(odml_type.value)
     else:
-        nix_prop_attributes['dtype'] = infer_dtype(non_byte_vals)
+        if len(non_byte_vals) == 0:
+            nix_prop_attributes['dtype'] = None
+        else:
+            nix_prop_attributes['dtype'] = infer_dtype(non_byte_vals)
 
     if 'reference' in nix_prop_attributes:
         nix_prop_attributes['reference'] = non_binary_value(nix_prop_attributes.pop('reference'))
