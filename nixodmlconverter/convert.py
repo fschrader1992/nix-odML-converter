@@ -37,7 +37,6 @@ import re
 
 from docopt import docopt
 
-import numpy as np
 import nixio as nix
 import odml
 
@@ -140,6 +139,12 @@ def infer_dtype(values):
         return "text"
 
     return "string"
+
+def non_binary_value(val):
+    if isinstance(val, bytes):
+        return str(val, "utf-8")
+    else:
+        return val
 
 #def print_same_line(msg):
 #    """
@@ -357,22 +362,37 @@ def nix_to_odml_property(nixprop, odml_sec):
                        'definition', 'dependency', 'dependency_value',
                        'odml_type', 'value_origin', 'id']
 
-    nix_prop_attributes = {attr: getattr(nixprop, attr)
-                           for attr in prop_attributes if hasattr(nixprop, attr)}
+    nix_prop_attributes = {}
+
+    for attr in prop_attributes:
+        try:
+            if hasattr(nixprop, attr):
+                nix_prop_attributes[attr] = getattr(nixprop, attr)
+        except TypeError as t_e:
+            print("Could not convert attribute " + attr + " of property "
+                  + str(nixprop) + ": " + str(t_e))
 
     if 'id' in nix_prop_attributes:
-        nix_prop_attributes['oid'] = nix_prop_attributes.pop('id')
+        nix_prop_attributes['oid'] = non_binary_value(nix_prop_attributes.pop('id'))
+
+    non_byte_vals = []
+    if 'values' in nix_prop_attributes:
+        for val in list(nix_prop_attributes.pop('values')):
+            non_byte_vals += [non_binary_value(val)]
 
     odml_type = None
     if 'odml_type' in nix_prop_attributes:
-        odml_type = nix_prop_attributes.pop('odml_type')
+        odml_type = non_binary_value(nix_prop_attributes.pop('odml_type'))
     if odml_type and odml_type.value:
-        nix_prop_attributes['dtype'] = odml_type.value
+        nix_prop_attributes['dtype'] = non_binary_value(odml_type.value)
     else:
-        nix_prop_attributes['dtype'] = infer_dtype(nix_prop_attributes['values'])
+        nix_prop_attributes['dtype'] = infer_dtype(non_byte_vals)
+
+    if 'reference' in nix_prop_attributes:
+        nix_prop_attributes['reference'] = non_binary_value(nix_prop_attributes.pop('reference'))
 
     nix_prop_attributes['parent'] = odml_sec
-    nix_prop_attributes['values'] = list(nix_prop_attributes.pop('values'))
+    nix_prop_attributes['values'] = non_byte_vals
 
     odml.Property(**nix_prop_attributes)
     INFO["properties written"] += 1
