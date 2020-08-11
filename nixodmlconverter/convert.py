@@ -196,10 +196,9 @@ def odml_to_nix_property(odmlprop, nixsec):
             nixvalues.append(nixv)
 
     # We need to get the appropriate NIX DataType for the current odML values
+    dtype = nix.DataType.String
     if nixvalues:
         dtype = nix.DataType.get_dtype(nixvalues[0])
-    else:
-        dtype = nix.DataType.get_dtype("")
 
     nixprop = nixsec.create_property(odmlprop.name, dtype, oid=odmlprop.id)
 
