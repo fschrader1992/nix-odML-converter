@@ -93,11 +93,9 @@ def user_input(prompt):
 
 def infer_dtype(values):
     """
-    PROTOTYPE
+    Tests, whether values with dtype "string" are maybe of different dtype.
 
-    Tests whether values with dtype "string" are maybe of different dtype.
-
-    :param prop: property the validation is applied on.
+    :param values: values, for which the dtype should be found
     """
 
     dtype_checks = {
@@ -135,18 +133,18 @@ def infer_dtype(values):
 
     if len(set(val_dtypes)) == 1:
         return val_dtypes[0]
-    elif "text" in set(val_dtypes):
+    if "text" in set(val_dtypes):
         return "text"
 
     return "string"
 
+
 def non_binary_value(val):
     if isinstance(val, bytes):
         return str(val, "utf-8")
-    else:
-        return val
+    return val
 
-#def print_same_line(msg):
+# def print_same_line(msg):
 #    """
 #    Print a message to the same line on the command line and
 #    use the appropriate function depending on the Python version.
@@ -197,12 +195,10 @@ def odml_to_nix_property(odmlprop, nixsec):
         if nixv is not None:
             nixvalues.append(nixv)
 
-    if not nixvalues:
-        INFO["skipped empty properties"] += 1
-        return
-
     # We need to get the appropriate NIX DataType for the current odML values
-    dtype = nix.DataType.get_dtype(nixvalues[0])
+    dtype = nix.DataType.String
+    if nixvalues:
+        dtype = nix.DataType.get_dtype(nixvalues[0])
 
     nixprop = nixsec.create_property(odmlprop.name, dtype, oid=odmlprop.id)
 
@@ -220,15 +216,7 @@ def odml_to_nix_property(odmlprop, nixsec):
         nixprop.values = enc_vals
         INFO["mod_prop_values"] += 1
 
-    # Python2 hotfix, since the omega character is not sanitized
-    # in nixpy Property.unit
-    try:
-        nixprop.unit = odmlprop.unit
-    except UnicodeDecodeError:
-        if u"Ω" in odmlprop.unit:
-            print("\n[WARNING] Property.unit currently does not support the omega "
-                  "unicode character. It will be replaced by 'Ohm'.\n")
-            nixprop.unit = odmlprop.unit.replace(u"Ω", "Ohm").encode('ascii')
+    nixprop.unit = odmlprop.unit
 
     nixprop.definition = odmlprop.definition
     nixprop.uncertainty = odmlprop.uncertainty
@@ -303,7 +291,6 @@ def nixwrite(odml_doc, filename, mode='append'):
 
         nix_document_section = write_odml_doc(odml_doc, nixfile)
         odml_to_nix_recurse(odml_doc.sections, nix_document_section)
-
 
 
 ############### NIX -> ODML #################
@@ -386,7 +373,10 @@ def nix_to_odml_property(nixprop, odml_sec):
     if odml_type and odml_type.value:
         nix_prop_attributes['dtype'] = non_binary_value(odml_type.value)
     else:
-        nix_prop_attributes['dtype'] = infer_dtype(non_byte_vals)
+        if len(non_byte_vals) == 0:
+            nix_prop_attributes['dtype'] = None
+        else:
+            nix_prop_attributes['dtype'] = infer_dtype(non_byte_vals)
 
     if 'reference' in nix_prop_attributes:
         nix_prop_attributes['reference'] = non_binary_value(nix_prop_attributes.pop('reference'))

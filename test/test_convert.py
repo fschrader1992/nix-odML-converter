@@ -30,7 +30,7 @@ class TestBlock(unittest.TestCase):
                      type='testsection', parent=self.odml_doc, reference='reference 1',
                      repository='also unknown', link='???', include=False)
 
-        odml.Property(name='first property', value=[1, 2, 3],
+        odml.Property(name='first property', values=[1, 2, 3],
                       parent=self.odml_doc.sections[0],
                       unit='Volt', uncertainty=3, reference='still unknown',
                       definition='first property recorded', dependency='unknown',
@@ -66,6 +66,6 @@ class TestBlock(unittest.TestCase):
     def test_example_nix_file(self):
         file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 
                                  '../odmlfiles/test')
-        nix_file = nix.File.open(file_path + '.nix', "r")
+        nix_file = nix.File.open(file_path + '.nix', nix.FileMode.ReadOnly)
         convert.odmlwrite(nix_file, file_path + '.xml')
         nix_file.close()
