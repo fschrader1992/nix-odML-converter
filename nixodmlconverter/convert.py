@@ -9,7 +9,7 @@ Furthermore, the converter b) exports odML content from a NIX file and saves it
 to an XML formatted odML file. If an odML file of the same name exists, the
 file will be overwritten.
 
-Usage: nixodmlconverter [-h] FILE_OR_DIR [-o OUTFILE | -t TYPE]
+Usage: nixodmlconverter [-h] FILE_OR_DIR [-o OUTFILE | -t TYPE] [-m MODE]
 
 Arguments:
     FILE_OR_DIR     NIX or odML file or directory.
@@ -32,6 +32,10 @@ Options:
     -o              Specify name of output file. Only if one file is presented.
     -t              Convert only files of this type/with this extension.
                     Only, if a directory is presented.
+    -m              Conversion mode:
+                        - append (only for conversion to nix, standard setting)
+                        - overwrite (automatically for nix to odML conversion)
+                        - overwrite metadata (only change nix file's odML metadata)
     -h --help       Show this screen.
     --version       Show version
 """
@@ -472,15 +476,16 @@ def main(args=None):
     parser = docopt(__doc__, argv=args, version=VERSION)
 
     file_or_dir = parser['FILE_OR_DIR']
+    mode = parser['MODE'] if parser['MODE'] else 'append'
     if not os.path.splitext(file_or_dir)[1]:
         file_type = parser['TYPE'] if parser['TYPE'] else "nix"
         for curr_file in os.listdir(file_or_dir):
             if curr_file.endswith("." + file_type):
                 print("Found File {}".format(curr_file))
-                convert(filename=os.path.join(file_or_dir, curr_file))
+                convert(filename=os.path.join(file_or_dir, curr_file), mode=mode)
     else:
         outfile = parser['OUTFILE']
-        convert(filename=file_or_dir, outfilename=outfile)
+        convert(filename=file_or_dir, outfilename=outfile, mode=mode)
     print_info()
 
 
