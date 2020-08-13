@@ -533,7 +533,7 @@ class TestDtypes(unittest.TestCase):
 
         sec_1 = nix_file_1.create_section(name="section")
         prop_1 = sec_1.create_property(name="datetime property", values_or_dtype="datetime")
-        prop_1.values = ['2011-11-01 11:11:11', '2012-12-02 02:02:02']
+        prop_1.values = ['2011-11-01 11:11:11', '2012-12-02 02:02:02', '2012-12-03T03:03:03']
 
         convert.odmlwrite(nix_file_1, odml_path_1)
         odml_doc_1 = odml.load(odml_path_1)
@@ -541,9 +541,10 @@ class TestDtypes(unittest.TestCase):
         odml_prop_1 = odml_doc_1.sections[0].props[0]
         vals_1 = odml_prop_1.values
         self.assertEqual(getattr(odml_prop_1, "dtype"), odml.DType.datetime)
-        self.assertEqual(len(vals_1), 2)
+        self.assertEqual(len(vals_1), 3)
         self.assertEqual(vals_1, [datetime.datetime(2011, 11, 1, 11, 11, 11),
-                                datetime.datetime(2012, 12, 2, 2, 2, 2)])
+                                datetime.datetime(2012, 12, 2, 2, 2, 2),
+                                datetime.datetime(2012, 12, 3, 3, 3, 3)])
         nix_file_1.close()
 
         file_name_2 = 'tmp' + str(uuid.uuid4())
@@ -554,7 +555,7 @@ class TestDtypes(unittest.TestCase):
         sec_2 = nix_file_2.create_section(name="section")
 
         prop_2 = sec_2.create_property(name="datetime property 2", values_or_dtype=np.str_)
-        prop_2.values = ['2012-12-02 12:12:12', '2013-01-01 01:01:01']
+        prop_2.values = ['2012-12-02 12:12:12', '2013-01-01 01:01:01', '2013-01-02T02:02:02']
         setattr(prop_2, "odml_type", nix.OdmlType("datetime"))
 
         convert.odmlwrite(nix_file_2, odml_path_2)
@@ -563,9 +564,10 @@ class TestDtypes(unittest.TestCase):
         odml_prop_2 = odml_doc_2.sections[0].props[0]
         vals = odml_prop_2.values
         self.assertEqual(getattr(odml_prop_2, "dtype"), odml.DType.datetime)
-        self.assertEqual(len(vals), 2)
+        self.assertEqual(len(vals), 3)
         self.assertEqual(vals, [datetime.datetime(2012, 12, 2, 12, 12, 12),
-                                datetime.datetime(2013, 1, 1, 1, 1, 1)])
+                                datetime.datetime(2013, 1, 1, 1, 1, 1),
+                                datetime.datetime(2013, 1, 2, 2, 2, 2)])
         nix_file_2.close()
 
     def test_nix_to_odml_text(self):
