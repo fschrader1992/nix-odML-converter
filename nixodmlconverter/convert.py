@@ -83,6 +83,7 @@ def infer_dtype(values):
     Tests, whether values with dtype "string" are maybe of different dtype.
 
     :param values: values, for which the dtype should be found
+    :return found dtype
     """
 
     dtype_checks = {
@@ -118,12 +119,13 @@ def infer_dtype(values):
 
         val_dtypes += [curr_dtype]
 
+    found_dtype = "string"
     if len(set(val_dtypes)) == 1:
-        return val_dtypes[0]
+        found_dtype = val_dtypes[0]
     if "text" in set(val_dtypes):
-        return "text"
+        found_dtype = "text"
 
-    return "string"
+    return found_dtype
 
 
 def non_binary_value(val):
