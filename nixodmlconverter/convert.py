@@ -9,7 +9,7 @@ Furthermore, the converter b) exports odML content from a NIX file and saves it
 to an XML formatted odML file. If an odML file of the same name exists, the
 file will be overwritten.
 
-Usage: nixodmlconverter [-h] FILE...
+Usage: nixodmlconverter [-h] FILE [-o OUTFILE]
 
 Arguments:
     FILE            NIX or odML file.
@@ -24,9 +24,8 @@ Arguments:
                     If a NIX file with the same name exists, the content of the odML
                     file will be appended, otherwise, a new NIX file will be created.
 
-                    Multiple files can be provided.
-
 Options:
+    -o              Specify name of output file.
     -h --help       Show this screen.
     --version       Show version
 """
@@ -405,7 +404,7 @@ def nix_to_odml_recurse(nix_section_list, odml_section):
         nix_to_odml_recurse(nix_sec.sections, odml_sec)
 
 
-def convert(filename, mode='append'):
+def convert(filename, outfilename=None, mode='append'):
     # Determine input and output format
     file_base, file_ext = os.path.splitext(filename)
     if file_ext in ['.xml', '.odml']:
@@ -420,7 +419,11 @@ def convert(filename, mode='append'):
         mode = 'overwrite'
 
     # Check output file
-    outfilename = file_base + output_format
+    if not outfilename:
+        outfilename = file_base
+    if not output_format in outfilename:
+        outfilename += output_format
+
     if os.path.exists(outfilename):
         yesno = input("File {} already exists. "
                       "{} (y/n)? ".format(outfilename, mode.title()))
@@ -462,10 +465,9 @@ def convert(filename, mode='append'):
 def main(args=None):
     parser = docopt(__doc__, argv=args, version=VERSION)
 
-    files = parser['FILE']
-    print(files)
-    for curr_file in files:
-        convert(curr_file)
+    file = parser['FILE']
+    outfile = parser['OUTFILE']
+    convert(file, outfile)
     print_info()
 
 
