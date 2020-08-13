@@ -379,9 +379,9 @@ def nix_to_odml_property(nixprop, odml_sec):
             nix_prop_attributes['dtype'] = infer_dtype(non_byte_vals)
 
     if "datetime" in str(nix_prop_attributes['dtype']):
-        for i in range(len(non_byte_vals)):
-            if "T" in str(non_byte_vals[i]):
-                non_byte_vals[i] = aniso8601.parse_datetime(non_byte_vals[i])
+        for (i, nbv) in enumerate(non_byte_vals):
+            if "T" in str(nbv):
+                non_byte_vals[i] = aniso8601.parse_datetime(nbv)
 
     if 'reference' in nix_prop_attributes:
         nix_prop_attributes['reference'] = non_binary_value(nix_prop_attributes.pop('reference'))
