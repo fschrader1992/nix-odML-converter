@@ -75,7 +75,6 @@ class TestBlock(unittest.TestCase):
     def test_nix_to_odml_none(self):
         file_name = 'tmp'
         nix_path = os.path.join(self.test_dir, file_name + '.nix')
-        nix_file_w = nix.File.open(nix_path, nix.FileMode.Overwrite)
         odml_path = os.path.join(self.test_dir, file_name + '.xml')
 
         odml.Section(name=None, oid=None, definition=None,
@@ -83,8 +82,7 @@ class TestBlock(unittest.TestCase):
                      reference=None, repository=None,
                      link=None, include=None)
 
-        convert.nixwrite(self.odml_doc, nix_path)
-        nix_file_w.close()
+        convert.nixwrite(self.odml_doc, nix_path, nix.FileMode.Overwrite)
 
         nix_file_r = nix.File.open(nix_path, nix.FileMode.ReadOnly)
         convert.odmlwrite(nix_file_r, odml_path)
@@ -106,13 +104,11 @@ class TestBlock(unittest.TestCase):
     def test_nix_to_odml_empty(self):
         file_name = 'tmp'
         nix_path = os.path.join(self.test_dir, file_name + '.nix')
-        nix_file_w = nix.File.open(nix_path, nix.FileMode.Overwrite)
         odml_path = os.path.join(self.test_dir, file_name + '.xml')
 
         odml.Section(parent=self.odml_doc)
 
-        convert.nixwrite(self.odml_doc, nix_path)
-        nix_file_w.close()
+        convert.nixwrite(self.odml_doc, nix_path, nix.FileMode.Overwrite)
 
         nix_file_r = nix.File.open(nix_path, nix.FileMode.ReadOnly)
         convert.odmlwrite(nix_file_r, odml_path)
