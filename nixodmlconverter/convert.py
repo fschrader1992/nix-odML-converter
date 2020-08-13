@@ -9,7 +9,7 @@ Furthermore, the converter b) exports odML content from a NIX file and saves it
 to an XML formatted odML file. If an odML file of the same name exists, the
 file will be overwritten.
 
-Usage: nixodmlconverter [-h] FILE_OR_DIR [-o OUTFILE]
+Usage: nixodmlconverter [-h] FILE_OR_DIR [-o OUTFILE | -t TYPE]
 
 Arguments:
     FILE_OR_DIR     NIX or odML file or directory.
@@ -29,7 +29,9 @@ Arguments:
                     to odML.
 
 Options:
-    -o              Specify name of output file.
+    -o              Specify name of output file. Only if one file is presented.
+    -t              Convert only files of this type/with this extension.
+                    Only, if a directory is presented.
     -h --help       Show this screen.
     --version       Show version
 """
@@ -471,7 +473,7 @@ def main(args=None):
 
     file_or_dir = parser['FILE_OR_DIR']
     if not os.path.splitext(file_or_dir)[1]:
-        file_type = "nix"
+        file_type = parser['TYPE'] if parser['TYPE'] else "nix"
         for curr_file in os.listdir(file_or_dir):
             if curr_file.endswith("." + file_type):
                 print("Found File {}".format(curr_file))
