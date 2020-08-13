@@ -220,7 +220,8 @@ def odml_to_nix_property(odmlprop, nixsec):
     nixprop.unit = odmlprop.unit
 
     nixprop.definition = odmlprop.definition
-    nixprop.uncertainty = odmlprop.uncertainty
+    if odmlprop.uncertainty:
+        nixprop.uncertainty = float(odmlprop.uncertainty)
     nixprop.reference = odmlprop.reference
     nixprop.value_origin = odmlprop.value_origin
     nixprop.dependency = odmlprop.dependency
