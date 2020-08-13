@@ -230,7 +230,8 @@ def odml_to_nix_property(odmlprop, nixsec):
     # We also need to provide the appropriate odML data type for a potential
     # later export from NIX to odML.
     try:
-        nixprop.odml_type = nix.property.OdmlType(odmlprop.dtype)
+        if odmlprop.dtype and len(odmlprop.values) > 0:
+            nixprop.odml_type = nix.property.OdmlType(odmlprop.dtype)
     except ValueError:
         print("\n[WARNING] Cannot set odml type {}\n".format(odmlprop.dtype))
         INFO["odml_types_omitted"] += 1
