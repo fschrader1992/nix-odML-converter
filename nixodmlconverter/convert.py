@@ -36,6 +36,7 @@ import sys
 import re
 
 from docopt import docopt
+import aniso8601
 
 import nixio as nix
 import odml
@@ -101,7 +102,7 @@ def infer_dtype(values):
     dtype_checks = {
         'int': r'^(-+)?\d+$',
         'date': r'^\d{2,4}-\d{1,2}-\d{1,2}$',
-        'datetime': r'^\d{2,4}-\d{1,2}-\d{1,2} \d{2}:\d{2}(:\d{2})?$',
+        'datetime': r'^\d{2,4}-\d{1,2}-\d{1,2} ?T?\d{2}:\d{2}(:\d{2})?([Z|(\+|\-)hh:mm])?$',
         'time': r'^\d{2}:\d{2}(:\d{2})?$',
         'float': r'^(-+)?\d+\.\d+$',
         'tuple': r'^\((.*?)\)',
@@ -377,6 +378,11 @@ def nix_to_odml_property(nixprop, odml_sec):
             nix_prop_attributes['dtype'] = None
         else:
             nix_prop_attributes['dtype'] = infer_dtype(non_byte_vals)
+
+    if "datetime" in str(nix_prop_attributes['dtype']):
+        for i in range(len(non_byte_vals)):
+            if "T" in str(non_byte_vals[i]):
+                non_byte_vals[i] = aniso8601.parse_datetime(non_byte_vals[i])
 
     if 'reference' in nix_prop_attributes:
         nix_prop_attributes['reference'] = non_binary_value(nix_prop_attributes.pop('reference'))
