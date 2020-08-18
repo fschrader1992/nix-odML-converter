@@ -31,10 +31,14 @@ Arguments:
 Options:
     -o              Specify name of output file. Only if one file is presented.
     -t              Convert only files of this type/with this extension.
+                    Supported extensions:
+                        - nix (default)
+                        - xml
+                        - odml
                     Only, if a directory is presented.
     -m              Conversion mode:
-                        - append (only for conversion to nix, standard setting)
-                        - overwrite (automatically for nix to odML conversion)
+                        - append (only for conversion to nix, default setting)
+                        - overwrite (default for nix to odML conversion)
                         - overwritemetadata (only change nix file's odML metadata)
     -h --help       Show this screen.
     --version       Show version
