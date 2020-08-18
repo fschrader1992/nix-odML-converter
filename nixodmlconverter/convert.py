@@ -49,7 +49,7 @@ import sys
 import re
 
 from docopt import docopt
-from datetime import datetime
+import dateutil.parser as dp
 
 import nixio as nix
 import odml
@@ -388,7 +388,7 @@ def nix_to_odml_property(nixprop, odml_sec):
     if "datetime" in str(nix_prop_attributes['dtype']):
         for (i, nbv) in enumerate(non_byte_vals):
             if "T" in str(nbv):
-                non_byte_vals[i] = datetime.fromisoformat(nbv)
+                non_byte_vals[i] = dp.parse(nbv)
 
     if 'reference' in nix_prop_attributes:
         nix_prop_attributes['reference'] = non_binary_value(nix_prop_attributes.pop('reference'))
