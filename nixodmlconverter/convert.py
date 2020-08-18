@@ -35,7 +35,7 @@ Options:
     -m              Conversion mode:
                         - append (only for conversion to nix, standard setting)
                         - overwrite (automatically for nix to odML conversion)
-                        - overwrite metadata (only change nix file's odML metadata)
+                        - overwritemetadata (only change nix file's odML metadata)
     -h --help       Show this screen.
     --version       Show version
 """
@@ -279,13 +279,13 @@ def write_odml_doc(odmldoc, nixfile):
 
 def nixwrite(odml_doc, filename, mode='append'):
     filemode = None
-    if ('append' or 'overwrite metadata') in mode:
+    if ('append' or 'overwritemetadata') in mode:
         filemode = nix.FileMode.ReadWrite
     elif mode == 'overwrite':
         filemode = nix.FileMode.Overwrite
 
     with nix.File.open(filename, filemode) as nixfile:
-        if mode == 'overwrite metadata':
+        if mode == 'overwritemetadata':
             if 'odML document' in nixfile.sections:
                 del nixfile.sections['odML document']
 
