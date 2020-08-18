@@ -67,6 +67,9 @@ INFO = {"sections read": 0,
         "mod_prop_values": 0,
         "odml_types_omitted": 0}
 
+possible_modes = ['append', 'overwrite', 'overwritemetadata']
+possible_types = ['nix', 'odml', 'xml']
+
 
 def print_info():
     print("\nConversion info")
@@ -477,8 +480,13 @@ def main(args=None):
 
     file_or_dir = parser['FILE_OR_DIR']
     mode = parser['MODE'] if parser['MODE'] else 'append'
+    if mode not in possible_modes:
+        raise NameError('"{}" is not a valid conversion mode. Possible modes are: {}'.format(mode, possible_modes))
     if not os.path.splitext(file_or_dir)[1]:
         file_type = parser['TYPE'] if parser['TYPE'] else "nix"
+        if file_type not in possible_types:
+            raise NameError('"{}" is not a valid file extension. Possible extensions are: {}'
+                            .format(file_type, possible_types))
         for curr_file in os.listdir(file_or_dir):
             if curr_file.endswith("." + file_type):
                 print("Found File {}".format(curr_file))
