@@ -286,7 +286,7 @@ def write_odml_doc(odmldoc, nixfile):
 
 def nixwrite(odml_doc, filename, mode='append'):
     filemode = None
-    if ('append' or 'overwritemetadata') in mode:
+    if mode in ('append', 'overwritemetadata'):
         filemode = nix.FileMode.ReadWrite
     elif mode == 'overwrite':
         filemode = nix.FileMode.Overwrite
