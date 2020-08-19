@@ -58,7 +58,7 @@ class TestBlock(unittest.TestCase):
         orig_odml_doc = odml.Document(author=None, date=None,
                                       version=None, repository=None)
 
-        convert.nixwrite(orig_odml_doc, nix_path, 'overwrite')
+        convert.nixwrite(orig_odml_doc, nix_path, nix.FileMode.Overwrite)
 
         nix_file_r = nix.File.open(nix_path, nix.FileMode.ReadOnly)
         convert.odmlwrite(nix_file_r, odml_path)
@@ -78,7 +78,7 @@ class TestBlock(unittest.TestCase):
 
         orig_odml_doc = odml.Document()
 
-        convert.nixwrite(orig_odml_doc, nix_path, 'overwrite')
+        convert.nixwrite(orig_odml_doc, nix_path, nix.FileMode.Overwrite)
 
         nix_file_r = nix.File.open(nix_path, nix.FileMode.ReadOnly)
         convert.odmlwrite(nix_file_r, odml_path)

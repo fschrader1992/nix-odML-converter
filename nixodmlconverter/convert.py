@@ -9,10 +9,10 @@ Furthermore, the converter b) exports odML content from a NIX file and saves it
 to an XML formatted odML file. If an odML file of the same name exists, the
 file will be overwritten.
 
-Usage: nixodmlconverter [-h] FILE...
+Usage: nixodmlconverter [-h] FILE_OR_DIR [-o OUTFILE | -t TYPE] [-m MODE]
 
 Arguments:
-    FILE            NIX or odML file.
+    FILE_OR_DIR     NIX or odML file or directory.
 
                     If the provided file is a NIX file, the odML content of this NIX file
                     will be exported to an odML file of the same name.
@@ -24,9 +24,22 @@ Arguments:
                     If a NIX file with the same name exists, the content of the odML
                     file will be appended, otherwise, a new NIX file will be created.
 
-                    Multiple files can be provided.
+                    A directory can also be provided. If so, all respective files within
+                    the directory are converted. Without options, nix files are converted
+                    to odML.
 
 Options:
+    -o              Specify name of output file. Only if one file is presented.
+    -t              Convert only files of this type/with this extension.
+                    Supported extensions:
+                        - nix (default)
+                        - xml
+                        - odml
+                    Only, if a directory is presented.
+    -m              Conversion mode:
+                        - append (only for conversion to nix, default setting)
+                        - overwrite (default for nix to odML conversion)
+                        - overwritemetadata (only change nix file's odML metadata)
     -h --help       Show this screen.
     --version       Show version
 """
@@ -36,6 +49,7 @@ import sys
 import re
 
 from docopt import docopt
+import isodate
 
 import nixio as nix
 import odml
@@ -57,6 +71,9 @@ INFO = {"sections read": 0,
         "mod_prop_values": 0,
         "odml_types_omitted": 0}
 
+possible_modes = ['append', 'overwrite', 'overwritemetadata']
+possible_types = ['nix', 'odml', 'xml']
+
 
 def print_info():
     print("\nConversion info")
@@ -77,31 +94,18 @@ def print_info():
           "(using string instead)\n".format(**INFO))
 
 
-def user_input(prompt):
-    """
-    Executes the appropriate user input function dependent on
-    the Python version.
-
-    :param prompt: Information string prompting user input.
-    :return: User input string.
-    """
-    if sys.version_info < (3, 0):
-        return raw_input(prompt)
-
-    return input(prompt)
-
-
 def infer_dtype(values):
     """
     Tests, whether values with dtype "string" are maybe of different dtype.
 
     :param values: values, for which the dtype should be found
+    :return found dtype
     """
 
     dtype_checks = {
         'int': r'^(-+)?\d+$',
         'date': r'^\d{2,4}-\d{1,2}-\d{1,2}$',
-        'datetime': r'^\d{2,4}-\d{1,2}-\d{1,2} \d{2}:\d{2}(:\d{2})?$',
+        'datetime': r'^\d{2,4}-\d{1,2}-\d{1,2} ?T?\d{2}:\d{2}(:\d{2})?([Z|(\+|\-)hh:mm])?$',
         'time': r'^\d{2}:\d{2}(:\d{2})?$',
         'float': r'^(-+)?\d+\.\d+$',
         'tuple': r'^\((.*?)\)',
@@ -131,12 +135,13 @@ def infer_dtype(values):
 
         val_dtypes += [curr_dtype]
 
+    found_dtype = "string"
     if len(set(val_dtypes)) == 1:
-        return val_dtypes[0]
+        found_dtype = val_dtypes[0]
     if "text" in set(val_dtypes):
-        return "text"
+        found_dtype = "text"
 
-    return "string"
+    return found_dtype
 
 
 def non_binary_value(val):
@@ -219,7 +224,8 @@ def odml_to_nix_property(odmlprop, nixsec):
     nixprop.unit = odmlprop.unit
 
     nixprop.definition = odmlprop.definition
-    nixprop.uncertainty = odmlprop.uncertainty
+    if odmlprop.uncertainty:
+        nixprop.uncertainty = float(odmlprop.uncertainty)
     nixprop.reference = odmlprop.reference
     nixprop.value_origin = odmlprop.value_origin
     nixprop.dependency = odmlprop.dependency
@@ -228,7 +234,8 @@ def odml_to_nix_property(odmlprop, nixsec):
     # We also need to provide the appropriate odML data type for a potential
     # later export from NIX to odML.
     try:
-        nixprop.odml_type = nix.property.OdmlType(odmlprop.dtype)
+        if odmlprop.dtype and len(odmlprop.values) > 0:
+            nixprop.odml_type = nix.property.OdmlType(odmlprop.dtype)
     except ValueError:
         print("\n[WARNING] Cannot set odml type {}\n".format(odmlprop.dtype))
         INFO["odml_types_omitted"] += 1
@@ -279,13 +286,13 @@ def write_odml_doc(odmldoc, nixfile):
 
 def nixwrite(odml_doc, filename, mode='append'):
     filemode = None
-    if mode == 'append' or mode == 'overwrite metadata':
+    if mode in ('append', 'overwritemetadata'):
         filemode = nix.FileMode.ReadWrite
     elif mode == 'overwrite':
         filemode = nix.FileMode.Overwrite
 
     with nix.File.open(filename, filemode) as nixfile:
-        if mode == 'overwrite metadata':
+        if mode == 'overwritemetadata':
             if 'odML document' in nixfile.sections:
                 del nixfile.sections['odML document']
 
@@ -378,6 +385,11 @@ def nix_to_odml_property(nixprop, odml_sec):
         else:
             nix_prop_attributes['dtype'] = infer_dtype(non_byte_vals)
 
+    if "datetime" in str(nix_prop_attributes['dtype']):
+        for (i, nbv) in enumerate(non_byte_vals):
+            if "T" in str(nbv):
+                non_byte_vals[i] = isodate.parse_datetime(nbv)
+
     if 'reference' in nix_prop_attributes:
         nix_prop_attributes['reference'] = non_binary_value(nix_prop_attributes.pop('reference'))
 
@@ -409,7 +421,7 @@ def nix_to_odml_recurse(nix_section_list, odml_section):
         nix_to_odml_recurse(nix_sec.sections, odml_sec)
 
 
-def convert(filename, mode='append'):
+def convert(filename, outfilename=None, mode='append'):
     # Determine input and output format
     file_base, file_ext = os.path.splitext(filename)
     if file_ext in ['.xml', '.odml']:
@@ -424,10 +436,14 @@ def convert(filename, mode='append'):
         mode = 'overwrite'
 
     # Check output file
-    outfilename = file_base + output_format
+    if not outfilename:
+        outfilename = file_base
+    if not output_format in outfilename:
+        outfilename += output_format
+
     if os.path.exists(outfilename):
-        yesno = user_input("File {} already exists. "
-                           "{} (y/n)? ".format(outfilename, mode.title()))
+        yesno = input("File {} already exists. "
+                      "{} (y/n)? ".format(outfilename, mode.title()))
         if yesno.lower() not in ("y", "yes"):
             print("Aborted")
             return
@@ -439,9 +455,9 @@ def convert(filename, mode='append'):
             odml_doc = odml.load(filename)
         except InvalidVersionException:
 
-            yesno = user_input("odML file format version is outdated. "
-                               "Automatically convert {} to the latest version "
-                               "(y/n)? ".format(outfilename))
+            yesno = input("odML file format version is outdated. "
+                          "Automatically convert {} to the latest version "
+                          "(y/n)? ".format(outfilename))
 
             if yesno.lower() not in ("y", "yes"):
                 print("  Use the odml.tools.VersionConverter to convert "
@@ -466,10 +482,22 @@ def convert(filename, mode='append'):
 def main(args=None):
     parser = docopt(__doc__, argv=args, version=VERSION)
 
-    files = parser['FILE']
-    print(files)
-    for curr_file in files:
-        convert(curr_file)
+    file_or_dir = parser['FILE_OR_DIR']
+    mode = parser['MODE'] if parser['MODE'] else 'append'
+    if mode not in possible_modes:
+        raise NameError('"{}" is not a valid conversion mode. Possible modes are: {}'.format(mode, possible_modes))
+    if not os.path.splitext(file_or_dir)[1]:
+        file_type = parser['TYPE'] if parser['TYPE'] else "nix"
+        if file_type not in possible_types:
+            raise NameError('"{}" is not a valid file extension. Possible extensions are: {}'
+                            .format(file_type, possible_types))
+        for curr_file in os.listdir(file_or_dir):
+            if curr_file.endswith("." + file_type):
+                print("Found File {}".format(curr_file))
+                convert(filename=os.path.join(file_or_dir, curr_file), mode=mode)
+    else:
+        outfile = parser['OUTFILE']
+        convert(filename=file_or_dir, outfilename=outfile, mode=mode)
     print_info()
 
 
